@@ -224,32 +224,114 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Social Proof */}
-      <section className="px-4 py-16 bg-muted/50">
-        <div className="container mx-auto text-center">
-          <div className="mx-auto max-w-2xl">
-            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-8">
-              Join Thousands of Happy Users
+      {/* Expert Style Tips Section */}
+      <section className="px-4 py-16">
+        <div className="container mx-auto">
+          <div className="mx-auto max-w-2xl text-center mb-12">
+            <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+              Expert Style Tips
             </h2>
-            
-            <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-12">
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">50K+</div>
-                <div className="text-muted-foreground">Users Served</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">6</div>
-                <div className="text-muted-foreground">Face Shape Types</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">Free</div>
-                <div className="text-muted-foreground">Always</div>
-              </div>
-            </div>
+            <p className="mt-4 text-lg text-muted-foreground">
+              Professional advice for choosing frames that enhance your natural features and personal style.
+            </p>
+          </div>
 
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-4">🎨</div>
+                <h3 className="text-xl font-semibold mb-3">Color Matching</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Learn how to choose frame colors that complement your skin tone, hair color, and personal style.
+                </p>
+                <ul className="text-xs text-muted-foreground text-left space-y-1">
+                  <li>• Warm skin tones: gold, brown, amber frames</li>
+                  <li>• Cool skin tones: silver, black, blue frames</li>
+                  <li>• Consider hair and eye color coordination</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-4">💼</div>
+                <h3 className="text-xl font-semibold mb-3">Professional Style</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Choose eyewear that enhances your professional image and workplace confidence.
+                </p>
+                <ul className="text-xs text-muted-foreground text-left space-y-1">
+                  <li>• Classic rectangular frames for authority</li>
+                  <li>• Neutral colors for versatility</li>
+                  <li>• Quality materials show attention to detail</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-4">🔧</div>
+                <h3 className="text-xl font-semibold mb-3">Frame Materials</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Understand different frame materials and their benefits for comfort and durability.
+                </p>
+                <ul className="text-xs text-muted-foreground text-left space-y-1">
+                  <li>• Acetate: rich colors and patterns</li>
+                  <li>• Metal: lightweight and adjustable</li>
+                  <li>• Titanium: premium strength and comfort</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-4">✨</div>
+                <h3 className="text-xl font-semibold mb-3">Feature Enhancement</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Learn how to use eyewear to highlight your best facial features and create visual balance.
+                </p>
+                <ul className="text-xs text-muted-foreground text-left space-y-1">
+                  <li>• Cat-eye frames lift the eye area</li>
+                  <li>• Bold frames make eyes appear larger</li>
+                  <li>• Color accents highlight eye color</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-4">🌟</div>
+                <h3 className="text-xl font-semibold mb-3">Seasonal Trends</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Stay current with the latest eyewear trends while maintaining styles that suit your face shape.
+                </p>
+                <ul className="text-xs text-muted-foreground text-left space-y-1">
+                  <li>• Spring: light colors and clear acetates</li>
+                  <li>• Summer: vibrant colors and gradients</li>
+                  <li>• Fall/Winter: rich tones and metallics</li>
+                </ul>
+              </CardContent>
+            </Card>
+
+            <Card className="text-center hover:shadow-lg transition-shadow">
+              <CardContent className="p-6">
+                <div className="text-4xl mb-4">🧽</div>
+                <h3 className="text-xl font-semibold mb-3">Care & Maintenance</h3>
+                <p className="text-muted-foreground text-sm mb-4">
+                  Keep your eyewear looking great with proper care techniques and maintenance tips.
+                </p>
+                <ul className="text-xs text-muted-foreground text-left space-y-1">
+                  <li>• Clean lenses with microfiber cloth daily</li>
+                  <li>• Store in protective case when not worn</li>
+                  <li>• Professional adjustments when needed</li>
+                </ul>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="text-center mt-12">
             <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6">
               <Link href="/face-analysis">
-                📷 Start Your Analysis Now
+                📷 Apply These Tips to My Face
                 <span className="ml-2">→</span>
               </Link>
             </Button>
