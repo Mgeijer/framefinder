@@ -7,6 +7,7 @@ import { ArrowLeft, Share2, Download } from 'lucide-react';
 import Link from 'next/link';
 import FaceAnalysis from '@/components/FaceAnalysis';
 import { AnalysisResult } from '@/types';
+import { features } from '@/lib/features';
 
 export default function FaceAnalysisPage() {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
@@ -126,13 +127,15 @@ export default function FaceAnalysisPage() {
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8">
         <div className="flex">
-          {/* Sidebar Ad Space */}
+          {/* Sidebar */}
           <aside className="hidden lg:block w-80 pr-8">
             <div className="sticky top-8 space-y-4">
-              {/* Ad Space */}
-              <div className="bg-gray-100 h-64 border border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm rounded-lg">
-                Advertisement Space (300x250)
-              </div>
+              {/* Ad Space - Only show when ads are enabled */}
+              {features.ads.sidebarAd && (
+                <div className="ad-container h-64 rounded-lg">
+                  {/* Actual ad content will go here when enabled */}
+                </div>
+              )}
               
               {/* Tips Card */}
               <Card>
@@ -288,12 +291,14 @@ export default function FaceAnalysisPage() {
         </div>
       </div>
 
-      {/* Bottom Ad Space */}
-      <div className="container mx-auto px-4 py-4">
-        <div className="bg-gray-100 h-20 border border-dashed border-gray-300 flex items-center justify-center text-gray-500 text-sm rounded-lg">
-          Advertisement Space (728x90)
+      {/* Bottom Ad Space - Only show when ads are enabled */}
+      {features.ads.bottomAd && (
+        <div className="container mx-auto px-4 py-4">
+          <div className="ad-container h-20 rounded-lg">
+            {/* Actual ad content will go here when enabled */}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

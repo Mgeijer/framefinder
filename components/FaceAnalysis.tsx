@@ -29,25 +29,28 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   const webcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize face detection service
-  useEffect(() => {
-    const initService = async () => {
-      if (!faceDetectionService.isReady()) {
-        setAnalysisState('initializing');
-        setProgress(20);
-        try {
-          await faceDetectionService.initialize();
-          setProgress(100);
-          setAnalysisState('idle');
-        } catch (err) {
-          setError('Failed to initialize face detection. Please refresh and try again.');
-          setAnalysisState('error');
-        }
+  // Initialize face detection service when needed (lazy loading)
+  const initializeIfNeeded = async () => {
+    if (!faceDetectionService.isReady()) {
+      setAnalysisState('initializing');
+      setProgress(20);
+      setError(null);
+      
+      try {
+        await faceDetectionService.initialize();
+        setProgress(100);
+        console.log('✅ Face detection service ready');
+        return true;
+      } catch (err) {
+        const errorMessage = err instanceof Error ? err.message : 'Failed to initialize face detection';
+        console.error('❌ Face detection initialization failed:', errorMessage);
+        setError(`Initialization failed: ${errorMessage}. Please check your internet connection and try again.`);
+        setAnalysisState('error');
+        return false;
       }
-    };
-
-    initService();
-  }, []);
+    }
+    return true;
+  };
 
   const resetAnalysis = useCallback(() => {
     setAnalysisState('idle');
@@ -68,6 +71,10 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
       setAnalysisState('error');
       return;
     }
+
+    // Initialize face detection service if needed
+    const initialized = await initializeIfNeeded();
+    if (!initialized) return; // Initialization failed, error already set
 
     setAnalysisState('analyzing');
     setProgress(20);
@@ -104,6 +111,10 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
 
   const capturePhoto = useCallback(async () => {
     if (!webcamRef.current) return;
+
+    // Initialize face detection service if needed
+    const initialized = await initializeIfNeeded();
+    if (!initialized) return; // Initialization failed, error already set
 
     setAnalysisState('analyzing');
     setProgress(20);

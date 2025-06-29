@@ -8,29 +8,81 @@ export class FaceDetectionService {
   private model: faceLandmarksDetection.FaceLandmarksDetector | null = null;
   private isInitialized = false;
 
-  async initialize(): Promise<void> {
+  async initialize(retryCount = 0): Promise<void> {
     if (this.isInitialized) return;
 
-    try {
-      // Initialize TensorFlow.js backend
-      await tf.ready();
-      console.log('TensorFlow.js backend initialized:', tf.getBackend());
+    const maxRetries = 3;
+    const retryDelay = 1000 * (retryCount + 1); // Progressive delay
 
-      // Load the face landmarks detection model
-      this.model = await faceLandmarksDetection.createDetector(
+    try {
+      console.log(`🤖 Initializing face detection service (attempt ${retryCount + 1}/${maxRetries + 1})`);
+      
+      // Check if we're in a browser environment
+      if (typeof window === 'undefined') {
+        throw new Error('Face detection can only be initialized in browser environment');
+      }
+
+      // Check for WebGL support
+      const canvas = document.createElement('canvas');
+      const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      if (!gl) {
+        throw new Error('WebGL is not supported. Face detection requires WebGL for optimal performance.');
+      }
+
+      console.log('✅ Browser environment and WebGL support confirmed');
+
+      // Initialize TensorFlow.js backend with explicit configuration
+      await tf.ready();
+      
+      // Try to set webgl backend explicitly
+      if (tf.getBackend() !== 'webgl') {
+        try {
+          await tf.setBackend('webgl');
+          await tf.ready();
+        } catch (backendError) {
+          console.warn('⚠️ Failed to set WebGL backend, falling back to CPU:', backendError);
+          await tf.setBackend('cpu');
+          await tf.ready();
+        }
+      }
+
+      console.log('✅ TensorFlow.js backend initialized:', tf.getBackend());
+
+      // Load the face landmarks detection model with timeout
+      console.log('📥 Loading MediaPipe FaceMesh model...');
+      
+      const modelLoadPromise = faceLandmarksDetection.createDetector(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
         {
           runtime: 'tfjs',
-          refineLandmarks: true,
+          refineLandmarks: false, // Disable for faster loading
           maxFaces: 1,
         }
       );
 
+      // Add timeout to model loading
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Model loading timeout (30s)')), 30000);
+      });
+
+      this.model = await Promise.race([modelLoadPromise, timeoutPromise]);
+
       this.isInitialized = true;
-      console.log('Face detection model initialized successfully');
+      console.log('✅ Face detection model initialized successfully');
+      
     } catch (error) {
-      console.error('Failed to initialize face detection model:', error);
-      throw new Error(`Failed to initialize face detection model: ${error}`);
+      console.error(`❌ Failed to initialize face detection model (attempt ${retryCount + 1}):`, error);
+      
+      // Retry logic
+      if (retryCount < maxRetries) {
+        console.log(`🔄 Retrying in ${retryDelay}ms...`);
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+        return this.initialize(retryCount + 1);
+      }
+      
+      // Final failure
+      const errorMessage = error instanceof Error ? error.message : 'Unknown initialization error';
+      throw new Error(`Failed to initialize face detection after ${maxRetries + 1} attempts: ${errorMessage}`);
     }
   }
 
