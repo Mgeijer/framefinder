@@ -416,6 +416,11 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
                   facingMode: "user"
                 }}
                 className="w-full h-full object-cover"
+                onUserMediaError={(error) => {
+                  console.error('Camera access error:', error);
+                  setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
+                  setAnalysisState('error');
+                }}
               />
               <div className="absolute inset-4 border-2 border-white/50 rounded-lg pointer-events-none">
                 <div className="w-full h-full border border-dashed border-white/30 rounded-lg flex items-center justify-center">
@@ -428,8 +433,11 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
             <div className="text-center">
               <Button onClick={capturePhoto} size="lg">
                 <Camera className="h-4 w-4 mr-2" />
-                Capture & Analyze
+                📷 Capture & Analyze
               </Button>
+            </div>
+            <div className="text-center text-xs text-muted-foreground">
+              ⚠️ Camera requires HTTPS and permission access
             </div>
           </div>
         ) : (
