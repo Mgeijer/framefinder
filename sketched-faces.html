@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sketched Face Shapes - FrameFinder</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .faces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .face-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .face-shape-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #16a34a;
+        }
+        .face-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            line-height: 1.4;
+        }
+        .sketch-face {
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #16a34a; margin-bottom: 2rem;">Sketched Face Shape Guide</h1>
+    
+    <div class="faces-grid">
+        <!-- Oval Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Oval</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Face outline -->
+                    <path d="M100 20 C130 20, 150 50, 150 100 C150 150, 130 200, 100 220 C70 200, 50 150, 50 100 C50 50, 70 20, 100 20 Z" 
+                          fill="none" stroke="#2d3748" stroke-width="2.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M70 25 Q100 15, 130 25 Q140 30, 135 35 Q120 20, 100 20 Q80 20, 65 35 Q60 30, 70 25" 
+                          fill="none" stroke="#2d3748" stroke-width="2"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="85" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <ellipse cx="120" cy="85" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <circle cx="80" cy="85" r="2" fill="#2d3748"/>
+                    <circle cx="120" cy="85" r="2" fill="#2d3748"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M72 75 Q80 70, 88 75" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <path d="M112 75 Q120 70, 128 75" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 100 L95 120 L100 125 L105 120 Z" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M90 150 Q100 160, 110 150" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Jawline definition -->
+                    <path d="M65 160 Q100 180, 135 160" fill="none" stroke="#2d3748" stroke-width="1" opacity="0.6"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Balanced proportions with gently rounded features. Length is about 1.5 times the width.
+            </div>
+        </div>
+
+        <!-- Round Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Round</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Face outline -->
+                    <circle cx="100" cy="120" r="70" fill="none" stroke="#2d3748" stroke-width="2.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M60 70 Q100 50, 140 70 Q145 75, 140 80 Q120 60, 100 60 Q80 60, 60 80 Q55 75, 60 70" 
+                          fill="none" stroke="#2d3748" stroke-width="2"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="105" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <ellipse cx="120" cy="105" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <circle cx="80" cy="105" r="2" fill="#2d3748"/>
+                    <circle cx="120" cy="105" r="2" fill="#2d3748"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M72 95 Q80 90, 88 95" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <path d="M112 95 Q120 90, 128 95" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 120 L95 135 L100 140 L105 135 Z" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M90 165 Q100 175, 110 165" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Cheek emphasis -->
+                    <path d="M55 120 Q70 130, 65 140" fill="none" stroke="#2d3748" stroke-width="1" opacity="0.5"/>
+                    <path d="M145 120 Q130 130, 135 140" fill="none" stroke="#2d3748" stroke-width="1" opacity="0.5"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Soft curves with full cheeks. Width and height are nearly equal with rounded jawline.
+            </div>
+        </div>
+
+        <!-- Square Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Square</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Face outline -->
+                    <path d="M60 40 L140 40 L145 50 L150 100 L150 170 L145 190 L100 200 L55 190 L50 170 L50 100 L55 50 Z" 
+                          fill="none" stroke="#2d3748" stroke-width="2.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M65 35 L135 35 Q142 40, 138 45 Q120 30, 100 30 Q80 30, 62 45 Q58 40, 65 35" 
+                          fill="none" stroke="#2d3748" stroke-width="2"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="90" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <ellipse cx="120" cy="90" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <circle cx="80" cy="90" r="2" fill="#2d3748"/>
+                    <circle cx="120" cy="90" r="2" fill="#2d3748"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M72 80 Q80 75, 88 80" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <path d="M112 80 Q120 75, 128 80" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 110 L95 125 L100 130 L105 125 Z" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M90 155 Q100 165, 110 155" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Strong jawline -->
+                    <path d="M60 175 L100 185 L140 175" fill="none" stroke="#2d3748" stroke-width="1.5" opacity="0.7"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Strong angular jawline with broad forehead. Width and height are similar with defined edges.
+            </div>
+        </div>
+
+        <!-- Heart Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Heart</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Face outline -->
+                    <path d="M100 25 C130 25, 155 45, 155 80 C155 100, 150 120, 140 140 C130 160, 120 180, 100 200 C80 180, 70 160, 60 140 C50 120, 45 100, 45 80 C45 45, 70 25, 100 25 Z" 
+                          fill="none" stroke="#2d3748" stroke-width="2.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M75 20 Q100 10, 125 20 Q135 25, 130 30 Q115 15, 100 15 Q85 15, 70 30 Q65 25, 75 20" 
+                          fill="none" stroke="#2d3748" stroke-width="2"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="75" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <ellipse cx="120" cy="75" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <circle cx="80" cy="75" r="2" fill="#2d3748"/>
+                    <circle cx="120" cy="75" r="2" fill="#2d3748"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M72 65 Q80 60, 88 65" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <path d="M112 65 Q120 60, 128 65" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 95 L95 110 L100 115 L105 110 Z" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M92 140 Q100 150, 108 140" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Cheekbones -->
+                    <path d="M60 90 Q75 95, 70 105" fill="none" stroke="#2d3748" stroke-width="1" opacity="0.5"/>
+                    <path d="M140 90 Q125 95, 130 105" fill="none" stroke="#2d3748" stroke-width="1" opacity="0.5"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Wide forehead and cheekbones with narrow, pointed chin. Creates an inverted triangle.
+            </div>
+        </div>
+
+        <!-- Diamond Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Diamond</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Face outline -->
+                    <path d="M100 25 C115 25, 125 35, 130 50 C140 70, 150 90, 150 110 C150 130, 140 150, 130 170 C125 185, 115 195, 100 200 C85 195, 75 185, 70 170 C60 150, 50 130, 50 110 C50 90, 60 70, 70 50 C75 35, 85 25, 100 25 Z" 
+                          fill="none" stroke="#2d3748" stroke-width="2.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M85 20 Q100 15, 115 20 Q120 25, 115 30 Q105 20, 100 20 Q95 20, 85 30 Q80 25, 85 20" 
+                          fill="none" stroke="#2d3748" stroke-width="2"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="85" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <ellipse cx="120" cy="85" rx="8" ry="6" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <circle cx="80" cy="85" r="2" fill="#2d3748"/>
+                    <circle cx="120" cy="85" r="2" fill="#2d3748"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M72 75 Q80 70, 88 75" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <path d="M112 75 Q120 70, 128 75" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 105 L95 120 L100 125 L105 120 Z" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M92 150 Q100 160, 108 150" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Prominent cheekbones -->
+                    <path d="M55 110 Q65 115, 60 125" fill="none" stroke="#2d3748" stroke-width="1.5" opacity="0.6"/>
+                    <path d="M145 110 Q135 115, 140 125" fill="none" stroke="#2d3748" stroke-width="1.5" opacity="0.6"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Narrow forehead and jaw with wide, prominent cheekbones. Creates a diamond shape.
+            </div>
+        </div>
+
+        <!-- Triangle Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Triangle</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Face outline -->
+                    <path d="M100 30 C110 30, 120 35, 125 45 C130 55, 135 70, 140 90 C145 110, 150 130, 155 150 C160 170, 150 185, 135 195 C120 205, 100 210, 100 210 C100 210, 80 205, 65 195 C50 185, 40 170, 45 150 C50 130, 55 110, 60 90 C65 70, 70 55, 75 45 C80 35, 90 30, 100 30 Z" 
+                          fill="none" stroke="#2d3748" stroke-width="2.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M90 25 Q100 20, 110 25 Q115 30, 110 35 Q105 25, 100 25 Q95 25, 90 35 Q85 30, 90 25" 
+                          fill="none" stroke="#2d3748" stroke-width="2"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="85" cy="75" rx="7" ry="5" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <ellipse cx="115" cy="75" rx="7" ry="5" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <circle cx="85" cy="75" r="2" fill="#2d3748"/>
+                    <circle cx="115" cy="75" r="2" fill="#2d3748"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M78 65 Q85 62, 92 65" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    <path d="M108 65 Q115 62, 122 65" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 95 L96 110 L100 115 L104 110 Z" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M90 140 Q100 150, 110 140" fill="none" stroke="#2d3748" stroke-width="1.5"/>
+                    
+                    <!-- Wide jawline -->
+                    <path d="M50 175 Q100 190, 150 175" fill="none" stroke="#2d3748" stroke-width="1.5" opacity="0.7"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Narrow forehead with wider jawline. Also called pear-shaped face.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

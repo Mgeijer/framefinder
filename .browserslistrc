@@ -1,0 +1,22 @@
+# Browsers that we support
+
+# Production browsers
+> 0.5%
+last 2 major versions
+not dead
+
+# Specific browser support
+Chrome >= 88
+Safari >= 14
+Firefox >= 78
+Edge >= 88
+
+# Mobile browsers
+iOS >= 14
+Android >= 8
+
+# Exclude very old browsers
+not IE 11
+not op_mini all
+not and_qq < 13
+not kaios <= 3

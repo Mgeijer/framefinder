@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Pencil Face Sketches - FrameFinder</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            background: #f8fafc;
+        }
+        .faces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .face-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .face-shape-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #16a34a;
+        }
+        .face-description {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            line-height: 1.4;
+        }
+        .sketch-face {
+            margin: 1rem 0;
+            background: #fefefe;
+            border-radius: 8px;
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center; color: #16a34a; margin-bottom: 2rem;">Realistic Pencil Face Sketches</h1>
+    
+    <div class="faces-grid">
+        <!-- Oval Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Oval</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <!-- Gradients for shading -->
+                        <radialGradient id="faceShading1" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#f8f8f8"/>
+                            <stop offset="70%" stop-color="#e8e8e8"/>
+                            <stop offset="100%" stop-color="#d0d0d0"/>
+                        </radialGradient>
+                        <linearGradient id="hairShading1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4a4a4a"/>
+                            <stop offset="50%" stop-color="#2a2a2a"/>
+                            <stop offset="100%" stop-color="#1a1a1a"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Face base with shading -->
+                    <path d="M100 20 C130 20, 150 50, 150 100 C150 150, 130 200, 100 220 C70 200, 50 150, 50 100 C50 50, 70 20, 100 20 Z" 
+                          fill="url(#faceShading1)" stroke="#333" stroke-width="1.5"/>
+                    
+                    <!-- Hair with texture -->
+                    <path d="M70 25 Q100 10, 130 25 Q140 30, 135 40 Q120 20, 100 15 Q80 20, 65 40 Q60 30, 70 25" 
+                          fill="url(#hairShading1)" stroke="#222" stroke-width="1"/>
+                    <path d="M75 30 Q85 25, 95 28 Q105 25, 115 28 Q125 25, 135 30" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Eye area shadows -->
+                    <ellipse cx="80" cy="83" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    <ellipse cx="120" cy="83" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    
+                    <!-- Eyes with detail -->
+                    <ellipse cx="80" cy="85" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <ellipse cx="120" cy="85" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <circle cx="80" cy="85" r="4" fill="#4a4a4a"/>
+                    <circle cx="120" cy="85" r="4" fill="#4a4a4a"/>
+                    <circle cx="82" cy="83" r="1.5" fill="white" opacity="0.8"/>
+                    <circle cx="122" cy="83" r="1.5" fill="white" opacity="0.8"/>
+                    
+                    <!-- Eyelashes -->
+                    <path d="M70 82 L72 80 M74 81 L76 79 M86 79 L88 80 M90 82 L92 80" 
+                          stroke="#333" stroke-width="0.8"/>
+                    <path d="M110 80 L112 79 M114 81 L116 79 M126 79 L128 81 M130 82 L132 80" 
+                          stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Eyebrows with texture -->
+                    <path d="M70 75 Q80 70, 90 75" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M72 76 Q80 72, 88 76 M74 77 Q80 73, 86 77" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    <path d="M110 75 Q120 70, 130 75" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M112 76 Q120 72, 128 76 M114 77 Q120 73, 126 77" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    
+                    <!-- Nose with shadows -->
+                    <path d="M100 100 L95 120 L100 125 L105 120 Z" 
+                          fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+                    <path d="M97 115 Q100 118, 103 115" fill="none" stroke="#333" stroke-width="0.8"/>
+                    <ellipse cx="96" cy="120" rx="2" ry="3" fill="#e8e8e8"/>
+                    <ellipse cx="104" cy="120" rx="2" ry="3" fill="#e8e8e8"/>
+                    
+                    <!-- Mouth with shading -->
+                    <path d="M88 150 Q100 162, 112 150" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M92 152 Q100 158, 108 152" fill="#f8d7da" stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Cheek contours -->
+                    <path d="M65 130 Q75 135, 70 145" fill="none" stroke="#ccc" stroke-width="1" opacity="0.6"/>
+                    <path d="M135 130 Q125 135, 130 145" fill="none" stroke="#ccc" stroke-width="1" opacity="0.6"/>
+                    
+                    <!-- Jawline definition -->
+                    <path d="M65 165 Q100 185, 135 165" fill="none" stroke="#bbb" stroke-width="1.2" opacity="0.7"/>
+                    
+                    <!-- Chin dimple -->
+                    <ellipse cx="100" cy="200" rx="3" ry="5" fill="#e8e8e8" opacity="0.5"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Balanced proportions with gently rounded features. Length is about 1.5 times the width.
+            </div>
+        </div>
+
+        <!-- Round Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Round</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="faceShading2" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#f8f8f8"/>
+                            <stop offset="70%" stop-color="#e8e8e8"/>
+                            <stop offset="100%" stop-color="#d0d0d0"/>
+                        </radialGradient>
+                        <linearGradient id="hairShading2" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4a4a4a"/>
+                            <stop offset="50%" stop-color="#2a2a2a"/>
+                            <stop offset="100%" stop-color="#1a1a1a"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Round face with full cheeks -->
+                    <circle cx="100" cy="120" r="75" fill="url(#faceShading2)" stroke="#333" stroke-width="1.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M55 75 Q100 45, 145 75 Q150 80, 145 85 Q120 55, 100 55 Q80 55, 55 85 Q50 80, 55 75" 
+                          fill="url(#hairShading2)" stroke="#222" stroke-width="1"/>
+                    <path d="M60 80 Q75 70, 90 75 Q105 70, 120 75 Q135 70, 150 80" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Prominent cheek shadows -->
+                    <ellipse cx="65" cy="125" rx="15" ry="20" fill="#e0e0e0" opacity="0.5"/>
+                    <ellipse cx="135" cy="125" rx="15" ry="20" fill="#e0e0e0" opacity="0.5"/>
+                    
+                    <!-- Eye area shadows -->
+                    <ellipse cx="80" cy="103" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    <ellipse cx="120" cy="103" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="105" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <ellipse cx="120" cy="105" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <circle cx="80" cy="105" r="4" fill="#4a4a4a"/>
+                    <circle cx="120" cy="105" r="4" fill="#4a4a4a"/>
+                    <circle cx="82" cy="103" r="1.5" fill="white" opacity="0.8"/>
+                    <circle cx="122" cy="103" r="1.5" fill="white" opacity="0.8"/>
+                    
+                    <!-- Eyelashes -->
+                    <path d="M70 102 L72 100 M74 101 L76 99 M86 99 L88 100 M90 102 L92 100" 
+                          stroke="#333" stroke-width="0.8"/>
+                    <path d="M110 100 L112 99 M114 101 L116 99 M126 99 L128 101 M130 102 L132 100" 
+                          stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M70 95 Q80 90, 90 95" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M72 96 Q80 92, 88 96 M74 97 Q80 93, 86 97" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    <path d="M110 95 Q120 90, 130 95" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M112 96 Q120 92, 128 96 M114 97 Q120 93, 126 97" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 120 L95 135 L100 140 L105 135 Z" 
+                          fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+                    <path d="M97 130 Q100 133, 103 130" fill="none" stroke="#333" stroke-width="0.8"/>
+                    <ellipse cx="96" cy="135" rx="2" ry="3" fill="#e8e8e8"/>
+                    <ellipse cx="104" cy="135" rx="2" ry="3" fill="#e8e8e8"/>
+                    
+                    <!-- Smile lines for round face -->
+                    <path d="M85 165 Q100 177, 115 165" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M89 167 Q100 173, 111 167" fill="#f8d7da" stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Round face contours -->
+                    <path d="M50 120 Q65 135, 60 150" fill="none" stroke="#ccc" stroke-width="1.2" opacity="0.6"/>
+                    <path d="M150 120 Q135 135, 140 150" fill="none" stroke="#ccc" stroke-width="1.2" opacity="0.6"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Soft curves with full cheeks. Width and height are nearly equal with rounded jawline.
+            </div>
+        </div>
+
+        <!-- Square Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Square</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="faceShading3" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#f8f8f8"/>
+                            <stop offset="70%" stop-color="#e8e8e8"/>
+                            <stop offset="100%" stop-color="#d0d0d0"/>
+                        </radialGradient>
+                        <linearGradient id="hairShading3" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4a4a4a"/>
+                            <stop offset="50%" stop-color="#2a2a2a"/>
+                            <stop offset="100%" stop-color="#1a1a1a"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Square face outline -->
+                    <path d="M55 40 L145 40 L150 50 L155 100 L155 170 L150 190 L100 205 L50 190 L45 170 L45 100 L50 50 Z" 
+                          fill="url(#faceShading3)" stroke="#333" stroke-width="1.5"/>
+                    
+                    <!-- Hair -->
+                    <path d="M60 35 L140 35 Q147 40, 143 45 Q120 25, 100 25 Q80 25, 57 45 Q53 40, 60 35" 
+                          fill="url(#hairShading3)" stroke="#222" stroke-width="1"/>
+                    <path d="M65 40 Q80 30, 95 35 Q105 30, 120 35 Q135 30, 150 40" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Strong jaw shadows -->
+                    <path d="M50 170 Q100 190, 150 170" fill="#d8d8d8" stroke="#bbb" stroke-width="1"/>
+                    <path d="M55 175 L95 185 L100 188 L105 185 L145 175" 
+                          fill="none" stroke="#aaa" stroke-width="1.2" opacity="0.8"/>
+                    
+                    <!-- Eye area shadows -->
+                    <ellipse cx="80" cy="88" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    <ellipse cx="120" cy="88" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="90" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <ellipse cx="120" cy="90" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <circle cx="80" cy="90" r="4" fill="#4a4a4a"/>
+                    <circle cx="120" cy="90" r="4" fill="#4a4a4a"/>
+                    <circle cx="82" cy="88" r="1.5" fill="white" opacity="0.8"/>
+                    <circle cx="122" cy="88" r="1.5" fill="white" opacity="0.8"/>
+                    
+                    <!-- Strong eyebrows -->
+                    <path d="M70 80 Q80 75, 90 80" fill="none" stroke="#333" stroke-width="2.5"/>
+                    <path d="M72 81 Q80 77, 88 81 M74 82 Q80 78, 86 82" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+                    <path d="M110 80 Q120 75, 130 80" fill="none" stroke="#333" stroke-width="2.5"/>
+                    <path d="M112 81 Q120 77, 128 81 M114 82 Q120 78, 126 82" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.7"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 110 L95 125 L100 130 L105 125 Z" 
+                          fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+                    <path d="M97 120 Q100 123, 103 120" fill="none" stroke="#333" stroke-width="0.8"/>
+                    <ellipse cx="96" cy="125" rx="2" ry="3" fill="#e8e8e8"/>
+                    <ellipse cx="104" cy="125" rx="2" ry="3" fill="#e8e8e8"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M88 155 Q100 167, 112 155" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M92 157 Q100 163, 108 157" fill="#f8d7da" stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Angular cheekbones -->
+                    <path d="M55 110 Q70 115, 65 125" fill="none" stroke="#bbb" stroke-width="1.5" opacity="0.7"/>
+                    <path d="M145 110 Q130 115, 135 125" fill="none" stroke="#bbb" stroke-width="1.5" opacity="0.7"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Strong angular jawline with broad forehead. Width and height are similar with defined edges.
+            </div>
+        </div>
+
+        <!-- Heart Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Heart</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="faceShading4" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#f8f8f8"/>
+                            <stop offset="70%" stop-color="#e8e8e8"/>
+                            <stop offset="100%" stop-color="#d0d0d0"/>
+                        </radialGradient>
+                        <linearGradient id="hairShading4" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4a4a4a"/>
+                            <stop offset="50%" stop-color="#2a2a2a"/>
+                            <stop offset="100%" stop-color="#1a1a1a"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Heart-shaped face -->
+                    <path d="M100 20 C135 20, 160 40, 160 75 C160 95, 155 115, 145 135 C135 155, 125 175, 100 205 C75 175, 65 155, 55 135 C45 115, 40 95, 40 75 C40 40, 65 20, 100 20 Z" 
+                          fill="url(#faceShading4)" stroke="#333" stroke-width="1.5"/>
+                    
+                    <!-- Wide forehead hair -->
+                    <path d="M70 18 Q100 5, 130 18 Q140 23, 135 28 Q115 10, 100 10 Q85 10, 65 28 Q60 23, 70 18" 
+                          fill="url(#hairShading4)" stroke="#222" stroke-width="1"/>
+                    <path d="M75 23 Q85 18, 95 21 Q105 18, 115 21 Q125 18, 135 23" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Wide forehead emphasis -->
+                    <path d="M45 60 Q100 50, 155 60" fill="none" stroke="#ddd" stroke-width="1" opacity="0.6"/>
+                    
+                    <!-- Eye area shadows -->
+                    <ellipse cx="80" cy="73" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    <ellipse cx="120" cy="73" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="75" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <ellipse cx="120" cy="75" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <circle cx="80" cy="75" r="4" fill="#4a4a4a"/>
+                    <circle cx="120" cy="75" r="4" fill="#4a4a4a"/>
+                    <circle cx="82" cy="73" r="1.5" fill="white" opacity="0.8"/>
+                    <circle cx="122" cy="73" r="1.5" fill="white" opacity="0.8"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M70 65 Q80 60, 90 65" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M72 66 Q80 62, 88 66 M74 67 Q80 63, 86 67" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    <path d="M110 65 Q120 60, 130 65" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M112 66 Q120 62, 128 66 M114 67 Q120 63, 126 67" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 95 L95 110 L100 115 L105 110 Z" 
+                          fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+                    <path d="M97 105 Q100 108, 103 105" fill="none" stroke="#333" stroke-width="0.8"/>
+                    <ellipse cx="96" cy="110" rx="2" ry="3" fill="#e8e8e8"/>
+                    <ellipse cx="104" cy="110" rx="2" ry="3" fill="#e8e8e8"/>
+                    
+                    <!-- Small mouth for pointed chin -->
+                    <path d="M92 140 Q100 152, 108 140" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M94 142 Q100 148, 106 142" fill="#f8d7da" stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Prominent cheekbones -->
+                    <path d="M55 85 Q70 90, 65 100" fill="none" stroke="#bbb" stroke-width="1.2" opacity="0.7"/>
+                    <path d="M145 85 Q130 90, 135 100" fill="none" stroke="#bbb" stroke-width="1.2" opacity="0.7"/>
+                    
+                    <!-- Pointed chin definition -->
+                    <path d="M85 180 Q100 200, 115 180" fill="none" stroke="#aaa" stroke-width="1.5" opacity="0.8"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Wide forehead and cheekbones with narrow, pointed chin. Creates an inverted triangle.
+            </div>
+        </div>
+
+        <!-- Diamond Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Diamond</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="faceShading5" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#f8f8f8"/>
+                            <stop offset="70%" stop-color="#e8e8e8"/>
+                            <stop offset="100%" stop-color="#d0d0d0"/>
+                        </radialGradient>
+                        <linearGradient id="hairShading5" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4a4a4a"/>
+                            <stop offset="50%" stop-color="#2a2a2a"/>
+                            <stop offset="100%" stop-color="#1a1a1a"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Diamond face shape -->
+                    <path d="M100 25 C118 25, 130 35, 135 50 C145 70, 155 90, 155 110 C155 130, 145 150, 135 170 C130 185, 118 195, 100 205 C82 195, 70 185, 65 170 C55 150, 45 130, 45 110 C45 90, 55 70, 65 50 C70 35, 82 25, 100 25 Z" 
+                          fill="url(#faceShading5)" stroke="#333" stroke-width="1.5"/>
+                    
+                    <!-- Narrow forehead hair -->
+                    <path d="M85 22 Q100 15, 115 22 Q120 27, 115 32 Q105 20, 100 20 Q95 20, 85 32 Q80 27, 85 22" 
+                          fill="url(#hairShading5)" stroke="#222" stroke-width="1"/>
+                    <path d="M88 27 Q95 22, 105 27 Q110 22, 115 27" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Very prominent cheekbones -->
+                    <ellipse cx="50" cy="110" rx="8" ry="15" fill="#d8d8d8" opacity="0.6"/>
+                    <ellipse cx="150" cy="110" rx="8" ry="15" fill="#d8d8d8" opacity="0.6"/>
+                    <path d="M45 105 Q55 112, 50 125" fill="none" stroke="#aaa" stroke-width="2" opacity="0.8"/>
+                    <path d="M155 105 Q145 112, 150 125" fill="none" stroke="#aaa" stroke-width="2" opacity="0.8"/>
+                    
+                    <!-- Eye area shadows -->
+                    <ellipse cx="80" cy="83" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    <ellipse cx="120" cy="83" rx="12" ry="8" fill="#e0e0e0" opacity="0.4"/>
+                    
+                    <!-- Eyes -->
+                    <ellipse cx="80" cy="85" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <ellipse cx="120" cy="85" rx="10" ry="6" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <circle cx="80" cy="85" r="4" fill="#4a4a4a"/>
+                    <circle cx="120" cy="85" r="4" fill="#4a4a4a"/>
+                    <circle cx="82" cy="83" r="1.5" fill="white" opacity="0.8"/>
+                    <circle cx="122" cy="83" r="1.5" fill="white" opacity="0.8"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M72 75 Q80 70, 88 75" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M74 76 Q80 72, 86 76 M76 77 Q80 73, 84 77" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    <path d="M112 75 Q120 70, 128 75" fill="none" stroke="#333" stroke-width="2"/>
+                    <path d="M114 76 Q120 72, 126 76 M116 77 Q120 73, 124 77" 
+                          fill="none" stroke="#333" stroke-width="0.6" opacity="0.7"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 105 L95 120 L100 125 L105 120 Z" 
+                          fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+                    <path d="M97 115 Q100 118, 103 115" fill="none" stroke="#333" stroke-width="0.8"/>
+                    <ellipse cx="96" cy="120" rx="2" ry="3" fill="#e8e8e8"/>
+                    <ellipse cx="104" cy="120" rx="2" ry="3" fill="#e8e8e8"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M92 150 Q100 162, 108 150" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M94 152 Q100 158, 106 152" fill="#f8d7da" stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Narrow jawline -->
+                    <path d="M75 180 Q100 195, 125 180" fill="none" stroke="#bbb" stroke-width="1.5" opacity="0.7"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Narrow forehead and jaw with wide, prominent cheekbones. Creates a diamond shape.
+            </div>
+        </div>
+
+        <!-- Triangle Face -->
+        <div class="face-card">
+            <div class="face-shape-name">Triangle</div>
+            <div class="sketch-face">
+                <svg width="200" height="240" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <radialGradient id="faceShading6" cx="0.3" cy="0.3">
+                            <stop offset="0%" stop-color="#f8f8f8"/>
+                            <stop offset="70%" stop-color="#e8e8e8"/>
+                            <stop offset="100%" stop-color="#d0d0d0"/>
+                        </radialGradient>
+                        <linearGradient id="hairShading6" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#4a4a4a"/>
+                            <stop offset="50%" stop-color="#2a2a2a"/>
+                            <stop offset="100%" stop-color="#1a1a1a"/>
+                        </linearGradient>
+                    </defs>
+                    
+                    <!-- Triangle/pear face shape -->
+                    <path d="M100 30 C112 30, 122 35, 127 45 C132 55, 137 70, 142 90 C147 110, 152 130, 157 150 C162 170, 155 185, 140 195 C125 205, 100 215, 100 215 C100 215, 75 205, 60 195 C45 185, 38 170, 43 150 C48 130, 53 110, 58 90 C63 70, 68 55, 73 45 C78 35, 88 30, 100 30 Z" 
+                          fill="url(#faceShading6)" stroke="#333" stroke-width="1.5"/>
+                    
+                    <!-- Narrow forehead hair -->
+                    <path d="M88 25 Q100 18, 112 25 Q117 30, 112 35 Q106 25, 100 25 Q94 25, 88 35 Q83 30, 88 25" 
+                          fill="url(#hairShading6)" stroke="#222" stroke-width="1"/>
+                    <path d="M91 30 Q96 25, 104 30 Q109 25, 114 30" 
+                          fill="none" stroke="#333" stroke-width="0.8" opacity="0.6"/>
+                    
+                    <!-- Wide jaw emphasis -->
+                    <path d="M40 175 Q100 195, 160 175" fill="#d0d0d0" stroke="#aaa" stroke-width="1.5"/>
+                    <path d="M45 180 Q75 190, 100 195 Q125 190, 155 180" 
+                          fill="none" stroke="#999" stroke-width="1.8" opacity="0.9"/>
+                    
+                    <!-- Eye area shadows -->
+                    <ellipse cx="85" cy="73" rx="11" ry="7" fill="#e0e0e0" opacity="0.4"/>
+                    <ellipse cx="115" cy="73" rx="11" ry="7" fill="#e0e0e0" opacity="0.4"/>
+                    
+                    <!-- Eyes (slightly closer due to narrow forehead) -->
+                    <ellipse cx="85" cy="75" rx="9" ry="5" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <ellipse cx="115" cy="75" rx="9" ry="5" fill="white" stroke="#333" stroke-width="1.2"/>
+                    <circle cx="85" cy="75" r="3.5" fill="#4a4a4a"/>
+                    <circle cx="115" cy="75" r="3.5" fill="#4a4a4a"/>
+                    <circle cx="87" cy="73" r="1.2" fill="white" opacity="0.8"/>
+                    <circle cx="117" cy="73" r="1.2" fill="white" opacity="0.8"/>
+                    
+                    <!-- Eyebrows -->
+                    <path d="M78 65 Q85 62, 92 65" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M80 66 Q85 63, 90 66 M82 67 Q85 64, 88 67" 
+                          fill="none" stroke="#333" stroke-width="0.5" opacity="0.7"/>
+                    <path d="M108 65 Q115 62, 122 65" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M110 66 Q115 63, 120 66 M112 67 Q115 64, 118 67" 
+                          fill="none" stroke="#333" stroke-width="0.5" opacity="0.7"/>
+                    
+                    <!-- Nose -->
+                    <path d="M100 95 L96 110 L100 115 L104 110 Z" 
+                          fill="#f0f0f0" stroke="#333" stroke-width="1"/>
+                    <path d="M98 105 Q100 108, 102 105" fill="none" stroke="#333" stroke-width="0.8"/>
+                    <ellipse cx="97" cy="110" rx="2" ry="3" fill="#e8e8e8"/>
+                    <ellipse cx="103" cy="110" rx="2" ry="3" fill="#e8e8e8"/>
+                    
+                    <!-- Mouth -->
+                    <path d="M88 140 Q100 152, 112 140" fill="none" stroke="#333" stroke-width="1.8"/>
+                    <path d="M91 142 Q100 148, 109 142" fill="#f8d7da" stroke="#333" stroke-width="0.8"/>
+                    
+                    <!-- Strong jaw contours -->
+                    <path d="M45 140 Q60 150, 55 165" fill="none" stroke="#aaa" stroke-width="1.5" opacity="0.8"/>
+                    <path d="M155 140 Q140 150, 145 165" fill="none" stroke="#aaa" stroke-width="1.5" opacity="0.8"/>
+                </svg>
+            </div>
+            <div class="face-description">
+                Narrow forehead with wider jawline. Also called pear-shaped face.
+            </div>
+        </div>
+    </div>
+</body>
+</html>

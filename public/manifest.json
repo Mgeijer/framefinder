@@ -1,0 +1,74 @@
+{
+  "name": "FrameFinder - AI Face Shape Analysis",
+  "short_name": "FrameFinder",
+  "description": "AI-powered face shape analysis and personalized eyeglass recommendations",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "categories": ["lifestyle", "utilities", "shopping"],
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "form_factor": "wide",
+      "label": "FrameFinder AI Face Analysis on Desktop"
+    },
+    {
+      "src": "/screenshot-mobile.png", 
+      "sizes": "390x844",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "FrameFinder AI Face Analysis on Mobile"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Analyze Face Shape",
+      "short_name": "Analyze",
+      "description": "Start AI face shape analysis",
+      "url": "/face-analysis",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Face Shape Guide",
+      "short_name": "Guide",
+      "description": "Browse face shape guides",
+      "url": "/guide",
+      "icons": [
+        {
+          "src": "/icon-192x192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}

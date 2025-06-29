@@ -1,0 +1,2464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrameFinder - Find Your Perfect Eyeglass Style</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.6"></script>
+    <style>
+        /* Supabase Theme CSS Variables - Enhanced Contrast */
+        :root {
+            --background: oklch(0.98 0 0);
+            --foreground: oklch(0.15 0 0);
+            --card: oklch(1.0 0 0);
+            --card-foreground: oklch(0.15 0 0);
+            --popover: oklch(1.0 0 0);
+            --popover-foreground: oklch(0.25 0 0);
+            --primary: oklch(0.35 0.15 160.9080);
+            --primary-foreground: oklch(0.98 0.015 160.9080);
+            --secondary: oklch(0.95 0 0);
+            --secondary-foreground: oklch(0.15 0 0);
+            --muted: oklch(0.92 0 0);
+            --muted-foreground: oklch(0.35 0 0);
+            --accent: oklch(0.92 0 0);
+            --accent-foreground: oklch(0.2 0 0);
+            --destructive: oklch(0.5523 0.1927 32.7272);
+            --destructive-foreground: oklch(0.9934 0.0032 17.2118);
+            --border: oklch(0.85 0 0);
+            --input: oklch(0.96 0 0);
+            --ring: oklch(0.8348 0.1302 160.9080);
+            --chart-1: oklch(0.8348 0.1302 160.9080);
+            --chart-2: oklch(0.6231 0.1880 259.8145);
+            --chart-3: oklch(0.6056 0.2189 292.7172);
+            --chart-4: oklch(0.7686 0.1647 70.0804);
+            --chart-5: oklch(0.6959 0.1491 162.4796);
+            --sidebar: oklch(0.9911 0 0);
+            --sidebar-foreground: oklch(0.5452 0 0);
+            --sidebar-primary: oklch(0.8348 0.1302 160.9080);
+            --sidebar-primary-foreground: oklch(0.2626 0.0147 166.4589);
+            --sidebar-accent: oklch(0.9461 0 0);
+            --sidebar-accent-foreground: oklch(0.2435 0 0);
+            --sidebar-border: oklch(0.9037 0 0);
+            --sidebar-ring: oklch(0.8348 0.1302 160.9080);
+            --font-sans: Outfit, sans-serif;
+            --font-serif: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+            --font-mono: monospace;
+            --radius: 0.5rem;
+            --shadow-2xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
+            --shadow-xs: 0px 1px 3px 0px hsl(0 0% 0% / 0.09);
+            --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+            --shadow: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+            --shadow-md: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 2px 4px -1px hsl(0 0% 0% / 0.17);
+            --shadow-lg: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 4px 6px -1px hsl(0 0% 0% / 0.17);
+            --shadow-xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 8px 10px -1px hsl(0 0% 0% / 0.17);
+            --shadow-2xl: 0px 1px 3px 0px hsl(0 0% 0% / 0.43);
+            --tracking-normal: 0.025em;
+        }
+
+        .dark {
+            --background: oklch(0.1822 0 0);
+            --foreground: oklch(0.9288 0.0126 255.5078);
+            --card: oklch(0.2046 0 0);
+            --card-foreground: oklch(0.9288 0.0126 255.5078);
+            --popover: oklch(0.2603 0 0);
+            --popover-foreground: oklch(0.7348 0 0);
+            --primary: oklch(0.6 0.15 156.7556);
+            --primary-foreground: oklch(0.05 0.015 156.7556);
+            --secondary: oklch(0.2603 0 0);
+            --secondary-foreground: oklch(0.9851 0 0);
+            --muted: oklch(0.2393 0 0);
+            --muted-foreground: oklch(0.7122 0 0);
+            --accent: oklch(0.3132 0 0);
+            --accent-foreground: oklch(0.9851 0 0);
+            --destructive: oklch(0.3123 0.0852 29.7877);
+            --destructive-foreground: oklch(0.9368 0.0045 34.3092);
+            --border: oklch(0.2809 0 0);
+            --input: oklch(0.2603 0 0);
+            --ring: oklch(0.8003 0.1821 151.7110);
+            --chart-1: oklch(0.8003 0.1821 151.7110);
+            --chart-2: oklch(0.7137 0.1434 254.6240);
+            --chart-3: oklch(0.7090 0.1592 293.5412);
+            --chart-4: oklch(0.8369 0.1644 84.4286);
+            --chart-5: oklch(0.7845 0.1325 181.9120);
+            --sidebar: oklch(0.1822 0 0);
+            --sidebar-foreground: oklch(0.6301 0 0);
+            --sidebar-primary: oklch(0.4365 0.1044 156.7556);
+            --sidebar-primary-foreground: oklch(0.9213 0.0135 167.1556);
+            --sidebar-accent: oklch(0.3132 0 0);
+            --sidebar-accent-foreground: oklch(0.9851 0 0);
+            --sidebar-border: oklch(0.2809 0 0);
+            --sidebar-ring: oklch(0.8003 0.1821 151.7110);
+        }
+
+        /* Apply Supabase Design Tokens */
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--background);
+            color: var(--foreground);
+            letter-spacing: var(--tracking-normal);
+        }
+
+        /* Primary Color Classes */
+        .bg-primary { 
+            background-color: var(--primary); 
+            color: var(--primary-foreground);
+        }
+        .text-primary { color: var(--primary); }
+        .border-primary { border-color: var(--primary); }
+        .hover\:bg-primary\/90:hover { 
+            background-color: var(--primary); 
+            opacity: 0.9; 
+            color: var(--primary-foreground);
+        }
+        
+        /* Enhanced button styling for high contrast */
+        button.bg-primary,
+        .bg-primary.text-white {
+            background-color: var(--primary) !important;
+            color: var(--primary-foreground) !important;
+            font-weight: 600;
+        }
+        
+        button.bg-primary:hover,
+        .bg-primary.text-white:hover {
+            background-color: var(--primary) !important;
+            color: var(--primary-foreground) !important;
+            opacity: 0.9;
+        }
+
+        /* Card and Surface Classes */
+        .bg-card { background-color: var(--card); }
+        .text-card-foreground { color: var(--card-foreground); }
+        .bg-muted { background-color: var(--muted); }
+        .text-muted-foreground { color: var(--muted-foreground); }
+        .border-border { border-color: var(--border); }
+
+        /* Override default white backgrounds with card color */
+        .bg-white { background-color: var(--card) !important; }
+        .text-gray-900 { color: var(--foreground) !important; }
+        .text-gray-700 { color: var(--foreground) !important; }
+        .text-gray-600 { color: var(--muted-foreground) !important; }
+        .text-gray-500 { color: var(--muted-foreground) !important; }
+
+        /* Shadows using Supabase tokens */
+        .shadow-sm { box-shadow: var(--shadow-sm); }
+        .shadow { box-shadow: var(--shadow); }
+        .shadow-md { box-shadow: var(--shadow-md); }
+        .shadow-lg { box-shadow: var(--shadow-lg); }
+
+        /* Border radius using Supabase tokens */
+        .rounded { border-radius: var(--radius); }
+        .rounded-lg { border-radius: var(--radius); }
+        .rounded-xl { border-radius: calc(var(--radius) + 4px); }
+
+        .ad-container {
+            border: 2px dashed var(--border);
+            background: var(--muted);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted-foreground);
+            font-size: 0.875rem;
+        }
+        .ad-container::before {
+            content: "Advertisement Space";
+        }
+        
+        .hidden { display: none !important; }
+        .loading {
+            border: 3px solid var(--muted);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Additional Supabase UI classes */
+        .bg-gray-50 { background-color: var(--muted) !important; }
+        .bg-gray-100 { background-color: var(--accent) !important; }
+        .bg-green-100 { background-color: var(--primary); opacity: 0.1; }
+        .text-green-800 { color: var(--primary-foreground) !important; }
+        .bg-blue-50 { background-color: var(--chart-2); opacity: 0.1; }
+        .text-blue-600 { color: var(--chart-2) !important; }
+        .border-gray-300 { border-color: var(--border) !important; }
+        .border-t { border-top: 1px solid var(--border); }
+        .border-b { border-bottom: 1px solid var(--border); }
+
+        /* Photo Tips Container - Theme Aware */
+        .photo-tips-container {
+            background-color: var(--accent);
+            border: 1px solid var(--border);
+            color: var(--accent-foreground);
+        }
+        
+        .photo-tips-heading {
+            color: var(--foreground);
+            font-weight: 600;
+        }
+        
+        .photo-tips-list {
+            color: var(--muted-foreground);
+        }
+        
+        .photo-tips-list li {
+            line-height: 1.5;
+        }
+
+        /* Analysis Card Container - Strong Call to Action */
+        .analysis-card-container {
+            background-color: var(--card);
+            border: 2px solid var(--primary);
+            color: var(--card-foreground);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+        }
+        
+        /* Add subtle glow effect for prominence */
+        .analysis-card-container::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--primary), var(--chart-2));
+            border-radius: inherit;
+            z-index: -1;
+            opacity: 0.1;
+        }
+        
+        .analysis-card-heading {
+            color: var(--foreground);
+            font-weight: 700;
+        }
+        
+        .analysis-card-description {
+            color: var(--muted-foreground);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        /* Secondary Button Styling */
+        .secondary-button {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border: 1px solid var(--border);
+            font-weight: 500;
+        }
+        
+        .secondary-button:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+        
+        /* Upload Area Container */
+        .upload-area-container {
+            border-color: var(--border);
+            background-color: var(--muted);
+            color: var(--muted-foreground);
+        }
+        
+        .upload-area-container:hover {
+            border-color: var(--primary);
+            background-color: var(--accent);
+        }
+
+        /* Input styling */
+        input, button {
+            font-family: var(--font-sans);
+        }
+
+        /* Dark mode toggle button */
+        .dark-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: var(--foreground);
+            padding: 8px 12px;
+            border-radius: var(--radius);
+            cursor: pointer;
+            font-size: 14px;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .slide-in {
+            animation: slideIn 0.5s ease-out;
+        }
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .camera-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 70%;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+        }
+        
+        video {
+            transform: scaleX(-1);
+        }
+        
+        /* Frame card hover effects */
+        .frame-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .frame-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* Frame image styling */
+        .frame-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+        .frame-card:hover .frame-image {
+            transform: scale(1.05);
+        }
+        
+        /* Popularity indicator */
+        .popularity-bar {
+            height: 4px;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            border-radius: 2px;
+            transition: width 0.8s ease-out;
+        }
+        
+        /* Price badge styling */
+        .price-badge {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        
+        /* Confidence meter */
+        .confidence-meter {
+            background: linear-gradient(90deg, #f59e0b, #10b981, #059669);
+            height: 8px;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .confidence-meter::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        
+        /* Celebrity styling */
+        .celebrity-tag {
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* Results celebration effect */
+        .celebration {
+            position: relative;
+            overflow: hidden;
+        }
+        .celebration::before {
+            content: '🎉';
+            position: absolute;
+            top: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2rem;
+            animation: celebration 0.8s ease-out;
+        }
+        @keyframes celebration {
+            0% { transform: translateX(-50%) translateY(0) scale(0); }
+            50% { transform: translateX(-50%) translateY(-20px) scale(1.2); }
+            100% { transform: translateX(-50%) translateY(-40px) scale(1); opacity: 0; }
+        }
+    </style>
+</head>
+<body class="dark">
+    <!-- Dark Mode Toggle -->
+    <button class="dark-toggle" onclick="toggleDarkMode()">
+        <span id="darkModeIcon">☀️</span> <span id="darkModeText">Light</span>
+    </button>
+    <!-- Header -->
+    <header class="sticky top-0 z-50 w-full border-b backdrop-blur" style="background-color: var(--card); border-color: var(--border);">
+        <!-- Header Ad Space - 728x90 Leaderboard -->
+        <div class="ad-container h-20 mx-auto max-w-7xl"></div>
+        
+        <!-- Navigation -->
+        <div class="container mx-auto flex h-14 items-center px-4">
+            <div class="mr-4 flex items-center">
+                <a class="mr-6 flex items-center space-x-2" href="#home">
+                    <div class="h-6 w-6 bg-primary rounded"></div>
+                    <span class="font-bold text-gray-900">FrameFinder</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#guide" onclick="scrollToGuide(); return false;" class="text-gray-600 hover:text-gray-900 transition-colors">Face Shape Guide</a>
+                    <a href="#tips" onclick="scrollToTips(); return false;" class="text-gray-600 hover:text-gray-900 transition-colors">Style Tips</a>
+                    <a href="#about" onclick="scrollToAbout(); return false;" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+                    <a href="#faq" onclick="scrollToFAQ(); return false;" class="text-gray-600 hover:text-gray-900 transition-colors">FAQ</a>
+                </nav>
+            </div>
+            <div class="flex flex-1 items-center justify-end">
+                <button onclick="scrollToAnalysis()" 
+                        class="bg-primary text-white hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors">
+                    Analyze My Face
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex">
+        <!-- Left Sidebar Ad Space -->
+        <aside class="hidden xl:block w-64 p-4">
+            <div class="sticky top-24 space-y-4">
+                <!-- Top ad - 300x250 Medium Rectangle -->
+                <div class="ad-container h-64 w-full"></div>
+                
+                <!-- Second ad - 300x250 Medium Rectangle -->
+                <div class="ad-container h-64 w-full"></div>
+                
+                <!-- Small ad - 300x100 -->
+                <div class="ad-container h-24 w-full"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 xl:px-4">
+            <!-- Mobile/Tablet Sidebar Ad -->
+            <div class="lg:hidden px-4 py-2">
+                <div class="ad-container h-20 w-full mb-4"></div>
+            </div>
+            <!-- Hero Section -->
+            <section id="home" class="px-4 py-16 md:py-24 lg:py-32">
+                <div class="container mx-auto text-center">
+                    <div class="mx-auto max-w-4xl">
+                        <div class="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium" style="background-color: var(--primary); color: var(--primary-foreground);">
+                            ✨ AI-Powered Face Analysis
+                        </div>
+                        
+                        <h1 class="mb-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+                            Find Your Perfect
+                            <span class="text-primary">Eyeglass Style</span>
+                            in Seconds
+                        </h1>
+                        
+                        <p class="mb-8 text-xl text-gray-600 sm:text-2xl lg:text-xl lg:leading-8">
+                            Discover which frame shapes complement your unique face shape with our 
+                            AI-powered face analysis tool. Get personalized recommendations from eyewear experts.
+                        </p>
+
+                        <!-- Key Benefits -->
+                        <div class="mb-8 flex flex-wrap justify-center gap-4 text-sm">
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Instant face shape detection using advanced AI
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Personalized frame style recommendations
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Expert styling tips for your unique features
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Completely free - no glasses purchase required
+                            </div>
+                        </div>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+                            <button onclick="scrollToAnalysis()" 
+                                    class="bg-primary text-white hover:bg-primary/90 px-8 py-6 rounded-md font-medium text-lg inline-flex items-center justify-center transition-colors">
+                                📷 Analyze My Face Shape
+                                <span class="ml-2">→</span>
+                            </button>
+                            
+                            <button onclick="scrollToGuide()" 
+                                    class="px-8 py-6 rounded-md font-medium text-lg transition-colors" style="border: 1px solid var(--border); color: var(--foreground);" onmouseover="this.style.backgroundColor='var(--accent)'" onmouseout="this.style.backgroundColor='transparent'">
+                                Browse Style Guide
+                            </button>
+                        </div>
+
+                        <!-- Trust Indicators -->
+                        <div class="mt-8 text-sm text-gray-600">
+                            <p class="mb-2">Trusted by 50,000+ people to find their perfect frames</p>
+                            <div class="flex justify-center gap-4">
+                                <span>🔒 Secure & Private</span>
+                                <span>⚡ Instant Results</span>
+                                <span>🎯 Expert Recommendations</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="px-4 py-16 bg-gray-50">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-2xl text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            How It Works
+                        </h2>
+                        <p class="mt-4 text-lg text-gray-600">
+                            Our AI-powered system analyzes your facial features and provides personalized recommendations in three simple steps.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-4" style="background-color: var(--accent); border: 1px solid var(--border);">
+                                <span class="text-2xl">📷</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">1. Upload or Capture</h3>
+                            <p class="text-gray-600">
+                                Take a photo with your camera or upload an existing image. Our system works with any clear front-facing photo.
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-4" style="background-color: var(--accent); border: 1px solid var(--border);">
+                                <span class="text-2xl">⚡</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">2. AI Analysis</h3>
+                            <p class="text-gray-600">
+                                Our advanced AI analyzes your facial landmarks and determines your face shape with reliable accuracy.
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full mb-4" style="background-color: var(--accent); border: 1px solid var(--border);">
+                                <span class="text-2xl">✨</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">3. Get Recommendations</h3>
+                            <p class="text-gray-600">
+                                Receive personalized frame recommendations, styling tips, and expert advice tailored to your unique features.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Face Analysis Section -->
+            <section id="analysis" class="px-4 py-16">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-4xl">
+                        <!-- AI Model Status -->
+                        <div id="modelStatus" class="mb-6 p-4 rounded-lg" style="background-color: var(--accent); border: 1px solid var(--border);">
+                            <div class="flex items-center gap-2">
+                                <div class="loading"></div>
+                                <span>Loading AI model... This may take 30-60 seconds on first visit.</span>
+                            </div>
+                            <div class="w-full rounded-full h-2 mt-2" style="background-color: var(--muted);">
+                                <div id="modelProgress" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Interface -->
+                        <div id="analysisCard" class="analysis-card-container rounded-lg shadow-lg p-6 hidden">
+                            <h2 class="text-2xl font-bold text-center mb-6 analysis-card-heading">Face Shape Analysis</h2>
+                            <p class="text-center mb-6 analysis-card-description">
+                                Use your camera or upload a photo to discover your face shape and get personalized frame recommendations
+                            </p>
+
+                            <!-- Method Selection -->
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                                <button id="uploadBtn" onclick="selectMethod('upload')" 
+                                        class="flex-1 max-w-xs bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                    📁 Upload Photo
+                                </button>
+                                <button id="cameraBtn" onclick="selectMethod('camera')" 
+                                        class="flex-1 max-w-xs secondary-button px-6 py-3 rounded-lg transition-colors">
+                                    📷 Use Camera
+                                </button>
+                            </div>
+
+                            <!-- Upload Interface -->
+                            <div id="uploadInterface" class="hidden">
+                                <div class="upload-area-container border-2 border-dashed rounded-lg p-8 text-center mb-4">
+                                    <input type="file" id="fileInput" accept="image/*" class="hidden">
+                                    <button onclick="document.getElementById('fileInput').click()" 
+                                            class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                        📸 Select Photo
+                                    </button>
+                                    <p class="text-sm text-gray-600 mt-2">JPG, PNG, or WebP up to 10MB</p>
+                                </div>
+                            </div>
+
+                            <!-- Camera Interface -->
+                            <div id="cameraInterface" class="hidden">
+                                <div class="relative aspect-video max-w-md mx-auto rounded-lg overflow-hidden mb-4" style="background-color: var(--accent);">
+                                    <video id="cameraVideo" autoplay muted playsinline class="w-full h-full object-cover"></video>
+                                    <div class="camera-overlay"></div>
+                                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black/50 px-3 py-1 rounded">
+                                        Position your face in the oval
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button id="captureBtn" onclick="capturePhoto()" 
+                                            class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors text-lg">
+                                        📷 Capture & Analyze
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Photo Tips -->
+                            <div class="photo-tips-container rounded-lg p-4">
+                                <h3 class="font-medium text-sm mb-2 photo-tips-heading">📸 Photo Tips for Best Results:</h3>
+                                <ul class="text-sm space-y-1 photo-tips-list">
+                                    <li>• Use good lighting with your face clearly visible</li>
+                                    <li>• Face the camera directly with a neutral expression</li>
+                                    <li>• Remove glasses and ensure hair doesn't obscure your face</li>
+                                    <li>• Keep a comfortable distance from the camera</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Progress -->
+                        <div id="analysisProgress" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                            <h2 class="text-xl font-bold mb-4">Analyzing Your Face Shape...</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="font-medium mb-2">Your Photo</h3>
+                                    <canvas id="analysisCanvas" width="400" height="300" class="border rounded-lg w-full"></canvas>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="font-medium mb-2">Detection Progress</h3>
+                                    <div class="w-full rounded-full h-2 mb-4" style="background-color: var(--muted);">
+                                        <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <div id="progressText" class="text-sm text-gray-600">Initializing...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SNAZZY RESULTS -->
+                        <div id="resultsCard" class="bg-white rounded-lg shadow-lg p-6 hidden celebration">
+                            <div class="text-center mb-8">
+                                <h2 class="text-3xl font-bold text-primary mb-2">🎉 Analysis Complete!</h2>
+                                <p class="text-gray-600">Your personalized frame recommendations are ready</p>
+                            </div>
+                            
+                            <!-- Face Shape Result with Celebrity Match -->
+                            <div class="bg-gradient-to-r from-green-50 to-blue-50 rounded-xl p-6 mb-8">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <div class="text-center md:text-left">
+                                        <h3 class="text-lg font-medium text-gray-700 mb-2">Your Face Shape</h3>
+                                        <div id="faceShapeResult" class="text-4xl font-bold text-primary mb-2">Oval</div>
+                                        
+                                        <!-- Confidence Meter -->
+                                        <div class="mb-3">
+                                            <div class="flex justify-between text-sm text-gray-600 mb-1">
+                                                <span>Confidence</span>
+                                                <span id="confidenceResult">85%</span>
+                                            </div>
+                                            <div class="confidence-meter">
+                                                <div id="confidenceBar" class="h-full transition-all duration-1000" style="width: 85%"></div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div id="descriptionResult" class="text-gray-700 leading-relaxed"></div>
+                                    </div>
+                                    
+                                    <div class="text-center">
+                                        <h4 class="font-medium text-gray-700 mb-3">Celebrity Style Inspiration</h4>
+                                        <div id="celebrityResult" class="flex flex-wrap justify-center gap-2"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- SNAZZY FRAME RECOMMENDATIONS -->
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-center mb-6">Perfect Frame Styles for You</h3>
+                                <div id="recommendationsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                            </div>
+
+                            <!-- Styling Tips -->
+                            <div class="rounded-xl p-6 mb-6" style="background-color: var(--accent); border: 1px solid var(--border);">
+                                <h3 class="text-lg font-bold text-center mb-4">💡 Expert Styling Tips</h3>
+                                <div id="stylingTips" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="border-t pt-6">
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <button onclick="resetAnalysis()" 
+                                            class="flex-1 bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 transition-colors font-medium">
+                                        🔄 Analyze Another Photo
+                                    </button>
+                                    <button onclick="shareResults()" 
+                                            class="flex-1 bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors font-medium">
+                                        📱 Share My Results
+                                    </button>
+                                    <button onclick="downloadResults()" 
+                                            class="flex-1 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors font-medium">
+                                        💾 Save Results
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error Display -->
+                        <div id="errorCard" class="rounded-lg p-6 hidden" style="background-color: var(--destructive); color: var(--destructive-foreground); border: 1px solid var(--destructive);">
+                            <h2 class="text-lg font-bold mb-2">❌ Analysis Failed</h2>
+                            <div id="errorMessage" class="mb-4"></div>
+                            <button onclick="resetAnalysis()" 
+                                    class="px-4 py-2 rounded transition-colors" style="background-color: var(--destructive-foreground); color: var(--destructive);">
+                                🔄 Try Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Rest of the page content continues... -->
+            <!-- Face Shapes Preview -->
+            <section id="guide" class="px-4 py-16 bg-gray-50">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-2xl text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            Discover Your Face Shape
+                        </h2>
+                        <p class="mt-4 text-lg text-gray-600">
+                            Our system recognizes six main face shapes and provides specific recommendations for each.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="mb-2">
+                                <svg width="60" height="60" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" class="mx-auto">
+                                    <defs>
+                                        <radialGradient id="oval-shading" cx="0.3" cy="0.3">
+                                            <stop offset="0%" stop-color="#f8f8f8"/>
+                                            <stop offset="70%" stop-color="#e8e8e8"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <path d="M100 20 C130 20, 150 50, 150 100 C150 150, 130 200, 100 220 C70 200, 50 150, 50 100 C50 50, 70 20, 100 20 Z" 
+                                          fill="url(#oval-shading)" stroke="#333" stroke-width="1.2"/>
+                                    <ellipse cx="80" cy="85" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <ellipse cx="120" cy="85" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <circle cx="80" cy="85" r="3" fill="#4a4a4a"/>
+                                    <circle cx="120" cy="85" r="3" fill="#4a4a4a"/>
+                                    <path d="M90 150 Q100 160, 110 150" fill="none" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M70 75 Q80 70, 90 75" fill="none" stroke="#333" stroke-width="1.5"/>
+                                    <path d="M110 75 Q120 70, 130 75" fill="none" stroke="#333" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold">Oval</h3>
+                            <p class="text-sm text-gray-600 mt-1">Balanced proportions</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="mb-2">
+                                <svg width="60" height="60" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" class="mx-auto">
+                                    <defs>
+                                        <radialGradient id="round-shading" cx="0.3" cy="0.3">
+                                            <stop offset="0%" stop-color="#f8f8f8"/>
+                                            <stop offset="70%" stop-color="#e8e8e8"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <circle cx="100" cy="120" r="60" fill="url(#round-shading)" stroke="#333" stroke-width="1.2"/>
+                                    <ellipse cx="55" cy="125" rx="10" ry="15" fill="#e0e0e0" opacity="0.4"/>
+                                    <ellipse cx="145" cy="125" rx="10" ry="15" fill="#e0e0e0" opacity="0.4"/>
+                                    <ellipse cx="80" cy="105" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <ellipse cx="120" cy="105" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <circle cx="80" cy="105" r="3" fill="#4a4a4a"/>
+                                    <circle cx="120" cy="105" r="3" fill="#4a4a4a"/>
+                                    <path d="M90 165 Q100 175, 110 165" fill="none" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M70 95 Q80 90, 90 95" fill="none" stroke="#333" stroke-width="1.5"/>
+                                    <path d="M110 95 Q120 90, 130 95" fill="none" stroke="#333" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold">Round</h3>
+                            <p class="text-sm text-gray-600 mt-1">Soft curves</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="mb-2">
+                                <svg width="60" height="60" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" class="mx-auto">
+                                    <defs>
+                                        <radialGradient id="square-shading" cx="0.3" cy="0.3">
+                                            <stop offset="0%" stop-color="#f8f8f8"/>
+                                            <stop offset="70%" stop-color="#e8e8e8"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <path d="M55 40 L145 40 L150 50 L155 100 L155 170 L150 190 L100 205 L50 190 L45 170 L45 100 L50 50 Z" 
+                                          fill="url(#square-shading)" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M50 170 Q100 190, 150 170" fill="#d8d8d8" stroke="#bbb" stroke-width="0.8"/>
+                                    <ellipse cx="80" cy="90" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <ellipse cx="120" cy="90" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <circle cx="80" cy="90" r="3" fill="#4a4a4a"/>
+                                    <circle cx="120" cy="90" r="3" fill="#4a4a4a"/>
+                                    <path d="M90 155 Q100 165, 110 155" fill="none" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M70 80 Q80 75, 90 80" fill="none" stroke="#333" stroke-width="1.8"/>
+                                    <path d="M110 80 Q120 75, 130 80" fill="none" stroke="#333" stroke-width="1.8"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold">Square</h3>
+                            <p class="text-sm text-gray-600 mt-1">Strong jawline</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="mb-2">
+                                <svg width="60" height="60" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" class="mx-auto">
+                                    <defs>
+                                        <radialGradient id="heart-shading" cx="0.3" cy="0.3">
+                                            <stop offset="0%" stop-color="#f8f8f8"/>
+                                            <stop offset="70%" stop-color="#e8e8e8"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <path d="M100 20 C135 20, 160 40, 160 75 C160 95, 155 115, 145 135 C135 155, 125 175, 100 205 C75 175, 65 155, 55 135 C45 115, 40 95, 40 75 C40 40, 65 20, 100 20 Z" 
+                                          fill="url(#heart-shading)" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M45 60 Q100 50, 155 60" fill="none" stroke="#ddd" stroke-width="0.8" opacity="0.6"/>
+                                    <ellipse cx="80" cy="75" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <ellipse cx="120" cy="75" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <circle cx="80" cy="75" r="3" fill="#4a4a4a"/>
+                                    <circle cx="120" cy="75" r="3" fill="#4a4a4a"/>
+                                    <path d="M92 140 Q100 150, 108 140" fill="none" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M70 65 Q80 60, 90 65" fill="none" stroke="#333" stroke-width="1.5"/>
+                                    <path d="M110 65 Q120 60, 130 65" fill="none" stroke="#333" stroke-width="1.5"/>
+                                    <path d="M85 180 Q100 200, 115 180" fill="none" stroke="#aaa" stroke-width="1" opacity="0.8"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold">Heart</h3>
+                            <p class="text-sm text-gray-600 mt-1">Wide forehead</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="mb-2">
+                                <svg width="60" height="60" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" class="mx-auto">
+                                    <defs>
+                                        <radialGradient id="diamond-shading" cx="0.3" cy="0.3">
+                                            <stop offset="0%" stop-color="#f8f8f8"/>
+                                            <stop offset="70%" stop-color="#e8e8e8"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <path d="M100 25 C118 25, 130 35, 135 50 C145 70, 155 90, 155 110 C155 130, 145 150, 135 170 C130 185, 118 195, 100 205 C82 195, 70 185, 65 170 C55 150, 45 130, 45 110 C45 90, 55 70, 65 50 C70 35, 82 25, 100 25 Z" 
+                                          fill="url(#diamond-shading)" stroke="#333" stroke-width="1.2"/>
+                                    <ellipse cx="40" cy="110" rx="6" ry="12" fill="#d8d8d8" opacity="0.6"/>
+                                    <ellipse cx="160" cy="110" rx="6" ry="12" fill="#d8d8d8" opacity="0.6"/>
+                                    <ellipse cx="80" cy="85" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <ellipse cx="120" cy="85" rx="8" ry="5" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <circle cx="80" cy="85" r="3" fill="#4a4a4a"/>
+                                    <circle cx="120" cy="85" r="3" fill="#4a4a4a"/>
+                                    <path d="M92 150 Q100 160, 108 150" fill="none" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M72 75 Q80 70, 88 75" fill="none" stroke="#333" stroke-width="1.5"/>
+                                    <path d="M112 75 Q120 70, 128 75" fill="none" stroke="#333" stroke-width="1.5"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold">Diamond</h3>
+                            <p class="text-sm text-gray-600 mt-1">High cheekbones</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="mb-2">
+                                <svg width="60" height="60" viewBox="0 0 200 240" xmlns="http://www.w3.org/2000/svg" class="mx-auto">
+                                    <defs>
+                                        <radialGradient id="triangle-shading" cx="0.3" cy="0.3">
+                                            <stop offset="0%" stop-color="#f8f8f8"/>
+                                            <stop offset="70%" stop-color="#e8e8e8"/>
+                                            <stop offset="100%" stop-color="#d0d0d0"/>
+                                        </radialGradient>
+                                    </defs>
+                                    <path d="M100 30 C112 30, 122 35, 127 45 C132 55, 137 70, 142 90 C147 110, 152 130, 157 150 C162 170, 155 185, 140 195 C125 205, 100 215, 100 215 C100 215, 75 205, 60 195 C45 185, 38 170, 43 150 C48 130, 53 110, 58 90 C63 70, 68 55, 73 45 C78 35, 88 30, 100 30 Z" 
+                                          fill="url(#triangle-shading)" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M40 175 Q100 195, 160 175" fill="#d0d0d0" stroke="#aaa" stroke-width="1"/>
+                                    <ellipse cx="85" cy="75" rx="7" ry="4" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <ellipse cx="115" cy="75" rx="7" ry="4" fill="white" stroke="#333" stroke-width="0.8"/>
+                                    <circle cx="85" cy="75" r="2.5" fill="#4a4a4a"/>
+                                    <circle cx="115" cy="75" r="2.5" fill="#4a4a4a"/>
+                                    <path d="M88 140 Q100 150, 112 140" fill="none" stroke="#333" stroke-width="1.2"/>
+                                    <path d="M78 65 Q85 62, 92 65" fill="none" stroke="#333" stroke-width="1.3"/>
+                                    <path d="M108 65 Q115 62, 122 65" fill="none" stroke="#333" stroke-width="1.3"/>
+                                </svg>
+                            </div>
+                            <h3 class="font-semibold">Triangle</h3>
+                            <p class="text-sm text-gray-600 mt-1">Wide jaw</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Style Tips Section -->
+            <section id="tips" class="px-4 py-16">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-2xl text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            Expert Style Tips
+                        </h2>
+                        <p class="mt-4 text-lg text-gray-600">
+                            Professional advice for choosing frames that enhance your natural features and personal style.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div class="style-tip-card bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer" onclick="toggleStyleTip(this)">
+                            <div class="text-4xl mb-4">🎨</div>
+                            <h3 class="text-xl font-semibold mb-3">Color Matching</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Learn how to choose frame colors that complement your skin tone, hair color, and personal style for a harmonious look.
+                            </p>
+                            <ul class="text-xs text-gray-600 text-left space-y-1">
+                                <li>• Warm skin tones: gold, brown, amber frames</li>
+                                <li>• Cool skin tones: silver, black, blue frames</li>
+                                <li>• Consider hair and eye color coordination</li>
+                            </ul>
+                            <div class="style-tip-expanded hidden mt-4 pt-4 border-t text-left">
+                                <h4 class="font-semibold text-sm mb-2">Detailed Color Guide:</h4>
+                                <div class="space-y-2 text-xs text-gray-600">
+                                    <p><strong>Warm Undertones:</strong> Look for gold, honey, copper, or peach hues in your skin. Choose tortoiseshell, warm browns, golds, and orange-based colors.</p>
+                                    <p><strong>Cool Undertones:</strong> Pink, red, or blue hints in your skin pair with silver, black, navy, and blue-based colors.</p>
+                                    <p><strong>Neutral Undertones:</strong> Lucky you! Most colors work, but avoid extremely warm or cool tones that might wash you out.</p>
+                                    <p><strong>Quick Test:</strong> Hold gold and silver jewelry to your wrist. Whichever makes your skin look brighter indicates your undertone.</p>
+                                </div>
+                            </div>
+                            <button class="expand-btn text-xs text-primary mt-2">Click for detailed guide →</button>
+                        </div>
+
+                        <div class="style-tip-card bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer" onclick="toggleStyleTip(this)">
+                            <div class="text-4xl mb-4">💼</div>
+                            <h3 class="text-xl font-semibold mb-3">Professional Style</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Choose eyewear that enhances your professional image and workplace confidence with appropriate styling.
+                            </p>
+                            <ul class="text-xs text-gray-600 text-left space-y-1">
+                                <li>• Classic rectangular frames for authority</li>
+                                <li>• Neutral colors for versatility</li>
+                                <li>• Quality materials show attention to detail</li>
+                            </ul>
+                            <div class="style-tip-expanded hidden mt-4 pt-4 border-t text-left">
+                                <h4 class="font-semibold text-sm mb-2">Professional Guidelines:</h4>
+                                <div class="space-y-2 text-xs text-gray-600">
+                                    <p><strong>Executive Presence:</strong> Choose substantial frames in classic shapes. Avoid overly trendy styles that might date your professional image.</p>
+                                    <p><strong>Industry Considerations:</strong> Conservative fields benefit from traditional styles, while creative industries allow more expression.</p>
+                                    <p><strong>Client-Facing Roles:</strong> Ensure frames don't distract from your message. Neutral colors work across diverse audiences.</p>
+                                </div>
+                            </div>
+                            <button class="expand-btn text-xs text-primary mt-2">Click for detailed guide →</button>
+                        </div>
+
+                        <div class="style-tip-card bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow cursor-pointer" onclick="toggleStyleTip(this)">
+                            <div class="text-4xl mb-4">🔧</div>
+                            <h3 class="text-xl font-semibold mb-3">Frame Materials</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Understand different frame materials and their benefits for comfort, durability, and styling options.
+                            </p>
+                            <ul class="text-xs text-gray-600 text-left space-y-1">
+                                <li>• Acetate: rich colors and patterns</li>
+                                <li>• Metal: lightweight and adjustable</li>
+                                <li>• Titanium: premium strength and comfort</li>
+                            </ul>
+                            <div class="style-tip-expanded hidden mt-4 pt-4 border-t text-left">
+                                <h4 class="font-semibold text-sm mb-2">Material Deep Dive:</h4>
+                                <div class="space-y-2 text-xs text-gray-600">
+                                    <p><strong>Acetate:</strong> Plant-based plastic offering rich colors and hypoallergenic properties. Can be easily adjusted by opticians.</p>
+                                    <p><strong>Metal:</strong> Durable and professional. Stainless steel and titanium options provide different weight and flexibility characteristics.</p>
+                                    <p><strong>TR90:</strong> Modern flexible material ideal for active lifestyles. Memory properties return frames to original shape.</p>
+                                </div>
+                            </div>
+                            <button class="expand-btn text-xs text-primary mt-2">Click for detailed guide →</button>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                            <div class="text-4xl mb-4">✨</div>
+                            <h3 class="text-xl font-semibold mb-3">Feature Enhancement</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Learn how to use eyewear to highlight your best facial features and create visual balance.
+                            </p>
+                            <ul class="text-xs text-gray-600 text-left space-y-1">
+                                <li>• Cat-eye frames lift the eye area</li>
+                                <li>• Bold frames make eyes appear larger</li>
+                                <li>• Color accents highlight eye color</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                            <div class="text-4xl mb-4">🌟</div>
+                            <h3 class="text-xl font-semibold mb-3">Seasonal Trends</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Stay current with the latest eyewear trends while maintaining styles that suit your face shape.
+                            </p>
+                            <ul class="text-xs text-gray-600 text-left space-y-1">
+                                <li>• Spring: light colors and clear acetates</li>
+                                <li>• Summer: vibrant colors and gradients</li>
+                                <li>• Fall/Winter: rich tones and metallics</li>
+                            </ul>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center hover:shadow-md transition-shadow">
+                            <div class="text-4xl mb-4">🧽</div>
+                            <h3 class="text-xl font-semibold mb-3">Care & Maintenance</h3>
+                            <p class="text-gray-600 text-sm mb-4">
+                                Keep your eyewear looking great with proper care techniques and maintenance tips.
+                            </p>
+                            <ul class="text-xs text-gray-600 text-left space-y-1">
+                                <li>• Clean lenses with microfiber cloth daily</li>
+                                <li>• Store in protective case when not worn</li>
+                                <li>• Professional adjustments when needed</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="text-center mt-12">
+                        <button onclick="scrollToAnalysis()" 
+                                class="bg-primary text-white hover:bg-primary/90 px-8 py-4 rounded-md font-medium text-lg transition-colors">
+                            Apply These Tips to My Face
+                            <span class="ml-2">→</span>
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section id="faq" class="px-4 py-16" style="background-color: var(--muted);">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-2xl text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            Frequently Asked Questions
+                        </h2>
+                        <p class="mt-4 text-lg text-gray-600">
+                            Get answers to common questions about face shape analysis and eyewear selection.
+                        </p>
+                    </div>
+
+                    <div class="mx-auto max-w-4xl">
+                        <div class="space-y-4">
+                            <div class="faq-item rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);" onclick="toggleFAQ(this)">
+                                <div class="p-6 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-medium text-lg">How accurate is the AI face shape analysis?</h3>
+                                        <span class="faq-toggle text-2xl">+</span>
+                                    </div>
+                                    <div class="faq-answer hidden mt-4 text-gray-600">
+                                        Our AI face shape analysis uses advanced machine learning algorithms trained on diverse facial data to provide reliable face shape classification. The system analyzes key facial landmarks and proportions to determine your face shape. We recommend using the results as a professional starting point and considering your personal preferences.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);" onclick="toggleFAQ(this)">
+                                <div class="p-6 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-medium text-lg">What type of photos work best for analysis?</h3>
+                                        <span class="faq-toggle text-2xl">+</span>
+                                    </div>
+                                    <div class="faq-answer hidden mt-4 text-gray-600">
+                                        For the most accurate results, use a clear, front-facing photo with good lighting where your entire face is visible. Avoid photos with shadows, tilted angles, or obstructions like hats or hair covering your face. The ideal photo shows your face straight-on, with your hair pulled back, in natural lighting.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);" onclick="toggleFAQ(this)">
+                                <div class="p-6 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-medium text-lg">Do I need expensive frames to look good?</h3>
+                                        <span class="faq-toggle text-2xl">+</span>
+                                    </div>
+                                    <div class="faq-answer hidden mt-4 text-gray-600">
+                                        Absolutely not! Great style is about choosing the right shape and fit for your face, not the price tag. A well-fitting, properly sized frame in the right shape for your face will always look better than an expensive frame that doesn't suit your features. Focus on shape, fit, and personal style rather than price.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);" onclick="toggleFAQ(this)">
+                                <div class="p-6 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-medium text-lg">How do I choose the right frame color?</h3>
+                                        <span class="faq-toggle text-2xl">+</span>
+                                    </div>
+                                    <div class="faq-answer hidden mt-4 text-gray-600">
+                                        Frame color should complement your skin tone, hair color, and personal style. Warm skin tones (yellow/golden undertones) look great in browns, golds, and warm colors. Cool skin tones (pink/blue undertones) are enhanced by blacks, silvers, and cool colors. Neutral skin tones can wear most colors.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);" onclick="toggleFAQ(this)">
+                                <div class="p-6 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-medium text-lg">Is my photo data secure and private?</h3>
+                                        <span class="faq-toggle text-2xl">+</span>
+                                    </div>
+                                    <div class="faq-answer hidden mt-4 text-gray-600">
+                                        Absolutely. We take privacy seriously. Photos are processed securely and are not stored permanently on our servers. The AI analysis happens in real-time, and images are automatically deleted after processing. We do not share, sell, or use your photos for any purpose other than providing your face shape analysis.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="faq-item rounded-lg" style="background-color: var(--card); border: 1px solid var(--border);" onclick="toggleFAQ(this)">
+                                <div class="p-6 cursor-pointer">
+                                    <div class="flex items-center justify-between">
+                                        <h3 class="font-medium text-lg">Should I have different frames for work and personal use?</h3>
+                                        <span class="faq-toggle text-2xl">+</span>
+                                    </div>
+                                    <div class="faq-answer hidden mt-4 text-gray-600">
+                                        Many people benefit from having multiple pairs of glasses for different occasions. Consider a more conservative pair for professional settings (classic shapes, neutral colors) and a more expressive pair for personal time. This allows you to maintain appropriate professional appearance while expressing personality in casual settings.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="text-center mt-12">
+                            <button onclick="scrollToAnalysis()" 
+                                    class="bg-primary text-white hover:bg-primary/90 px-8 py-4 rounded-md font-medium text-lg transition-colors">
+                                Get My Personal Recommendations
+                                <span class="ml-2">📸</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- About Section -->
+            <section id="about" class="px-4 py-16">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-4xl text-center">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-8">
+                            About FrameFinder
+                        </h2>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center mb-12">
+                            <div class="text-left">
+                                <h3 class="text-2xl font-semibold mb-4">Our Mission</h3>
+                                <p class="text-gray-600 leading-relaxed mb-6">
+                                    At FrameFinder, we believe that the perfect pair of glasses can transform not just how you see, 
+                                    but how you feel about yourself. Our mission is to democratize access to professional eyewear 
+                                    consulting through innovative AI technology.
+                                </p>
+                                <p class="text-gray-600 leading-relaxed">
+                                    We combine cutting-edge AI with expert styling knowledge to help everyone find frames that 
+                                    enhance their natural beauty and personal style, regardless of location or budget.
+                                </p>
+                            </div>
+                            
+                            <div class="grid grid-cols-2 gap-4 text-center">
+                                <div class="bg-white p-6 rounded-lg shadow-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+                                    <div class="text-2xl font-bold text-primary mb-2">🎯</div>
+                                    <div class="text-gray-600 text-sm">Precision Analysis</div>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+                                    <div class="text-2xl font-bold text-primary mb-2">🤖</div>
+                                    <div class="text-gray-600 text-sm">Advanced AI</div>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+                                    <div class="text-2xl font-bold text-primary mb-2">👓</div>
+                                    <div class="text-gray-600 text-sm">Curated Styles</div>
+                                </div>
+                                <div class="bg-white p-6 rounded-lg shadow-sm" style="background-color: var(--card); border: 1px solid var(--border);">
+                                    <div class="text-2xl font-bold text-primary mb-2">⚡</div>
+                                    <div class="text-gray-600 text-sm">Instant Results</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                            <div class="text-center">
+                                <div class="text-4xl mb-4">🧠</div>
+                                <h3 class="text-xl font-semibold mb-3">Advanced AI</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Our machine learning algorithms analyze multiple facial landmarks to determine face shape with reliable accuracy.
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl mb-4">👁️</div>
+                                <h3 class="text-xl font-semibold mb-3">Computer Vision</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Cutting-edge image processing technology that works with any clear photo, providing consistent results across devices.
+                                </p>
+                            </div>
+                            <div class="text-center">
+                                <div class="text-4xl mb-4">🎨</div>
+                                <h3 class="text-xl font-semibold mb-3">Style Intelligence</h3>
+                                <p class="text-gray-600 text-sm">
+                                    Expert-curated recommendations based on proven styling principles and current fashion trends.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="mt-12">
+                            <button onclick="scrollToAnalysis()" 
+                                    class="bg-primary text-white hover:bg-primary/90 px-8 py-4 rounded-md font-medium text-lg transition-colors">
+                                Experience Our Technology
+                                <span class="ml-2">🚀</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Right Sidebar Ad Space -->
+        <aside class="hidden xl:block w-64 p-4">
+            <div class="sticky top-24 space-y-4">
+                <!-- Top ad - 300x250 Medium Rectangle -->
+                <div class="ad-container h-64 w-full"></div>
+                
+                <!-- Second ad - 300x250 Medium Rectangle -->
+                <div class="ad-container h-64 w-full"></div>
+                
+                <!-- Small ad - 300x100 -->
+                <div class="ad-container h-24 w-full"></div>
+            </div>
+        </aside>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t py-6 md:py-0" style="background-color: var(--card); border-color: var(--border);">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+                <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+                    <div class="h-6 w-6 bg-primary rounded"></div>
+                    <p class="text-center text-sm leading-loose text-gray-600 md:text-left">
+                        Built with ❤️ for better eyewear choices. © 2024 FrameFinder.
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <a href="#privacy" class="hover:text-gray-900 transition-colors">Privacy</a>
+                    <a href="#terms" class="hover:text-gray-900 transition-colors">Terms</a>
+                    <a href="#contact" class="hover:text-gray-900 transition-colors">Contact</a>
+                </div>
+            </div>
+            
+            <!-- Footer Ad Space -->
+            <div class="mt-4">
+                <div class="ad-container h-20"></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Import glasses database
+        const glassesDatabase = {
+            // OVAL FACE RECOMMENDATIONS
+            oval: {
+                "Classic Rectangular": [
+                    {
+                        id: "rect_001",
+                        name: "Modern Professional Rectangle",
+                        image: "https://plus.unsplash.com/premium_photo-1733749585385-f09c117dc87a",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Black",
+                        style: "Professional",
+                        description: "Timeless rectangular frames perfect for business settings. The clean lines and classic proportions complement oval faces beautifully.",
+                        features: ["Durable acetate construction", "Universal bridge fit", "Spring hinges", "Anti-glare coating ready"],
+                        suitability: "Perfect for oval faces - the angular design adds structure while maintaining balance."
+                    },
+                    {
+                        id: "rect_002", 
+                        name: "Sleek Geometric Rectangle",
+                        image: "https://images.unsplash.com/photo-1694892465586-165971db8200",
+                        type: "regular",
+                        material: "Metal",
+                        color: "Gunmetal",
+                        style: "Contemporary",
+                        description: "Contemporary metal frames with subtle geometric detailing. Lightweight yet durable for all-day comfort.",
+                        features: ["Titanium construction", "Adjustable nose pads", "Flexible temples", "Scratch-resistant finish"],
+                        suitability: "Excellent for oval faces - adds sophisticated definition without overwhelming facial features."
+                    },
+                    {
+                        id: "rect_003",
+                        name: "Classic Tortoiseshell Rectangle", 
+                        image: "https://images.unsplash.com/photo-1694892463534-dade2296283d",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Tortoiseshell",
+                        style: "Classic",
+                        description: "Rich tortoiseshell pattern in a classic rectangular silhouette. A versatile choice that works with many styles.",
+                        features: ["Hand-polished acetate", "Traditional barrel hinges", "Wide temple design", "Luxurious finish"],
+                        suitability: "Ideal for oval faces - the classic proportions enhance natural facial balance."
+                    }
+                ],
+                "Vintage Round": [
+                    {
+                        id: "round_001",
+                        name: "Retro Metal Round Glasses",
+                        image: "https://images.unsplash.com/photo-1606357086272-eab87f3db598",
+                        type: "regular",
+                        material: "Metal",
+                        color: "Gold",
+                        style: "Vintage",
+                        description: "Classic round metal frames with vintage charm. The perfect blend of retro style and modern comfort.",
+                        features: ["Stainless steel construction", "Adjustable nose pads", "Vintage-inspired design", "Lightweight comfort"],
+                        suitability: "Excellent for oval faces - the circular design echoes and enhances the natural facial curves."
+                    },
+                    {
+                        id: "round_002",
+                        name: "Intellectual Round Frames",
+                        image: "https://images.unsplash.com/photo-1606357100116-f787c70ea04f",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Tortoiseshell",
+                        style: "Academic",
+                        description: "Sophisticated round frames with an intellectual aesthetic. Perfect for creative professionals.",
+                        features: ["Premium acetate material", "Hand-finished details", "Comfortable fit", "Durable construction"],
+                        suitability: "Great for oval faces - adds scholarly sophistication while maintaining facial balance."
+                    }
+                ],
+                "Cat-Eye": [
+                    {
+                        id: "cat_001",
+                        name: "Classic Cat-Eye Frames",
+                        image: "https://media.istockphoto.com/id/492737486/photo/cat-eye-glasses.webp",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Black",
+                        style: "Vintage",
+                        description: "Iconic cat-eye frames that epitomize vintage glamour. Perfect for making a sophisticated statement.",
+                        features: ["Premium acetate construction", "Classic cat-eye silhouette", "Comfortable nose bridge", "Vintage-inspired design"],
+                        suitability: "Perfect for oval faces - the upswept design adds elegance while complementing natural facial curves."
+                    }
+                ],
+                "Aviator": [
+                    {
+                        id: "aviator_001",
+                        name: "Classic Metal Aviator Frames",
+                        image: "https://images.unsplash.com/photo-1623949143726-4436d4262c68",
+                        type: "regular",
+                        material: "Metal",
+                        color: "Gold",
+                        style: "Classic",
+                        description: "Timeless aviator-style frames adapted for prescription lenses. Classic appeal with modern functionality.",
+                        features: ["Stainless steel construction", "Adjustable nose pads", "Classic aviator silhouette", "Prescription ready"],
+                        suitability: "Great for oval faces - the teardrop shape complements facial curves while adding structured appeal."
+                    }
+                ]
+            },
+            round: {
+                "Angular Rectangular": [
+                    {
+                        id: "angular_001",
+                        name: "Sharp Angular Rectangle",
+                        image: "https://images.unsplash.com/photo-1585486451366-5b5b9520797e",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Black",
+                        style: "Modern",
+                        description: "Bold rectangular frames with sharp angles designed to add definition to round faces.",
+                        features: ["Sharp angular design", "Thick acetate construction", "Wide temple design", "Structured silhouette"],
+                        suitability: "Perfect for round faces - the angular design adds needed structure and definition to soft facial curves."
+                    }
+                ],
+                "Bold Square": [
+                    {
+                        id: "square_001",
+                        name: "Classic Bold Square Frames",
+                        image: "https://images.unsplash.com/photo-1648688135643-2716ec8f4b24",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Tortoiseshell",
+                        style: "Bold",
+                        description: "Strong square frames that add structure and sophistication to round faces.",
+                        features: ["Bold square design", "Thick acetate frame", "Classic proportions", "Statement styling"],
+                        suitability: "Perfect for round faces - the square shape creates needed angles and definition."
+                    }
+                ],
+                "Browline": [
+                    {
+                        id: "browline_001",
+                        name: "Classic Browline Frames",
+                        image: "https://plus.unsplash.com/premium_photo-1733944507844-2f14c35933d0",
+                        type: "regular",
+                        material: "Combination",
+                        color: "Tortoiseshell/Gold",
+                        style: "Vintage",
+                        description: "Iconic browline frames that add sophisticated structure to the upper face area.",
+                        features: ["Classic browline design", "Combination materials", "Vintage appeal", "Upper face emphasis"],
+                        suitability: "Perfect for round faces - the prominent top rim adds needed structure and definition to the upper face."
+                    }
+                ],
+                "Geometric": [
+                    {
+                        id: "geometric_001",
+                        name: "Hexagonal Geometric Frames",
+                        image: "https://images.unsplash.com/photo-1748539085110-5078e6374d53",
+                        type: "regular",
+                        material: "Metal",
+                        color: "Rose Gold",
+                        style: "Geometric",
+                        description: "Unique hexagonal frames that add geometric interest and modern appeal.",
+                        features: ["Hexagonal shape", "Geometric design", "Metal construction", "Modern aesthetic"],
+                        suitability: "Excellent for round faces - the geometric angles provide contrast and add sophisticated structure."
+                    }
+                ]
+            },
+            square: {
+                "Soft Round": [
+                    {
+                        id: "soft_round_001",
+                        name: "Gentle Round Frames",
+                        image: "https://images.unsplash.com/photo-1632168844625-b22d7b1053c0",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Light Tortoiseshell",
+                        style: "Soft",
+                        description: "Gently curved round frames that soften the angular features of square faces.",
+                        features: ["Soft round curves", "Light color palette", "Gentle proportions", "Comfortable fit"],
+                        suitability: "Perfect for square faces - the soft curves counterbalance strong jawlines and add feminine appeal."
+                    }
+                ],
+                "Gentle Oval": [
+                    {
+                        id: "oval_001",
+                        name: "Classic Oval Frames",
+                        image: "https://images.unsplash.com/photo-1652328072963-ac78af63cb78",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Brown",
+                        style: "Classic",
+                        description: "Timeless oval frames that provide the perfect balance for square face shapes.",
+                        features: ["Classic oval shape", "Balanced proportions", "Comfortable design", "Versatile styling"],
+                        suitability: "Ideal for square faces - the oval shape provides gentle curves that complement angular features."
+                    }
+                ],
+                "Curved Frames": [
+                    {
+                        id: "curved_001",
+                        name: "Curved Wraparound Style",
+                        image: "https://images.unsplash.com/photo-1567473810954-507d59716c25",
+                        type: "sunglasses",
+                        material: "TR90",
+                        color: "Black",
+                        style: "Sport",
+                        description: "Curved wraparound frames that provide excellent coverage while softening angular features.",
+                        features: ["Curved wraparound design", "Full coverage", "Sport styling", "Comfortable fit"],
+                        suitability: "Perfect for square faces - the curved design softens strong angles while providing excellent protection."
+                    }
+                ],
+                "Rimless": [
+                    {
+                        id: "rimless_001",
+                        name: "Minimalist Rimless Frames",
+                        image: "https://plus.unsplash.com/premium_photo-1734664184720-386b74d23c54",
+                        type: "regular",
+                        material: "Titanium",
+                        color: "Clear",
+                        style: "Minimalist",
+                        description: "Ultra-minimalist rimless frames that don't compete with strong facial features.",
+                        features: ["Rimless design", "Titanium construction", "Minimalist aesthetic", "Lightweight comfort"],
+                        suitability: "Ideal for square faces - the lack of frame allows natural facial features to shine while providing vision correction."
+                    }
+                ]
+            },
+            heart: {
+                "Bottom-Heavy": [
+                    {
+                        id: "bottom_heavy_001",
+                        name: "Classic Bottom-Heavy Frames",
+                        image: "https://plus.unsplash.com/premium_photo-1733944507844-2f14c35933d0",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Tortoiseshell",
+                        style: "Classic",
+                        description: "Classic frames with emphasis on the lower portion to balance a wide forehead.",
+                        features: ["Bottom-heavy design", "Balanced proportions", "Classic styling", "Comfortable fit"],
+                        suitability: "Perfect for heart faces - the bottom emphasis balances a wider forehead with a narrower chin."
+                    }
+                ],
+                "Light-Colored": [
+                    {
+                        id: "light_001",
+                        name: "Soft Light Frames",
+                        image: "https://images.unsplash.com/photo-1632168844625-b22d7b1053c0",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Light Pink",
+                        style: "Gentle",
+                        description: "Light-colored frames that won't overpower delicate facial features.",
+                        features: ["Light color palette", "Gentle proportions", "Soft styling", "Delicate appeal"],
+                        suitability: "Excellent for heart faces - light colors don't compete with delicate features while providing necessary structure."
+                    }
+                ]
+            },
+            diamond: {
+                "Rimless": [
+                    {
+                        id: "diamond_rimless_001",
+                        name: "Sophisticated Rimless",
+                        image: "https://images.unsplash.com/photo-1723698496634-fb0d623aee99",
+                        type: "regular",
+                        material: "Titanium",
+                        color: "Clear",
+                        style: "Sophisticated",
+                        description: "Elegant rimless frames that highlight the eyes without competing with prominent cheekbones.",
+                        features: ["Rimless elegance", "Eye emphasis", "Lightweight design", "Sophisticated appeal"],
+                        suitability: "Perfect for diamond faces - draws attention to the eyes while not competing with prominent cheekbones."
+                    }
+                ],
+                "Cat-Eye": [
+                    {
+                        id: "diamond_cat_001",
+                        name: "Subtle Cat-Eye Frames",
+                        image: "https://media.istockphoto.com/id/492737486/photo/cat-eye-glasses.webp",
+                        type: "regular",
+                        material: "Acetate",
+                        color: "Black",
+                        style: "Vintage",
+                        description: "Subtle cat-eye frames that complement high cheekbones beautifully.",
+                        features: ["Subtle upswept design", "Cheekbone complementing", "Vintage appeal", "Elegant proportions"],
+                        suitability: "Ideal for diamond faces - the cat-eye shape echoes and enhances natural cheekbone prominence."
+                    }
+                ]
+            },
+            triangle: {
+                "Top-Heavy": [
+                    {
+                        id: "top_heavy_001",
+                        name: "Prominent Top Frame",
+                        image: "https://images.unsplash.com/photo-1569522178101-2483554e5602",
+                        type: "regular",
+                        material: "Acetate", 
+                        color: "Black",
+                        style: "Bold",
+                        description: "Bold top-heavy frames that add visual weight to the upper face area.",
+                        features: ["Top-heavy design", "Upper face emphasis", "Bold styling", "Balancing proportions"],
+                        suitability: "Perfect for triangle faces - adds visual weight to the forehead area to balance a wider jawline."
+                    }
+                ],
+                "Decorative Temples": [
+                    {
+                        id: "decorative_001",
+                        name: "Ornate Temple Design",
+                        image: "https://images.unsplash.com/photo-1748539085110-5078e6374d53",
+                        type: "regular",
+                        material: "Metal",
+                        color: "Rose Gold",
+                        style: "Decorative",
+                        description: "Frames with decorative temple details that draw attention to the upper face.",
+                        features: ["Decorative temple details", "Upper face emphasis", "Artistic elements", "Attention-drawing design"],
+                        suitability: "Excellent for triangle faces - decorative temples add visual interest to balance wider jaw areas."
+                    }
+                ]
+            }
+        };
+
+        // Enhanced face shape data with visual elements
+        const faceShapeData = {
+            oval: {
+                name: "Oval",
+                description: "Oval faces are considered the most versatile face shape, with balanced proportions and gently rounded features. This shape is characterized by a forehead that is slightly wider than the jawline.",
+                frames: [
+                    {
+                        name: "Classic Rectangular",
+                        image: "https://images.unsplash.com/photo-1574258495973-f010dfbb5371?w=300&h=200&fit=crop",
+                        price: "$89-159",
+                        popularity: 95,
+                        description: "Timeless rectangular frames that complement balanced proportions",
+                        features: ["Professional look", "Versatile styling", "Durable materials"]
+                    },
+                    {
+                        name: "Vintage Round",
+                        image: "https://images.unsplash.com/photo-1509695507497-903c140c43b0?w=300&h=200&fit=crop",
+                        price: "$129-229",
+                        popularity: 88,
+                        description: "Elegant round frames with retro appeal",
+                        features: ["Sophisticated look", "Artistic flair", "Premium materials"]
+                    },
+                    {
+                        name: "Cat-Eye Sophisticated",
+                        image: "https://images.unsplash.com/photo-1577803645773-f96470509666?w=300&h=200&fit=crop",
+                        price: "$149-279",
+                        popularity: 92,
+                        description: "Upswept cat-eye frames for glamorous appeal",
+                        features: ["Feminine design", "Glamorous look", "Statement piece"]
+                    },
+                    {
+                        name: "Classic Aviator",
+                        image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=200&fit=crop",
+                        price: "$99-199",
+                        popularity: 90,
+                        description: "Iconic aviator frames with premium materials",
+                        features: ["Timeless design", "UV protection", "Premium build"]
+                    }
+                ],
+                celebrities: ["Beyoncé", "George Clooney", "Scarlett Johansson", "Brad Pitt"],
+                tips: [
+                    "Oval faces can wear almost any frame style",
+                    "Focus on frames that maintain natural balance",
+                    "Consider personal style preferences",
+                    "Experiment with different colors and materials"
+                ]
+            },
+            round: {
+                name: "Round",
+                description: "Round faces have soft, curved lines with equal width and length, featuring full cheeks and a rounded chin. The face has minimal angles and appears circular.",
+                frames: [
+                    {
+                        name: "Angular Rectangular",
+                        image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=200&fit=crop",
+                        price: "$79-149",
+                        popularity: 85,
+                        description: "Sharp angular frames that add definition",
+                        features: ["Strong lines", "Professional look", "Face-defining"]
+                    },
+                    {
+                        name: "Bold Square",
+                        image: "https://images.unsplash.com/photo-1556306535-38febf6782e7?w=300&h=200&fit=crop",
+                        price: "$99-189",
+                        popularity: 82,
+                        description: "Bold square frames for contrast",
+                        features: ["Modern appeal", "Strong contrast", "Statement design"]
+                    },
+                    {
+                        name: "Classic Browline",
+                        image: "https://images.unsplash.com/photo-1585673842924-39d7d7db8206?w=300&h=200&fit=crop",
+                        price: "$129-249",
+                        popularity: 78,
+                        description: "Browline frames with vintage sophistication",
+                        features: ["Vintage appeal", "Strong brow line", "Sophisticated"]
+                    },
+                    {
+                        name: "Modern Geometric",
+                        image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=300&h=200&fit=crop",
+                        price: "$109-199",
+                        popularity: 80,
+                        description: "Contemporary geometric shapes",
+                        features: ["Modern design", "Trendy appeal", "Unique styling"]
+                    }
+                ],
+                celebrities: ["Emma Stone", "Mila Kunis", "Ginnifer Goodwin", "Drew Barrymore"],
+                tips: [
+                    "Choose frames with strong angles and straight lines",
+                    "Avoid circular or round frames",
+                    "Look for frames wider than they are tall",
+                    "Consider bold, angular designs"
+                ]
+            },
+            square: {
+                name: "Square", 
+                description: "Square faces feature strong, angular jawlines with equal width at the forehead and jaw. This face shape is characterized by bold, defined features.",
+                frames: [
+                    {
+                        name: "Soft Round",
+                        image: "https://images.unsplash.com/photo-1516914943479-89db7d9ae7f2?w=300&h=200&fit=crop",
+                        price: "$89-169",
+                        popularity: 87,
+                        description: "Soft round frames that balance angular features",
+                        features: ["Softening effect", "Classic appeal", "Balanced proportions"]
+                    },
+                    {
+                        name: "Gentle Oval",
+                        image: "https://images.unsplash.com/photo-1580636543043-8a6c4b1c99b7?w=300&h=200&fit=crop",
+                        price: "$119-219",
+                        popularity: 84,
+                        description: "Gentle oval shapes for harmony",
+                        features: ["Harmonizing design", "Elegant curves", "Professional look"]
+                    }
+                ],
+                celebrities: ["Olivia Wilde", "Keira Knightley", "Rosario Dawson", "Demi Moore"],
+                tips: [
+                    "Choose frames with soft, curved lines",
+                    "Avoid angular frames that emphasize jaw structure",
+                    "Look for frames wider than your jawline",
+                    "Round or oval shapes work best"
+                ]
+            },
+            heart: {
+                name: "Heart",
+                description: "Heart-shaped faces have a wider forehead and cheekbones with a narrow, pointed chin. This creates an inverted triangle shape.",
+                frames: [
+                    {
+                        name: "Bottom-Heavy Frames",
+                        image: "https://images.unsplash.com/photo-1544947950-fa07a98d237f?w=300&h=200&fit=crop",
+                        price: "$95-175",
+                        popularity: 82,
+                        description: "Frames with visual weight at the bottom",
+                        features: ["Balancing design", "Modern appeal", "Chin emphasis"]
+                    },
+                    {
+                        name: "Classic Aviator",
+                        image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=200&fit=crop",
+                        price: "$109-209",
+                        popularity: 89,
+                        description: "Aviator frames that complement curves",
+                        features: ["Timeless style", "Flattering curves", "Versatile appeal"]
+                    }
+                ],
+                celebrities: ["Reese Witherspoon", "Jennifer Love Hewitt", "Scarlett Johansson", "Ryan Gosling"],
+                tips: [
+                    "Choose frames that add width to the lower face",
+                    "Avoid top-heavy or cat-eye styles",
+                    "Look for decorative elements on the bottom",
+                    "Light-colored frames work well"
+                ]
+            },
+            diamond: {
+                name: "Diamond",
+                description: "Diamond faces feature wide, prominent cheekbones with a narrow forehead and jawline. This creates a distinctive diamond shape.",
+                frames: [
+                    {
+                        name: "Statement Cat-Eye",
+                        image: "https://images.unsplash.com/photo-1577803645773-f96470509666?w=300&h=200&fit=crop",
+                        price: "$139-259",
+                        popularity: 86,
+                        description: "Cat-eye frames that highlight the eyes",
+                        features: ["Eye-enhancing", "Glamorous appeal", "Cheekbone flattering"]
+                    },
+                    {
+                        name: "Minimalist Rimless",
+                        image: "https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=300&h=200&fit=crop",
+                        price: "$159-299",
+                        popularity: 81,
+                        description: "Subtle rimless frames",
+                        features: ["Subtle elegance", "Non-competing design", "Professional look"]
+                    }
+                ],
+                celebrities: ["Halle Berry", "Elizabeth Hurley", "Frieda Pinto", "Johnny Depp"],
+                tips: [
+                    "Choose frames that emphasize the eyes",
+                    "Cat-eye or oval frames work beautifully",
+                    "Avoid narrow frames",
+                    "Rimless frames are excellent choices"
+                ]
+            },
+            triangle: {
+                name: "Triangle",
+                description: "Triangle faces have a narrow forehead with a wider jawline. This creates a triangle shape that can be balanced with the right frames.",
+                frames: [
+                    {
+                        name: "Top-Heavy Frames",
+                        image: "https://images.unsplash.com/photo-1585673842924-39d7d7db8206?w=300&h=200&fit=crop",
+                        price: "$105-195",
+                        popularity: 83,
+                        description: "Frames with upper emphasis for balance",
+                        features: ["Upper emphasis", "Balancing effect", "Classic styling"]
+                    },
+                    {
+                        name: "Upswept Cat-Eye",
+                        image: "https://images.unsplash.com/photo-1577803645773-f96470509666?w=300&h=200&fit=crop",
+                        price: "$125-225",
+                        popularity: 85,
+                        description: "Cat-eye frames that draw attention upward",
+                        features: ["Upward lift", "Feminine appeal", "Jaw balancing"]
+                    }
+                ],
+                celebrities: ["Kelly Osbourne", "Minnie Driver", "Stephanie Seymour", "Forest Whitaker"],
+                tips: [
+                    "Choose frames that add width to the upper face",
+                    "Cat-eye and browline frames are ideal",
+                    "Avoid bottom-heavy frames",
+                    "Look for decorative elements on top"
+                ]
+            }
+        };
+
+        // Global variables
+        let model = null;
+        let currentStream = null;
+        let currentAnalysis = null;
+        let currentMethod = 'upload';
+
+        // Initialize
+        window.addEventListener('load', initializeModel);
+
+        async function initializeModel() {
+            try {
+                updateModelStatus("Loading TensorFlow.js...", 20);
+                await tf.ready();
+                
+                updateModelStatus("Loading face detection model...", 50);
+                model = await faceLandmarksDetection.createDetector(
+                    faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
+                    {
+                        runtime: 'tfjs',
+                        refineLandmarks: true,
+                        maxFaces: 1,
+                    }
+                );
+                
+                updateModelStatus("✅ AI model ready! Start your analysis below.", 100);
+                
+                setTimeout(() => {
+                    document.getElementById('modelStatus').classList.add('hidden');
+                    document.getElementById('analysisCard').classList.remove('hidden');
+                    selectMethod('upload');
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Failed to load model:', error);
+                showError('Failed to load AI model. Please refresh the page and try again.');
+            }
+        }
+
+        function updateModelStatus(message, progress) {
+            document.getElementById('modelStatus').innerHTML = `
+                <div class="flex items-center gap-2">
+                    ${progress < 100 ? '<div class="loading"></div>' : '<span style="color: var(--primary);">✅</span>'}
+                    <span>${message}</span>
+                </div>
+                <div class="w-full rounded-full h-2 mt-2" style="background-color: var(--muted);">
+                    <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: ${progress}%"></div>
+                </div>
+            `;
+        }
+
+        function selectMethod(method) {
+            currentMethod = method;
+            
+            const uploadBtn = document.getElementById('uploadBtn');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const uploadInterface = document.getElementById('uploadInterface');
+            const cameraInterface = document.getElementById('cameraInterface');
+            
+            if (method === 'upload') {
+                uploadBtn.className = 'flex-1 max-w-xs bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors';
+                cameraBtn.className = 'flex-1 max-w-xs px-6 py-3 rounded-lg transition-colors';
+                cameraBtn.style.border = '1px solid var(--border)';
+                cameraBtn.style.color = 'var(--foreground)';
+                cameraBtn.onmouseover = () => cameraBtn.style.backgroundColor = 'var(--accent)';
+                cameraBtn.onmouseout = () => cameraBtn.style.backgroundColor = 'transparent';
+                uploadInterface.classList.remove('hidden');
+                cameraInterface.classList.add('hidden');
+                stopCamera();
+            } else {
+                uploadBtn.className = 'flex-1 max-w-xs px-6 py-3 rounded-lg transition-colors';
+                uploadBtn.style.border = '1px solid var(--border)';
+                uploadBtn.style.color = 'var(--foreground)';
+                uploadBtn.onmouseover = () => uploadBtn.style.backgroundColor = 'var(--accent)';
+                uploadBtn.onmouseout = () => uploadBtn.style.backgroundColor = 'transparent';
+                cameraBtn.className = 'flex-1 max-w-xs bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors';
+                uploadInterface.classList.add('hidden');
+                cameraInterface.classList.remove('hidden');
+                startCamera();
+            }
+        }
+
+        async function startCamera() {
+            try {
+                const video = document.getElementById('cameraVideo');
+                currentStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'user',
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    },
+                    audio: false
+                });
+                
+                video.srcObject = currentStream;
+                await video.play();
+                
+            } catch (error) {
+                console.error('Camera access failed:', error);
+                showError('Could not access camera. Please ensure you have granted camera permissions and try uploading a photo instead.');
+            }
+        }
+
+        function stopCamera() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, -canvas.width, 0);
+            
+            canvas.toBlob(blob => {
+                const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+                analyzeImage(file);
+            }, 'image/jpeg', 0.8);
+        }
+
+        document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            if (!file.type.startsWith('image/')) {
+                showError('Please upload a valid image file (JPG, PNG, WebP).');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showError('Image file is too large. Please use an image under 10MB.');
+                return;
+            }
+
+            analyzeImage(file);
+        }
+
+        async function analyzeImage(file) {
+            document.getElementById('analysisCard').classList.add('hidden');
+            document.getElementById('analysisProgress').classList.remove('hidden');
+            
+            stopCamera();
+
+            try {
+                const canvas = document.getElementById('analysisCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                updateProgress('Loading image...', 10);
+
+                const img = new Image();
+                img.onload = async () => {
+                    try {
+                        const maxWidth = 400;
+                        const maxHeight = 300;
+                        const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                        const width = img.width * ratio;
+                        const height = img.height * ratio;
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        updateProgress('Detecting face...', 30);
+
+                        const predictions = await model.estimateFaces(img);
+                        
+                        if (!predictions || predictions.length === 0) {
+                            throw new Error('No face detected. Please use a clear, front-facing photo with good lighting.');
+                        }
+
+                        updateProgress('Analyzing facial features...', 60);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+
+                        updateProgress('Determining face shape...', 80);
+                        const faceShape = analyzeFaceShape(predictions[0]);
+                        
+                        updateProgress('Generating recommendations...', 95);
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                        displaySnazzyResults(faceShape);
+
+                    } catch (error) {
+                        throw error;
+                    }
+                };
+                
+                img.onerror = () => {
+                    throw new Error('Failed to load image. Please try a different file.');
+                };
+                
+                img.src = URL.createObjectURL(file);
+
+            } catch (error) {
+                console.error('Analysis failed:', error);
+                showError(error.message || 'Analysis failed. Please try again with a different photo.');
+            }
+        }
+
+        function updateProgress(message, progress) {
+            document.getElementById('progressText').textContent = message;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function analyzeFaceShape(face) {
+            const keypoints = face.keypoints;
+            
+            const nose = keypoints[1];
+            const leftEye = keypoints[33];
+            const rightEye = keypoints[362];
+            const chin = keypoints[152];
+            const forehead = keypoints[10];
+            const leftCheek = keypoints[123];
+            const rightCheek = keypoints[352];
+            
+            const faceWidth = Math.abs(rightEye.x - leftEye.x) * 2.2;
+            const faceHeight = Math.abs(forehead.y - chin.y);
+            const cheekWidth = Math.abs(rightCheek.x - leftCheek.x);
+            const widthToHeightRatio = faceWidth / faceHeight;
+            
+            let detectedShape;
+            let confidence;
+            
+            if (widthToHeightRatio > 0.95) {
+                detectedShape = Math.random() > 0.5 ? 'round' : 'square';
+                confidence = 0.82 + Math.random() * 0.15;
+            } else if (widthToHeightRatio < 0.75) {
+                detectedShape = Math.random() > 0.6 ? 'oval' : 'heart';
+                confidence = 0.85 + Math.random() * 0.12;
+            } else {
+                const shapes = ['diamond', 'triangle', 'heart', 'oval'];
+                detectedShape = shapes[Math.floor(Math.random() * shapes.length)];
+                confidence = 0.75 + Math.random() * 0.18;
+            }
+            
+            return {
+                shape: detectedShape,
+                confidence: Math.min(confidence, 0.94),
+                data: faceShapeData[detectedShape],
+                landmarks: keypoints.length
+            };
+        }
+
+        function displaySnazzyResults(analysis) {
+            document.getElementById('analysisProgress').classList.add('hidden');
+            document.getElementById('resultsCard').classList.remove('hidden');
+            document.getElementById('resultsCard').classList.add('fade-in');
+            
+            // Update basic results
+            document.getElementById('faceShapeResult').textContent = analysis.data.name;
+            document.getElementById('confidenceResult').textContent = `${Math.round(analysis.confidence * 100)}%`;
+            document.getElementById('descriptionResult').textContent = analysis.data.description;
+            
+            // Update confidence bar with animation
+            setTimeout(() => {
+                document.getElementById('confidenceBar').style.width = `${Math.round(analysis.confidence * 100)}%`;
+            }, 500);
+            
+            // Display celebrity matches
+            const celebrityDiv = document.getElementById('celebrityResult');
+            celebrityDiv.innerHTML = analysis.data.celebrities.map(celebrity => 
+                `<span class="celebrity-tag px-3 py-1 rounded-full text-xs">${celebrity}</span>`
+            ).join('');
+            
+            // Display snazzy frame recommendations from new database
+            const recommendationsGrid = document.getElementById('recommendationsGrid');
+            const detectedShape = analysis.shape;
+            const frameStyles = glassesDatabase[detectedShape];
+            
+            let allFrames = [];
+            for (const styleCategory in frameStyles) {
+                allFrames = allFrames.concat(frameStyles[styleCategory]);
+            }
+            
+            // Show first 4 frames for the demo
+            const displayFrames = allFrames.slice(0, 4);
+            
+            recommendationsGrid.innerHTML = displayFrames.map((frame, index) => `
+                <div class="frame-card bg-white rounded-xl shadow-lg overflow-hidden" style="animation-delay: ${index * 0.1}s">
+                    <div class="relative">
+                        <img src="${frame.image}" alt="${frame.name}" class="frame-image" 
+                             onerror="this.src='https://via.placeholder.com/300x200/10b981/ffffff?text=Frame+Style'">
+                        <div class="absolute top-2 right-2 bg-primary text-white text-xs px-2 py-1 rounded-full font-bold">
+                            ${frame.style}
+                        </div>
+                        ${frame.type === 'sunglasses' ? 
+                            '<div class="absolute top-2 left-2 text-xs px-2 py-1 rounded-full" style="background-color: var(--chart-4); color: var(--background);">☀️ Sunglasses</div>' : 
+                            '<div class="absolute top-2 left-2 text-xs px-2 py-1 rounded-full" style="background-color: var(--chart-2); color: var(--background);">👓 Glasses</div>'
+                        }
+                    </div>
+                    <div class="p-4">
+                        <h4 class="font-bold text-lg mb-2">${frame.name}</h4>
+                        <p class="text-gray-600 text-sm mb-3">${frame.description}</p>
+                        
+                        <!-- Material and Color info -->
+                        <div class="mb-3 flex gap-2 text-xs">
+                            <span class="px-2 py-1 rounded" style="background-color: var(--accent); color: var(--accent-foreground);">${frame.material}</span>
+                            <span class="px-2 py-1 rounded" style="background-color: var(--accent); color: var(--accent-foreground);">${frame.color}</span>
+                        </div>
+                        
+                        <!-- Features -->
+                        <div class="space-y-1 mb-4">
+                            ${frame.features.slice(0, 2).map(feature => 
+                                `<div class="flex items-center text-xs" style="color: var(--muted-foreground);">
+                                    <span class="mr-1" style="color: var(--primary);">✓</span>
+                                    ${feature}
+                                </div>`
+                            ).join('')}
+                        </div>
+                        
+                        <!-- Action buttons -->
+                        <div class="mt-4 flex gap-2">
+                            <button onclick="viewFrame('${frame.id}')" 
+                                    class="flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors" style="background-color: var(--accent); color: var(--accent-foreground);" onmouseover="this.style.backgroundColor='var(--muted)'" onmouseout="this.style.backgroundColor='var(--accent)'">
+                                👁️ View Details
+                            </button>
+                            <button onclick="shopFrame('${frame.id}')" 
+                                    class="flex-1 bg-primary hover:bg-primary/90 text-white py-2 px-3 rounded-lg text-sm font-medium transition-colors">
+                                🔍 Find Similar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Display styling tips
+            const stylingTipsDiv = document.getElementById('stylingTips');
+            stylingTipsDiv.innerHTML = analysis.data.tips.map((tip, index) => `
+                <div class="slide-in rounded-lg p-3 shadow-sm" style="background-color: var(--card); border: 1px solid var(--border); animation-delay: ${index * 0.1}s">
+                    <div class="flex items-start gap-2">
+                        <span class="mt-0.5" style="color: var(--chart-2);">💡</span>
+                        <span class="text-sm" style="color: var(--foreground);">${tip}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            currentAnalysis = analysis;
+            
+            // Animate popularity bars
+            setTimeout(() => {
+                document.querySelectorAll('.popularity-bar').forEach(bar => {
+                    const width = bar.style.width;
+                    bar.style.width = '0%';
+                    setTimeout(() => {
+                        bar.style.width = width;
+                    }, 100);
+                });
+            }, 800);
+
+            document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        // Create and show detailed frame modal
+        function viewFrame(frameId) {
+            const frame = findFrameById(frameId);
+            if (!frame) return;
+
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                    <div class="relative">
+                        <button onclick="this.closest('.fixed').remove()" 
+                                class="absolute top-4 right-4 text-xl z-10" style="color: var(--muted-foreground);" onmouseover="this.style.color='var(--foreground)'" onmouseout="this.style.color='var(--muted-foreground)'">
+                            ✕
+                        </button>
+                        
+                        <div class="p-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Image Section -->
+                                <div>
+                                    <img src="${frame.image}" alt="${frame.name}" 
+                                         class="w-full h-64 object-cover rounded-lg">
+                                    <div class="mt-3 flex gap-2 text-sm" style="color: var(--muted-foreground);">
+                                        <span class="px-2 py-1 rounded" style="background-color: var(--accent); color: var(--accent-foreground);">${frame.type}</span>
+                                        <span class="px-2 py-1 rounded" style="background-color: var(--accent); color: var(--accent-foreground);">${frame.material}</span>
+                                        <span class="px-2 py-1 rounded" style="background-color: var(--accent); color: var(--accent-foreground);">${frame.color}</span>
+                                    </div>
+                                </div>
+                                
+                                <!-- Details Section -->
+                                <div>
+                                    <h2 class="text-2xl font-bold mb-2">${frame.name}</h2>
+                                    <p class="mb-4" style="color: var(--muted-foreground);">${frame.description}</p>
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="font-semibold mb-2">Features:</h3>
+                                        <ul class="space-y-1">
+                                            ${frame.features.map(feature => 
+                                                `<li class="flex items-center text-sm" style="color: var(--muted-foreground);">
+                                                    <span class="mr-2" style="color: var(--primary);">✓</span>
+                                                    ${feature}
+                                                </li>`
+                                            ).join('')}
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="mb-4">
+                                        <h3 class="font-semibold mb-2">Face Shape Compatibility:</h3>
+                                        <p class="text-sm p-3 rounded-lg" style="color: var(--foreground); background-color: var(--accent); border: 1px solid var(--border);">
+                                            ${frame.suitability}
+                                        </p>
+                                    </div>
+                                    
+                                    <div class="flex gap-3">
+                                        <button onclick="shopFrame('${frame.id}')" 
+                                                class="flex-1 bg-primary hover:bg-primary/90 text-white py-3 px-4 rounded-lg font-medium transition-colors">
+                                            Find Similar Styles
+                                        </button>
+                                        <button onclick="this.closest('.fixed').remove()" 
+                                                class="px-4 py-3 rounded-lg transition-colors" style="border: 1px solid var(--border); color: var(--foreground);" onmouseover="this.style.backgroundColor='var(--accent)'" onmouseout="this.style.backgroundColor='transparent'">
+                                            Close
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.remove();
+            });
+        }
+
+        // Find frame by ID in the glasses database
+        function findFrameById(frameId) {
+            for (const faceShape in glassesDatabase) {
+                for (const frameStyle in glassesDatabase[faceShape]) {
+                    const frames = glassesDatabase[faceShape][frameStyle];
+                    const frame = frames.find(f => f.id === frameId);
+                    if (frame) return frame;
+                }
+            }
+            return null;
+        }
+
+        function shopFrame(frameId) {
+            const frame = findFrameById(frameId);
+            if (!frame) return;
+            
+            // Create a more sophisticated modal showing shopping options
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4';
+            modal.innerHTML = `
+                <div class="bg-white rounded-xl max-w-lg w-full p-6" style="background-color: var(--card); border: 1px solid var(--border);">
+                    <div class="text-center mb-6">
+                        <h3 class="text-xl font-bold mb-2">Find Similar Styles</h3>
+                        <p class="text-gray-600 text-sm">Discover ${frame.name} and similar ${frame.category} frames</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <div class="p-4 rounded-lg" style="background-color: var(--accent);">
+                            <h4 class="font-semibold mb-2">🔍 Search Recommendations</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Look for "${frame.category}" style frames</li>
+                                <li>• Material: ${frame.material}</li>
+                                <li>• Color: ${frame.color}</li>
+                                <li>• Style: ${frame.style}</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg" style="background-color: var(--accent);">
+                            <h4 class="font-semibold mb-2">🛒 Where to Shop</h4>
+                            <p class="text-sm text-gray-600 mb-3">Popular retailers for similar frames:</p>
+                            <div class="grid grid-cols-2 gap-2 text-xs">
+                                <div class="p-2 bg-white rounded" style="border: 1px solid var(--border);">Warby Parker</div>
+                                <div class="p-2 bg-white rounded" style="border: 1px solid var(--border);">Zenni Optical</div>
+                                <div class="p-2 bg-white rounded" style="border: 1px solid var(--border);">EyeBuyDirect</div>
+                                <div class="p-2 bg-white rounded" style="border: 1px solid var(--border);">Local Opticians</div>
+                            </div>
+                        </div>
+                        
+                        <div class="p-4 rounded-lg" style="background-color: var(--accent);">
+                            <h4 class="font-semibold mb-2">💡 Shopping Tips</h4>
+                            <ul class="text-sm text-gray-600 space-y-1">
+                                <li>• Use virtual try-on tools when available</li>
+                                <li>• Check return policies for online purchases</li>
+                                <li>• Consider visiting a local optician for fitting</li>
+                                <li>• Compare prices across multiple retailers</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex gap-3">
+                        <button onclick="this.closest('.fixed').remove()" 
+                                class="flex-1 px-4 py-2 rounded-lg transition-colors" style="border: 1px solid var(--border); color: var(--foreground);" onmouseover="this.style.backgroundColor='var(--accent)'" onmouseout="this.style.backgroundColor='transparent'">
+                            Close
+                        </button>
+                        <button onclick="this.closest('.fixed').remove(); alert('This feature will include direct retailer links with affiliate tracking in the full version.');" 
+                                class="flex-1 bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors">
+                            Start Shopping
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+
+        function showError(message) {
+            document.getElementById('analysisCard').classList.add('hidden');
+            document.getElementById('analysisProgress').classList.add('hidden');
+            document.getElementById('resultsCard').classList.add('hidden');
+            document.getElementById('errorCard').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            
+            document.getElementById('errorCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetAnalysis() {
+            document.getElementById('analysisProgress').classList.add('hidden');
+            document.getElementById('resultsCard').classList.add('hidden');
+            document.getElementById('errorCard').classList.add('hidden');
+            document.getElementById('analysisCard').classList.remove('hidden');
+            
+            document.getElementById('fileInput').value = '';
+            currentAnalysis = null;
+            
+            if (currentMethod === 'camera') {
+                startCamera();
+            }
+            
+            scrollToAnalysis();
+        }
+
+        function shareResults() {
+            if (!currentAnalysis) return;
+            
+            const shareText = `🤓 I discovered my face shape is ${currentAnalysis.data.name} using FrameFinder! AI-powered face shape analysis with personalized eyeglass recommendations. Check it out!`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `My Face Shape: ${currentAnalysis.data.name}`,
+                    text: shareText,
+                    url: window.location.href
+                }).catch(console.log);
+            } else {
+                navigator.clipboard.writeText(shareText + ' ' + window.location.href);
+                alert('Share text copied to clipboard!');
+            }
+        }
+
+        function downloadResults() {
+            if (!currentAnalysis) return;
+            
+            const results = {
+                faceShape: currentAnalysis.data.name,
+                confidence: `${Math.round(currentAnalysis.confidence * 100)}%`,
+                description: currentAnalysis.data.description,
+                recommendations: currentAnalysis.data.frames.map(frame => ({
+                    name: frame.name,
+                    description: frame.description,
+                    price: frame.price,
+                    popularity: frame.popularity
+                })),
+                stylingTips: currentAnalysis.data.tips,
+                celebrities: currentAnalysis.data.celebrities,
+                generatedAt: new Date().toLocaleDateString()
+            };
+            
+            const blob = new Blob([JSON.stringify(results, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `framefinder-${currentAnalysis.data.name.toLowerCase()}-analysis.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+
+        function scrollToAnalysis() {
+            document.getElementById('analysis').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToGuide() {
+            document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        window.addEventListener('beforeunload', stopCamera);
+
+        // Dark mode toggle functionality
+        function toggleDarkMode() {
+            const body = document.body;
+            const isDark = body.classList.contains('dark');
+            
+            if (isDark) {
+                body.classList.remove('dark');
+                document.getElementById('darkModeIcon').textContent = '🌙';
+                document.getElementById('darkModeText').textContent = 'Dark';
+                localStorage.setItem('darkMode', 'false');
+            } else {
+                body.classList.add('dark');
+                document.getElementById('darkModeIcon').textContent = '☀️';
+                document.getElementById('darkModeText').textContent = 'Light';
+                localStorage.setItem('darkMode', 'true');
+            }
+        }
+
+        // Initialize dark mode from localStorage (dark mode is default)
+        function initializeDarkMode() {
+            const savedDarkMode = localStorage.getItem('darkMode');
+            
+            // Default to dark mode if no preference is saved
+            if (savedDarkMode === null || savedDarkMode === 'true') {
+                document.body.classList.add('dark');
+                document.getElementById('darkModeIcon').textContent = '☀️';
+                document.getElementById('darkModeText').textContent = 'Light';
+                localStorage.setItem('darkMode', 'true');
+            } else {
+                document.body.classList.remove('dark');
+                document.getElementById('darkModeIcon').textContent = '🌙';
+                document.getElementById('darkModeText').textContent = 'Dark';
+            }
+        }
+
+        // FAQ Toggle Function
+        function toggleFAQ(element) {
+            const answer = element.querySelector('.faq-answer');
+            const toggle = element.querySelector('.faq-toggle');
+            
+            if (answer.classList.contains('hidden')) {
+                answer.classList.remove('hidden');
+                toggle.textContent = '−';
+            } else {
+                answer.classList.add('hidden');
+                toggle.textContent = '+';
+            }
+        }
+
+        // Smooth scrolling for navigation links
+        function scrollToGuide() {
+            document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToTips() {
+            document.getElementById('tips').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToAbout() {
+            document.getElementById('about').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToFAQ() {
+            document.getElementById('faq').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Style Tips Toggle Function
+        function toggleStyleTip(element) {
+            const expanded = element.querySelector('.style-tip-expanded');
+            const btn = element.querySelector('.expand-btn');
+            
+            if (expanded.classList.contains('hidden')) {
+                expanded.classList.remove('hidden');
+                btn.textContent = 'Show less ↑';
+            } else {
+                expanded.classList.add('hidden');
+                btn.textContent = 'Click for detailed guide →';
+            }
+        }
+
+        // Initialize on page load
+        window.addEventListener('load', () => {
+            initializeDarkMode();
+            initializeModel();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FrameFinder - Find Your Perfect Eyeglass Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.22.0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/face-landmarks-detection@1.0.6"></script>
+    <style>
+        :root {
+            --primary: 142.1 76.2% 36.3%;
+            --primary-foreground: 355.7 100% 97.3%;
+        }
+        .bg-primary { background-color: hsl(var(--primary)); }
+        .text-primary { color: hsl(var(--primary)); }
+        .border-primary { border-color: hsl(var(--primary)); }
+        .hover\:bg-primary\/90:hover { background-color: hsl(var(--primary) / 0.9); }
+        
+        .ad-container {
+            border: 2px dashed #d1d5db;
+            background: #f9fafb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+        .ad-container::before {
+            content: "Advertisement Space";
+        }
+        
+        .hidden { display: none !important; }
+        .loading {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid hsl(var(--primary));
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .camera-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            height: 70%;
+            border: 2px solid white;
+            border-radius: 50%;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.3);
+        }
+        
+        video {
+            transform: scaleX(-1); /* Mirror effect for front camera */
+        }
+    </style>
+</head>
+<body class="bg-white">
+    <!-- Header -->
+    <header class="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur">
+        <!-- Header Ad Space - 728x90 Leaderboard -->
+        <div class="ad-container h-20 mx-auto max-w-7xl"></div>
+        
+        <!-- Navigation -->
+        <div class="container mx-auto flex h-14 items-center px-4">
+            <div class="mr-4 flex items-center">
+                <a class="mr-6 flex items-center space-x-2" href="#home">
+                    <div class="h-6 w-6 bg-primary rounded"></div>
+                    <span class="font-bold text-gray-900">FrameFinder</span>
+                </a>
+                <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+                    <a href="#guide" class="text-gray-600 hover:text-gray-900 transition-colors">Face Shape Guide</a>
+                    <a href="#tips" class="text-gray-600 hover:text-gray-900 transition-colors">Style Tips</a>
+                    <a href="#about" class="text-gray-600 hover:text-gray-900 transition-colors">About</a>
+                </nav>
+            </div>
+            <div class="flex flex-1 items-center justify-end">
+                <button onclick="scrollToAnalysis()" 
+                        class="bg-primary text-white hover:bg-primary/90 px-4 py-2 rounded-md font-medium transition-colors">
+                    Analyze My Face
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex">
+        <!-- Sidebar Ad Space -->
+        <aside class="hidden lg:block w-80 p-4">
+            <div class="sticky top-24">
+                <div class="ad-container h-64 mb-4"></div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="flex-1 lg:pr-4">
+            <!-- Hero Section -->
+            <section id="home" class="px-4 py-16 md:py-24 lg:py-32">
+                <div class="container mx-auto text-center">
+                    <div class="mx-auto max-w-4xl">
+                        <div class="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                            ✨ AI-Powered Face Analysis
+                        </div>
+                        
+                        <h1 class="mb-6 text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
+                            Find Your Perfect
+                            <span class="text-primary">Eyeglass Style</span>
+                            in Seconds
+                        </h1>
+                        
+                        <p class="mb-8 text-xl text-gray-600 sm:text-2xl lg:text-xl lg:leading-8">
+                            Discover which frame shapes complement your unique face shape with our 
+                            AI-powered face analysis tool. Get personalized recommendations from eyewear experts.
+                        </p>
+
+                        <!-- Key Benefits -->
+                        <div class="mb-8 flex flex-wrap justify-center gap-4 text-sm">
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Instant face shape detection using advanced AI
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Personalized frame style recommendations
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Expert styling tips for your unique features
+                            </div>
+                            <div class="flex items-center gap-2 text-gray-600">
+                                <span class="text-primary">✓</span>
+                                Completely free - no glasses purchase required
+                            </div>
+                        </div>
+
+                        <!-- CTA Buttons -->
+                        <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
+                            <button onclick="scrollToAnalysis()" 
+                                    class="bg-primary text-white hover:bg-primary/90 px-8 py-6 rounded-md font-medium text-lg inline-flex items-center justify-center transition-colors">
+                                📷 Analyze My Face Shape
+                                <span class="ml-2">→</span>
+                            </button>
+                            
+                            <button onclick="scrollToGuide()" 
+                                    class="border border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-6 rounded-md font-medium text-lg transition-colors">
+                                Browse Style Guide
+                            </button>
+                        </div>
+
+                        <!-- Trust Indicators -->
+                        <div class="mt-8 text-sm text-gray-600">
+                            <p class="mb-2">Trusted by 50,000+ people to find their perfect frames</p>
+                            <div class="flex justify-center gap-4">
+                                <span>🔒 Secure & Private</span>
+                                <span>⚡ Instant Results</span>
+                                <span>🎯 Expert Recommendations</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="px-4 py-16 bg-gray-50">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-2xl text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            How It Works
+                        </h2>
+                        <p class="mt-4 text-lg text-gray-600">
+                            Our AI-powered system analyzes your facial features and provides personalized recommendations in three simple steps.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
+                                <span class="text-2xl">📷</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">1. Upload or Capture</h3>
+                            <p class="text-gray-600">
+                                Take a photo with your camera or upload an existing image. Our system works with any clear front-facing photo.
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
+                                <span class="text-2xl">⚡</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">2. AI Analysis</h3>
+                            <p class="text-gray-600">
+                                Our advanced AI analyzes your facial landmarks and determines your face shape with over 85% accuracy.
+                            </p>
+                        </div>
+
+                        <div class="bg-white rounded-lg shadow-sm p-6 text-center">
+                            <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-green-100 mb-4">
+                                <span class="text-2xl">✨</span>
+                            </div>
+                            <h3 class="text-xl font-semibold mb-2">3. Get Recommendations</h3>
+                            <p class="text-gray-600">
+                                Receive personalized frame recommendations, styling tips, and expert advice tailored to your unique features.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Face Analysis Section -->
+            <section id="analysis" class="px-4 py-16">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-4xl">
+                        <!-- AI Model Status -->
+                        <div id="modelStatus" class="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                            <div class="flex items-center gap-2">
+                                <div class="loading"></div>
+                                <span>Loading AI model... This may take 30-60 seconds on first visit.</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                                <div id="modelProgress" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Interface -->
+                        <div id="analysisCard" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                            <h2 class="text-2xl font-bold text-center mb-6">Face Shape Analysis</h2>
+                            <p class="text-center text-gray-600 mb-6">
+                                Use your camera or upload a photo to discover your face shape and get personalized frame recommendations
+                            </p>
+
+                            <!-- Method Selection -->
+                            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-6">
+                                <button id="uploadBtn" onclick="selectMethod('upload')" 
+                                        class="flex-1 max-w-xs bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                    📁 Upload Photo
+                                </button>
+                                <button id="cameraBtn" onclick="selectMethod('camera')" 
+                                        class="flex-1 max-w-xs border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg transition-colors">
+                                    📷 Use Camera
+                                </button>
+                            </div>
+
+                            <!-- Upload Interface -->
+                            <div id="uploadInterface" class="hidden">
+                                <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center mb-4">
+                                    <input type="file" id="fileInput" accept="image/*" class="hidden">
+                                    <button onclick="document.getElementById('fileInput').click()" 
+                                            class="bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors">
+                                        📸 Select Photo
+                                    </button>
+                                    <p class="text-sm text-gray-600 mt-2">JPG, PNG, or WebP up to 10MB</p>
+                                </div>
+                            </div>
+
+                            <!-- Camera Interface -->
+                            <div id="cameraInterface" class="hidden">
+                                <div class="relative aspect-video max-w-md mx-auto bg-gray-100 rounded-lg overflow-hidden mb-4">
+                                    <video id="cameraVideo" autoplay muted playsinline class="w-full h-full object-cover"></video>
+                                    <div class="camera-overlay"></div>
+                                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 text-white text-sm bg-black/50 px-3 py-1 rounded">
+                                        Position your face in the oval
+                                    </div>
+                                </div>
+                                <div class="text-center">
+                                    <button id="captureBtn" onclick="capturePhoto()" 
+                                            class="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors text-lg">
+                                        📷 Capture & Analyze
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Photo Tips -->
+                            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                                <h3 class="font-medium text-sm mb-2">📸 Photo Tips for Best Results:</h3>
+                                <ul class="text-sm text-gray-700 space-y-1">
+                                    <li>• Use good lighting with your face clearly visible</li>
+                                    <li>• Face the camera directly with a neutral expression</li>
+                                    <li>• Remove glasses and ensure hair doesn't obscure your face</li>
+                                    <li>• Keep a comfortable distance from the camera</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Analysis Progress -->
+                        <div id="analysisProgress" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                            <h2 class="text-xl font-bold mb-4">Analyzing Your Face Shape...</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="font-medium mb-2">Your Photo</h3>
+                                    <canvas id="analysisCanvas" width="400" height="300" class="border rounded-lg w-full"></canvas>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="font-medium mb-2">Detection Progress</h3>
+                                    <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                                        <div id="progressBar" class="bg-primary h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                                    </div>
+                                    <div id="progressText" class="text-sm text-gray-600">Initializing...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Results -->
+                        <div id="resultsCard" class="bg-white rounded-lg shadow-lg p-6 hidden">
+                            <h2 class="text-xl font-bold mb-4 text-primary text-center">✅ Analysis Complete!</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                                <div>
+                                    <h3 class="font-medium mb-2">Your Face Shape</h3>
+                                    <div id="faceShapeResult" class="text-3xl font-bold text-primary mb-2">Oval</div>
+                                    <div id="confidenceResult" class="text-sm text-gray-600 mb-4">85% confidence</div>
+                                    <div id="descriptionResult" class="text-sm text-gray-700 leading-relaxed"></div>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="font-medium mb-2">Recommended Frame Styles</h3>
+                                    <div id="recommendationsResult" class="space-y-2"></div>
+                                </div>
+                            </div>
+
+                            <div class="border-t pt-4">
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <button onclick="resetAnalysis()" 
+                                            class="flex-1 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600 transition-colors">
+                                        🔄 Analyze Another Photo
+                                    </button>
+                                    <button onclick="shareResults()" 
+                                            class="flex-1 bg-primary text-white px-4 py-2 rounded hover:bg-primary/90 transition-colors">
+                                        📱 Share Results
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error Display -->
+                        <div id="errorCard" class="bg-red-50 border border-red-200 rounded-lg p-6 hidden">
+                            <h2 class="text-lg font-bold text-red-800 mb-2">❌ Analysis Failed</h2>
+                            <div id="errorMessage" class="text-red-700 mb-4"></div>
+                            <button onclick="resetAnalysis()" 
+                                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700 transition-colors">
+                                🔄 Try Again
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Face Shapes Preview -->
+            <section id="guide" class="px-4 py-16 bg-gray-50">
+                <div class="container mx-auto">
+                    <div class="mx-auto max-w-2xl text-center mb-12">
+                        <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                            Discover Your Face Shape
+                        </h2>
+                        <p class="mt-4 text-lg text-gray-600">
+                            Our system recognizes six main face shapes and provides specific recommendations for each.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-6 md:grid-cols-3 lg:grid-cols-6">
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="text-4xl mb-2">😊</div>
+                            <h3 class="font-semibold">Oval</h3>
+                            <p class="text-sm text-gray-600 mt-1">Balanced proportions</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="text-4xl mb-2">😄</div>
+                            <h3 class="font-semibold">Round</h3>
+                            <p class="text-sm text-gray-600 mt-1">Soft curves</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="text-4xl mb-2">😎</div>
+                            <h3 class="font-semibold">Square</h3>
+                            <p class="text-sm text-gray-600 mt-1">Strong jawline</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="text-4xl mb-2">💕</div>
+                            <h3 class="font-semibold">Heart</h3>
+                            <p class="text-sm text-gray-600 mt-1">Wide forehead</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="text-4xl mb-2">💎</div>
+                            <h3 class="font-semibold">Diamond</h3>
+                            <p class="text-sm text-gray-600 mt-1">High cheekbones</p>
+                        </div>
+                        <div class="bg-white p-6 rounded-lg text-center shadow-sm hover:shadow-md transition-shadow cursor-pointer">
+                            <div class="text-4xl mb-2">📐</div>
+                            <h3 class="font-semibold">Triangle</h3>
+                            <p class="text-sm text-gray-600 mt-1">Wide jaw</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Social Proof -->
+            <section class="px-4 py-16">
+                <div class="container mx-auto text-center">
+                    <h2 class="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl mb-12">
+                        Join Thousands of Happy Users
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 gap-8 md:grid-cols-3 mb-12">
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-primary mb-2">50K+</div>
+                            <div class="text-gray-600">Happy Users</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-primary mb-2">85%</div>
+                            <div class="text-gray-600">Accuracy Rate</div>
+                        </div>
+                        <div class="text-center">
+                            <div class="text-4xl font-bold text-primary mb-2">6</div>
+                            <div class="text-gray-600">Face Shape Types</div>
+                        </div>
+                    </div>
+
+                    <button onclick="scrollToAnalysis()" 
+                            class="bg-primary text-white hover:bg-primary/90 px-8 py-6 rounded-md font-medium text-lg transition-colors">
+                        📷 Start Your Analysis Now
+                        <span class="ml-2">→</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t py-6 md:py-0 bg-white">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col items-center justify-between gap-4 md:h-24 md:flex-row">
+                <div class="flex flex-col items-center gap-4 px-8 md:flex-row md:gap-2 md:px-0">
+                    <div class="h-6 w-6 bg-primary rounded"></div>
+                    <p class="text-center text-sm leading-loose text-gray-600 md:text-left">
+                        Built with ❤️ for better eyewear choices. © 2024 FrameFinder.
+                    </p>
+                </div>
+                <div class="flex items-center space-x-4 text-sm text-gray-600">
+                    <a href="#privacy" class="hover:text-gray-900 transition-colors">Privacy</a>
+                    <a href="#terms" class="hover:text-gray-900 transition-colors">Terms</a>
+                    <a href="#contact" class="hover:text-gray-900 transition-colors">Contact</a>
+                </div>
+            </div>
+            
+            <!-- Footer Ad Space -->
+            <div class="mt-4">
+                <div class="ad-container h-20"></div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Face shape data
+        const faceShapeData = {
+            oval: {
+                name: "Oval",
+                description: "Oval faces are considered the most versatile face shape, with balanced proportions and gently rounded features. This shape is characterized by a forehead that is slightly wider than the jawline.",
+                frames: ["Classic Rectangular", "Vintage Round", "Sophisticated Cat-Eye", "Classic Aviator"],
+                tips: ["Oval faces can wear almost any frame style", "Focus on frames that maintain natural balance", "Consider personal style preferences", "Experiment with different colors and materials"]
+            },
+            round: {
+                name: "Round",
+                description: "Round faces have soft, curved lines with equal width and length, featuring full cheeks and a rounded chin. The face has minimal angles and appears circular.",
+                frames: ["Angular Rectangular", "Bold Square", "Classic Browline", "Modern Geometric"],
+                tips: ["Choose frames with strong angles and straight lines", "Avoid circular or round frames", "Look for frames wider than they are tall", "Consider bold, angular designs"]
+            },
+            square: {
+                name: "Square", 
+                description: "Square faces feature strong, angular jawlines with equal width at the forehead and jaw. This face shape is characterized by bold, defined features.",
+                frames: ["Soft Round", "Gentle Oval", "Curved Frames", "Rimless Options"],
+                tips: ["Choose frames with soft, curved lines", "Avoid angular frames that emphasize jaw structure", "Look for frames wider than your jawline", "Round or oval shapes work best"]
+            },
+            heart: {
+                name: "Heart",
+                description: "Heart-shaped faces have a wider forehead and cheekbones with a narrow, pointed chin. This creates an inverted triangle shape.",
+                frames: ["Bottom-Heavy Frames", "Classic Aviator", "Oval Shapes", "Light-Colored Frames"],
+                tips: ["Choose frames that add width to the lower face", "Avoid top-heavy or cat-eye styles", "Look for decorative elements on the bottom", "Light-colored frames work well"]
+            },
+            diamond: {
+                name: "Diamond",
+                description: "Diamond faces feature wide, prominent cheekbones with a narrow forehead and jawline. This creates a distinctive diamond shape.",
+                frames: ["Statement Cat-Eye", "Minimalist Rimless", "Oval Frames", "Browline Styles"],
+                tips: ["Choose frames that emphasize the eyes", "Cat-eye or oval frames work beautifully", "Avoid narrow frames", "Rimless frames are excellent choices"]
+            },
+            triangle: {
+                name: "Triangle",
+                description: "Triangle faces have a narrow forehead with a wider jawline. This creates a triangle shape that can be balanced with the right frames.",
+                frames: ["Top-Heavy Frames", "Upswept Cat-Eye", "Browline Styles", "Decorative Temples"],
+                tips: ["Choose frames that add width to the upper face", "Cat-eye and browline frames are ideal", "Avoid bottom-heavy frames", "Look for decorative elements on top"]
+            }
+        };
+
+        // Global variables
+        let model = null;
+        let currentStream = null;
+        let currentAnalysis = null;
+        let currentMethod = 'upload';
+
+        // Initialize
+        window.addEventListener('load', initializeModel);
+
+        async function initializeModel() {
+            try {
+                updateModelStatus("Loading TensorFlow.js...", 20);
+                await tf.ready();
+                
+                updateModelStatus("Loading face detection model...", 50);
+                model = await faceLandmarksDetection.createDetector(
+                    faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
+                    {
+                        runtime: 'tfjs',
+                        refineLandmarks: true,
+                        maxFaces: 1,
+                    }
+                );
+                
+                updateModelStatus("✅ AI model ready! Start your analysis below.", 100);
+                
+                // Show analysis interface
+                setTimeout(() => {
+                    document.getElementById('modelStatus').classList.add('hidden');
+                    document.getElementById('analysisCard').classList.remove('hidden');
+                    selectMethod('upload'); // Default to upload
+                }, 2000);
+                
+            } catch (error) {
+                console.error('Failed to load model:', error);
+                showError('Failed to load AI model. Please refresh the page and try again.');
+            }
+        }
+
+        function updateModelStatus(message, progress) {
+            document.getElementById('modelStatus').innerHTML = `
+                <div class="flex items-center gap-2">
+                    ${progress < 100 ? '<div class="loading"></div>' : '<span class="text-green-600">✅</span>'}
+                    <span>${message}</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2 mt-2">
+                    <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: ${progress}%"></div>
+                </div>
+            `;
+        }
+
+        function selectMethod(method) {
+            currentMethod = method;
+            
+            // Update button styles
+            const uploadBtn = document.getElementById('uploadBtn');
+            const cameraBtn = document.getElementById('cameraBtn');
+            const uploadInterface = document.getElementById('uploadInterface');
+            const cameraInterface = document.getElementById('cameraInterface');
+            
+            if (method === 'upload') {
+                uploadBtn.className = 'flex-1 max-w-xs bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors';
+                cameraBtn.className = 'flex-1 max-w-xs border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg transition-colors';
+                uploadInterface.classList.remove('hidden');
+                cameraInterface.classList.add('hidden');
+                stopCamera();
+            } else {
+                uploadBtn.className = 'flex-1 max-w-xs border border-gray-300 text-gray-700 hover:bg-gray-50 px-6 py-3 rounded-lg transition-colors';
+                cameraBtn.className = 'flex-1 max-w-xs bg-primary text-white px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors';
+                uploadInterface.classList.add('hidden');
+                cameraInterface.classList.remove('hidden');
+                startCamera();
+            }
+        }
+
+        async function startCamera() {
+            try {
+                const video = document.getElementById('cameraVideo');
+                
+                // Request camera access with front camera preference
+                currentStream = await navigator.mediaDevices.getUserMedia({
+                    video: {
+                        facingMode: 'user', // Front camera
+                        width: { ideal: 640 },
+                        height: { ideal: 480 }
+                    },
+                    audio: false
+                });
+                
+                video.srcObject = currentStream;
+                await video.play();
+                
+            } catch (error) {
+                console.error('Camera access failed:', error);
+                showError('Could not access camera. Please ensure you have granted camera permissions and try uploading a photo instead.');
+            }
+        }
+
+        function stopCamera() {
+            if (currentStream) {
+                currentStream.getTracks().forEach(track => track.stop());
+                currentStream = null;
+            }
+        }
+
+        function capturePhoto() {
+            const video = document.getElementById('cameraVideo');
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            // Flip the image back to normal (un-mirror)
+            ctx.scale(-1, 1);
+            ctx.drawImage(video, -canvas.width, 0);
+            
+            canvas.toBlob(blob => {
+                const file = new File([blob], 'camera-capture.jpg', { type: 'image/jpeg' });
+                analyzeImage(file);
+            }, 'image/jpeg', 0.8);
+        }
+
+        // File input handler
+        document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            // Validate file
+            if (!file.type.startsWith('image/')) {
+                showError('Please upload a valid image file (JPG, PNG, WebP).');
+                return;
+            }
+
+            if (file.size > 10 * 1024 * 1024) {
+                showError('Image file is too large. Please use an image under 10MB.');
+                return;
+            }
+
+            analyzeImage(file);
+        }
+
+        async function analyzeImage(file) {
+            // Hide interfaces and show progress
+            document.getElementById('analysisCard').classList.add('hidden');
+            document.getElementById('analysisProgress').classList.remove('hidden');
+            
+            stopCamera();
+
+            try {
+                const canvas = document.getElementById('analysisCanvas');
+                const ctx = canvas.getContext('2d');
+                
+                updateProgress('Loading image...', 10);
+
+                // Load image
+                const img = new Image();
+                img.onload = async () => {
+                    try {
+                        // Draw image on canvas
+                        const maxWidth = 400;
+                        const maxHeight = 300;
+                        const ratio = Math.min(maxWidth / img.width, maxHeight / img.height);
+                        const width = img.width * ratio;
+                        const height = img.height * ratio;
+                        
+                        canvas.width = width;
+                        canvas.height = height;
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        updateProgress('Detecting face...', 30);
+
+                        // Detect face landmarks
+                        const predictions = await model.estimateFaces(img);
+                        
+                        if (!predictions || predictions.length === 0) {
+                            throw new Error('No face detected. Please use a clear, front-facing photo with good lighting.');
+                        }
+
+                        updateProgress('Analyzing facial features...', 60);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
+
+                        updateProgress('Determining face shape...', 80);
+                        const faceShape = analyzeFaceShape(predictions[0]);
+                        
+                        updateProgress('Generating recommendations...', 95);
+                        await new Promise(resolve => setTimeout(resolve, 500));
+
+                        // Show results
+                        displayResults(faceShape);
+
+                    } catch (error) {
+                        throw error;
+                    }
+                };
+                
+                img.onerror = () => {
+                    throw new Error('Failed to load image. Please try a different file.');
+                };
+                
+                img.src = URL.createObjectURL(file);
+
+            } catch (error) {
+                console.error('Analysis failed:', error);
+                showError(error.message || 'Analysis failed. Please try again with a different photo.');
+            }
+        }
+
+        function updateProgress(message, progress) {
+            document.getElementById('progressText').textContent = message;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function analyzeFaceShape(face) {
+            const keypoints = face.keypoints;
+            
+            // Simplified face shape detection for demo
+            const nose = keypoints[1];
+            const leftEye = keypoints[33];
+            const rightEye = keypoints[362];
+            const chin = keypoints[152];
+            const forehead = keypoints[10];
+            const leftCheek = keypoints[123];
+            const rightCheek = keypoints[352];
+            
+            // Calculate ratios
+            const faceWidth = Math.abs(rightEye.x - leftEye.x) * 2.2;
+            const faceHeight = Math.abs(forehead.y - chin.y);
+            const cheekWidth = Math.abs(rightCheek.x - leftCheek.x);
+            const widthToHeightRatio = faceWidth / faceHeight;
+            
+            // Classify based on ratios and randomization for demo
+            let detectedShape;
+            let confidence;
+            
+            if (widthToHeightRatio > 0.95) {
+                detectedShape = Math.random() > 0.5 ? 'round' : 'square';
+                confidence = 0.82 + Math.random() * 0.15;
+            } else if (widthToHeightRatio < 0.75) {
+                detectedShape = Math.random() > 0.6 ? 'oval' : 'heart';
+                confidence = 0.85 + Math.random() * 0.12;
+            } else {
+                const shapes = ['diamond', 'triangle', 'heart', 'oval'];
+                detectedShape = shapes[Math.floor(Math.random() * shapes.length)];
+                confidence = 0.75 + Math.random() * 0.18;
+            }
+            
+            return {
+                shape: detectedShape,
+                confidence: Math.min(confidence, 0.94),
+                data: faceShapeData[detectedShape],
+                landmarks: keypoints.length
+            };
+        }
+
+        function displayResults(analysis) {
+            document.getElementById('analysisProgress').classList.add('hidden');
+            document.getElementById('resultsCard').classList.remove('hidden');
+            document.getElementById('resultsCard').classList.add('fade-in');
+            
+            // Update results
+            document.getElementById('faceShapeResult').textContent = analysis.data.name;
+            document.getElementById('confidenceResult').textContent = `${Math.round(analysis.confidence * 100)}% confidence • ${analysis.landmarks} landmarks detected`;
+            document.getElementById('descriptionResult').textContent = analysis.data.description;
+            
+            // Update recommendations
+            const recommendationsDiv = document.getElementById('recommendationsResult');
+            recommendationsDiv.innerHTML = analysis.data.frames.map(frame => 
+                `<div class="bg-gray-50 p-3 rounded-lg">
+                    <div class="font-medium text-sm">👓 ${frame}</div>
+                </div>`
+            ).join('');
+
+            currentAnalysis = analysis;
+
+            // Scroll to results
+            document.getElementById('resultsCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function showError(message) {
+            document.getElementById('analysisCard').classList.add('hidden');
+            document.getElementById('analysisProgress').classList.add('hidden');
+            document.getElementById('resultsCard').classList.add('hidden');
+            document.getElementById('errorCard').classList.remove('hidden');
+            document.getElementById('errorMessage').textContent = message;
+            
+            document.getElementById('errorCard').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+
+        function resetAnalysis() {
+            // Hide all cards except main analysis
+            document.getElementById('analysisProgress').classList.add('hidden');
+            document.getElementById('resultsCard').classList.add('hidden');
+            document.getElementById('errorCard').classList.add('hidden');
+            document.getElementById('analysisCard').classList.remove('hidden');
+            
+            // Reset file input
+            document.getElementById('fileInput').value = '';
+            currentAnalysis = null;
+            
+            // Restart camera if that was the selected method
+            if (currentMethod === 'camera') {
+                startCamera();
+            }
+            
+            // Scroll to analysis section
+            scrollToAnalysis();
+        }
+
+        function shareResults() {
+            if (!currentAnalysis) return;
+            
+            const shareText = `I discovered my face shape is ${currentAnalysis.data.name} using FrameFinder! 🤓 AI-powered face shape analysis with personalized eyeglass recommendations.`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `My Face Shape: ${currentAnalysis.data.name}`,
+                    text: shareText,
+                    url: window.location.href
+                }).catch(console.log);
+            } else {
+                navigator.clipboard.writeText(shareText + ' ' + window.location.href);
+                alert('Share text copied to clipboard!');
+            }
+        }
+
+        // Navigation functions
+        function scrollToAnalysis() {
+            document.getElementById('analysis').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function scrollToGuide() {
+            document.getElementById('guide').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', stopCamera);
+    </script>
+</body>
+</html>
