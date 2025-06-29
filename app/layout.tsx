@@ -211,11 +211,10 @@ export default function RootLayout({
         outfit.className,
         "min-h-full bg-background text-foreground font-sans antialiased"
       )}>
-        <ThemeProvider>
           <div className="relative flex min-h-screen flex-col">
             {/* Debugging indicator - will be visible when new styles load */}
             <div className="hidden bg-primary text-primary-foreground p-1 text-xs text-center" style={{display: 'block'}}>
-              ✅ New Styling Loaded (Build: 946ce3e) - {new Date().toLocaleTimeString()}
+              ✅ New Styling Loaded (Build: 46ceec3) - Debug Mode
             </div>
             <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
             <div className="container flex h-16 items-center">
@@ -241,7 +240,6 @@ export default function RootLayout({
                   {/* Search will be added here if needed */}
                 </div>
                 <nav className="flex items-center space-x-2">
-                  <ThemeToggle />
                   <a 
                     href="/face-analysis" 
                     className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
@@ -428,7 +426,6 @@ export default function RootLayout({
             `
           }}
         />
-        </ThemeProvider>
       </body>
     </html>
   )

@@ -12,42 +12,46 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('dark'); // Default to dark mode to match snazzy demo
+  const [theme, setTheme] = useState<Theme>('light'); // Start with light to avoid hydration issues
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
     
-    // Check if user has a preference stored
-    const stored = localStorage.getItem('framefinder-theme') as Theme;
-    if (stored) {
-      setTheme(stored);
-    } else {
-      // Default to dark mode as in snazzy demo
-      setTheme('dark');
+    // After mounting, check for user preference or default to dark
+    try {
+      const stored = localStorage.getItem('framefinder-theme') as Theme;
+      if (stored && (stored === 'light' || stored === 'dark')) {
+        setTheme(stored);
+      } else {
+        // Default to dark mode as in snazzy demo
+        setTheme('dark');
+      }
+    } catch (error) {
+      console.log('Theme provider: localStorage not available, using light theme');
+      setTheme('light');
     }
   }, []);
 
   useEffect(() => {
     if (!mounted) return;
     
-    // Apply theme to document
-    const root = document.documentElement;
-    root.classList.remove('light', 'dark');
-    root.classList.add(theme);
-    
-    // Store preference
-    localStorage.setItem('framefinder-theme', theme);
+    try {
+      // Apply theme to document
+      const root = document.documentElement;
+      root.classList.remove('light', 'dark');
+      root.classList.add(theme);
+      
+      // Store preference
+      localStorage.setItem('framefinder-theme', theme);
+    } catch (error) {
+      console.log('Theme provider: Error applying theme', error);
+    }
   }, [theme, mounted]);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
-
-  // Prevent hydration mismatch by not rendering until mounted
-  if (!mounted) {
-    return <div className="min-h-screen bg-background dark">{children}</div>;
-  }
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme }}>
@@ -59,10 +63,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    // During SSR/static generation, provide fallback values that match our default
+    // During SSR/static generation, provide safe fallback values
     if (typeof window === 'undefined') {
       return {
-        theme: 'dark' as Theme, // Match our default theme
+        theme: 'light' as Theme, // Safe default for SSR
         toggleTheme: () => {},
       };
     }
