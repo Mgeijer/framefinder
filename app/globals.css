@@ -2,6 +2,20 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Ensure all custom utility classes are generated */
+@layer components {
+  .bg-background { background-color: hsl(var(--background)); }
+  .text-foreground { color: hsl(var(--foreground)); }
+  .bg-card { background-color: hsl(var(--card)); }
+  .text-card-foreground { color: hsl(var(--card-foreground)); }
+  .bg-muted { background-color: hsl(var(--muted)); }
+  .text-muted-foreground { color: hsl(var(--muted-foreground)); }
+  .bg-primary { background-color: hsl(var(--primary)); }
+  .text-primary-foreground { color: hsl(var(--primary-foreground)); }
+  .bg-secondary { background-color: hsl(var(--secondary)); }
+  .text-secondary-foreground { color: hsl(var(--secondary-foreground)); }
+}
+
 @layer base {
   :root {
     /* Supabase Theme Variables */
