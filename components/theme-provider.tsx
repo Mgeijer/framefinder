@@ -12,7 +12,7 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('light'); // Default to light mode
+  const [theme, setTheme] = useState<Theme>('dark'); // Default to dark mode to match snazzy demo
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -23,9 +23,8 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     if (stored) {
       setTheme(stored);
     } else {
-      // Check system preference as fallback
-      const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(systemPrefersDark ? 'dark' : 'light');
+      // Default to dark mode as in snazzy demo
+      setTheme('dark');
     }
   }, []);
 
@@ -47,7 +46,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   // Prevent hydration mismatch by not rendering until mounted
   if (!mounted) {
-    return <div className="min-h-screen bg-background">{children}</div>;
+    return <div className="min-h-screen bg-background dark">{children}</div>;
   }
 
   return (
@@ -60,10 +59,10 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    // During SSR/static generation, provide fallback values
+    // During SSR/static generation, provide fallback values that match our default
     if (typeof window === 'undefined') {
       return {
-        theme: 'light' as Theme,
+        theme: 'dark' as Theme, // Match our default theme
         toggleTheme: () => {},
       };
     }

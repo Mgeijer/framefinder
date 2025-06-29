@@ -55,17 +55,16 @@ export default function HomePage() {
   return (
     <div className="flex flex-col">
       {/* Hero Section */}
-      <section className="px-4 py-16 md:py-24 lg:py-32">
+      <section id="home" className="px-4 py-16 md:py-24 lg:py-32">
         <div className="container mx-auto text-center">
           <div className="mx-auto max-w-4xl">
-            <Badge variant="secondary" className="mb-4 text-sm font-medium">
-              <Sparkles className="mr-1 h-3 w-3" />
-              AI-Powered Face Analysis
-            </Badge>
+            <div className="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary text-primary-foreground">
+              ✨ AI-Powered Face Analysis
+            </div>
             
             <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
               Find Your Perfect{' '}
-              <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
+              <span className="text-primary">
                 Eyeglass Style
               </span>{' '}
               in Seconds
@@ -79,34 +78,33 @@ export default function HomePage() {
             {/* Key Benefits */}
             <div className="mb-8 flex flex-wrap justify-center gap-4 text-sm">
               <div className="flex items-center gap-2 text-muted-foreground">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
+                <span className="text-primary">✓</span>
                 Instant face shape detection using advanced AI
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
+                <span className="text-primary">✓</span>
                 Personalized frame style recommendations
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
+                <span className="text-primary">✓</span>
                 Expert styling tips for your unique features
               </div>
               <div className="flex items-center gap-2 text-muted-foreground">
-                <CheckCircle2 className="h-4 w-4 text-primary" />
+                <span className="text-primary">✓</span>
                 Completely free - no glasses purchase required
               </div>
             </div>
 
             {/* CTA Buttons */}
             <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-              <Button asChild size="lg" className="text-lg px-8 py-6">
+              <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-6 text-lg">
                 <Link href="/face-analysis">
-                  <Camera className="mr-2 h-5 w-5" />
-                  Analyze My Face Shape
-                  <ArrowRight className="ml-2 h-5 w-5" />
+                  📷 Analyze My Face Shape
+                  <span className="ml-2">→</span>
                 </Link>
               </Button>
               
-              <Button asChild variant="outline" size="lg" className="text-lg px-8 py-6">
+              <Button asChild variant="outline" size="lg" className="px-8 py-6 text-lg">
                 <Link href="/guide">
                   Browse Style Guide
                 </Link>
@@ -126,7 +124,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Features Section */}
+      {/* How It Works Section */}
       <section className="px-4 py-16 bg-muted/50">
         <div className="container mx-auto">
           <div className="mx-auto max-w-2xl text-center mb-12">
@@ -139,43 +137,43 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            <Card className="text-center">
+            <Card className="text-center bg-card border-border">
               <CardHeader>
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <Camera className="h-8 w-8 text-primary" />
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent border border-border mb-4">
+                  <span className="text-2xl">📷</span>
                 </div>
                 <CardTitle>1. Upload or Capture</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base">
+                <CardDescription className="text-base text-muted-foreground">
                   Take a photo with your camera or upload an existing image. Our system works with any clear front-facing photo.
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center bg-card border-border">
               <CardHeader>
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <Zap className="h-8 w-8 text-primary" />
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent border border-border mb-4">
+                  <span className="text-2xl">⚡</span>
                 </div>
                 <CardTitle>2. AI Analysis</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base">
-                  Our advanced AI analyzes your facial landmarks and determines your face shape with over 85% accuracy.
+                <CardDescription className="text-base text-muted-foreground">
+                  Our advanced AI analyzes your facial landmarks and determines your face shape with reliable accuracy.
                 </CardDescription>
               </CardContent>
             </Card>
 
-            <Card className="text-center">
+            <Card className="text-center bg-card border-border">
               <CardHeader>
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-primary/10">
-                  <Sparkles className="h-8 w-8 text-primary" />
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-accent border border-border mb-4">
+                  <span className="text-2xl">✨</span>
                 </div>
                 <CardTitle>3. Get Recommendations</CardTitle>
               </CardHeader>
               <CardContent>
-                <CardDescription className="text-base">
+                <CardDescription className="text-base text-muted-foreground">
                   Receive personalized frame recommendations, styling tips, and expert advice tailored to your unique features.
                 </CardDescription>
               </CardContent>
@@ -237,23 +235,22 @@ export default function HomePage() {
             <div className="grid grid-cols-1 gap-8 md:grid-cols-3 mb-12">
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">50K+</div>
-                <div className="text-muted-foreground">Happy Users</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl font-bold text-primary mb-2">85%</div>
-                <div className="text-muted-foreground">Accuracy Rate</div>
+                <div className="text-muted-foreground">Users Served</div>
               </div>
               <div className="text-center">
                 <div className="text-4xl font-bold text-primary mb-2">6</div>
                 <div className="text-muted-foreground">Face Shape Types</div>
               </div>
+              <div className="text-center">
+                <div className="text-4xl font-bold text-primary mb-2">Free</div>
+                <div className="text-muted-foreground">Always</div>
+              </div>
             </div>
 
-            <Button asChild size="lg" className="text-lg px-8 py-6">
+            <Button asChild size="lg" className="bg-primary text-primary-foreground hover:bg-primary/90 text-lg px-8 py-6">
               <Link href="/face-analysis">
-                <Camera className="mr-2 h-5 w-5" />
-                Start Your Analysis Now
-                <ArrowRight className="ml-2 h-5 w-5" />
+                📷 Start Your Analysis Now
+                <span className="ml-2">→</span>
               </Link>
             </Button>
           </div>

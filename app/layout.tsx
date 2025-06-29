@@ -331,31 +331,49 @@ export default function RootLayout({
           defer
           dangerouslySetInnerHTML={{
             __html: `
-              // PostHog Analytics - Non-blocking initialization
+              // PostHog Analytics - Non-blocking initialization with error handling
               (function() {
-                const script = document.createElement('script');
-                script.src = 'https://app.posthog.com/static/array.js';
-                script.async = true;
-                script.onload = function() {
-                  if (typeof posthog !== 'undefined') {
-                    posthog.init('${process.env.NEXT_PUBLIC_POSTHOG_KEY || 'ph-key-placeholder'}', {
-                      api_host: '${process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com'}',
-                      person_profiles: 'identified_only',
-                      capture_pageview: false,
-                      capture_pageleave: true,
-                      disable_session_recording: false,
-                      cross_subdomain_cookie: false,
-                      secure_cookie: true,
-                      loaded: function(posthog) {
-                        posthog.capture('$pageview');
-                      }
-                    });
+                try {
+                  const posthogKey = '${process.env.NEXT_PUBLIC_POSTHOG_KEY || ''}';
+                  if (!posthogKey || posthogKey === 'ph-key-placeholder') {
+                    console.log('FrameFinder - Analytics disabled (no key provided)');
+                    return;
                   }
-                };
-                script.onerror = function() {
-                  console.log('FrameFinder - Analytics failed to load');
-                };
-                document.head.appendChild(script);
+
+                  const script = document.createElement('script');
+                  script.src = 'https://app.posthog.com/static/array.js';
+                  script.async = true;
+                  script.onload = function() {
+                    try {
+                      if (typeof posthog !== 'undefined') {
+                        posthog.init(posthogKey, {
+                          api_host: '${process.env.NEXT_PUBLIC_POSTHOG_HOST || 'https://app.posthog.com'}',
+                          person_profiles: 'identified_only',
+                          capture_pageview: false,
+                          capture_pageleave: true,
+                          disable_session_recording: false,
+                          cross_subdomain_cookie: false,
+                          secure_cookie: true,
+                          loaded: function(posthog) {
+                            try {
+                              posthog.capture('$pageview');
+                            } catch (e) {
+                              console.log('FrameFinder - Analytics pageview capture failed:', e);
+                            }
+                          }
+                        });
+                      }
+                    } catch (e) {
+                      console.log('FrameFinder - Analytics initialization failed:', e);
+                    }
+                  };
+                  script.onerror = function() {
+                    console.log('FrameFinder - Analytics script failed to load');
+                  };
+                  document.head.appendChild(script);
+                } catch (e) {
+                  console.log('FrameFinder - Analytics setup failed:', e);
+                }
               })();
               
               // Performance observer for Core Web Vitals
