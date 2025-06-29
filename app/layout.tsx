@@ -210,6 +210,10 @@ export default function RootLayout({
         "min-h-full bg-background text-foreground font-sans antialiased"
       )}>
         <div className="relative flex min-h-screen flex-col">
+          {/* Debugging indicator - will be visible when new styles load */}
+          <div className="hidden bg-primary text-primary-foreground p-1 text-xs text-center" style={{display: 'block'}}>
+            ✅ New Styling Loaded (Build: 946ce3e) - {new Date().toLocaleTimeString()}
+          </div>
           <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
             <div className="container flex h-16 items-center">
               <div className="mr-4 flex">
