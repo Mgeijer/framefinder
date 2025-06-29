@@ -1,15 +1,16 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
+import { Outfit } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { PerformanceMonitor } from '@/components/performance-monitor'
 
-const inter = Inter({ 
+const outfit = Outfit({ 
   subsets: ['latin'],
   display: 'swap',
   preload: true,
   fallback: ['system-ui', 'arial'],
-  variable: '--font-inter'
+  variable: '--font-sans',
+  weight: ['100', '200', '300', '400', '500', '600', '700', '800', '900']
 })
 
 export const metadata: Metadata = {
@@ -205,11 +206,11 @@ export default function RootLayout({
         />
       </head>
       <body className={cn(
-        inter.className,
-        "min-h-full bg-white font-sans antialiased"
+        outfit.className,
+        "min-h-full bg-background text-foreground font-sans antialiased"
       )}>
         <div className="relative flex min-h-screen flex-col">
-          <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+          <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
             <div className="container flex h-16 items-center">
               <div className="mr-4 flex">
                 <a className="mr-6 flex items-center space-x-2" href="/">
