@@ -3,8 +3,7 @@ import { Outfit } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { PerformanceMonitor } from '@/components/performance-monitor'
-import { ThemeProvider } from '@/components/theme-provider'
-import { ThemeToggle } from '@/components/theme-toggle'
+import { SafeThemeToggle } from '@/components/safe-theme-toggle'
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -185,6 +184,24 @@ export default function RootLayout({
         <link rel="sitemap" href="/sitemap.xml" />
         <link rel="canonical" href="https://framefinder.com" />
         
+        {/* Theme initialization script - runs immediately to prevent flash */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  const stored = localStorage.getItem('theme');
+                  const theme = stored || 'dark'; // Default to dark mode like snazzy demo
+                  document.documentElement.classList.add(theme);
+                } catch (e) {
+                  // If localStorage fails, default to dark
+                  document.documentElement.classList.add('dark');
+                }
+              })();
+            `
+          }}
+        />
+        
         {/* Performance optimizations */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -240,6 +257,7 @@ export default function RootLayout({
                   {/* Search will be added here if needed */}
                 </div>
                 <nav className="flex items-center space-x-2">
+                  <SafeThemeToggle />
                   <a 
                     href="/face-analysis" 
                     className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
