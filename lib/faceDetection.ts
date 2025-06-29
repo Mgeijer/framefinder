@@ -12,6 +12,10 @@ export class FaceDetectionService {
     if (this.isInitialized) return;
 
     try {
+      // Initialize TensorFlow.js backend
+      await tf.ready();
+      console.log('TensorFlow.js backend initialized:', tf.getBackend());
+
       // Load the face landmarks detection model
       this.model = await faceLandmarksDetection.createDetector(
         faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh,
@@ -23,9 +27,10 @@ export class FaceDetectionService {
       );
 
       this.isInitialized = true;
+      console.log('Face detection model initialized successfully');
     } catch (error) {
       console.error('Failed to initialize face detection model:', error);
-      throw new Error('Failed to initialize face detection model');
+      throw new Error(`Failed to initialize face detection model: ${error}`);
     }
   }
 
@@ -187,6 +192,19 @@ export class FaceDetectionService {
           .catch(reject);
       };
       img.onerror = () => reject(new Error('Failed to load canvas image'));
+    });
+  }
+
+  async analyzeImage(imageData: string): Promise<AnalysisResult> {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => {
+        this.analyzeFace(img)
+          .then(resolve)
+          .catch(reject);
+      };
+      img.onerror = () => reject(new Error('Failed to load image data'));
+      img.src = imageData;
     });
   }
 

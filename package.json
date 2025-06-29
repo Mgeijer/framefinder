@@ -12,6 +12,7 @@
     "@hookform/resolvers": "^5.1.1",
     "@radix-ui/react-slot": "^1.2.3",
     "@sentry/nextjs": "^9.33.0",
+    "@tailwindcss/postcss": "^4.1.11",
     "@tensorflow-models/face-landmarks-detection": "^1.0.6",
     "@tensorflow/tfjs": "^4.22.0",
     "@types/node": "^24.0.4",

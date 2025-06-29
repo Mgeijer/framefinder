@@ -10,6 +10,7 @@ import { Camera, Upload, RotateCcw, Loader2, CheckCircle2, AlertCircle } from 'l
 import { faceDetectionService } from '@/lib/faceDetection';
 import { AnalysisResult } from '@/types';
 import { validateImageFile, resizeImage } from '@/lib/utils';
+import SocialShare from '@/components/ui/social-share';
 
 interface FaceAnalysisProps {
   onAnalysisComplete?: (result: AnalysisResult) => void;
@@ -289,6 +290,9 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
               ))}
             </ul>
           </div>
+
+          {/* Social Sharing */}
+          <SocialShare result={result} imageUrl={capturedImage || undefined} />
 
           {/* Actions */}
           <div className="flex flex-col sm:flex-row gap-3 pt-4 border-t">

@@ -131,3 +131,43 @@
   object-fit: cover;
   border-radius: 0.5rem;
 }
+
+/* Mobile touch targets and accessibility */
+.touch-target {
+  @apply min-h-[44px] min-w-[44px];
+  touch-action: manipulation;
+}
+
+/* Ensure proper touch targets on mobile */
+@media (max-width: 768px) {
+  .touch-target {
+    @apply min-h-[48px] min-w-[48px];
+  }
+}
+
+/* Mobile-specific styles */
+@media (max-width: 640px) {
+  .mobile-optimize {
+    @apply px-4 py-2;
+  }
+  
+  /* Better spacing for mobile cards */
+  .mobile-card {
+    @apply mx-4 my-2;
+  }
+  
+  /* Larger text on mobile for readability */
+  .mobile-text {
+    @apply text-base leading-relaxed;
+  }
+}
+
+/* Prevent zoom on double-tap for better UX */
+button, input, select, textarea {
+  touch-action: manipulation;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
