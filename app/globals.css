@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Supabase Theme CSS Variables - Enhanced Contrast with OKLCH */
-:root {
+@layer base {
+  /* Supabase Theme CSS Variables - Enhanced Contrast with OKLCH */
+  :root {
     --background: oklch(0.98 0 0);
     --foreground: oklch(0.15 0 0);
     --card: oklch(1.0 0 0);
@@ -84,16 +85,22 @@
     --sidebar-accent-foreground: oklch(0.9851 0 0);
     --sidebar-border: oklch(0.2809 0 0);
     --sidebar-ring: oklch(0.8003 0.1821 151.7110);
+  }
+
+  /* Apply Supabase Design Tokens */
+  body {
+      font-family: var(--font-sans);
+      background-color: var(--background);
+      color: var(--foreground);
+      letter-spacing: var(--tracking-normal);
+  }
+
+  * {
+    border-color: var(--border);
+  }
 }
 
-/* Apply Supabase Design Tokens */
-body {
-    font-family: var(--font-sans);
-    background-color: var(--background);
-    color: var(--foreground);
-    letter-spacing: var(--tracking-normal);
-}
-
+@layer components {
 /* Primary Color Classes */
 .bg-primary { 
     background-color: var(--primary); 
@@ -159,14 +166,6 @@ button.bg-primary:hover,
 .border-gray-300 { border-color: var(--border) !important; }
 .border-t { border-top: 1px solid var(--border); }
 .border-b { border-bottom: 1px solid var(--border); }
-
-@layer base {
-  * {
-    border-color: hsl(var(--border));
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
 }
 
 /* Custom animations for face detection */
