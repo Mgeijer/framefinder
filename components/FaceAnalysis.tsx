@@ -7,7 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { OptimizedImage } from '@/components/ui/optimized-image';
 import { Camera, Upload, RotateCcw, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
-import { faceDetectionService } from '@/lib/faceDetection';
+import { simpleFaceAnalysis } from '@/lib/simpleFaceAnalysis';
 import { AnalysisResult } from '@/types';
 import { validateImageFile, resizeImage } from '@/lib/utils';
 import SocialShare from '@/components/ui/social-share';
@@ -29,27 +29,9 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   const webcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Initialize face detection service when needed (lazy loading)
+  // Simple face analysis doesn't need initialization
   const initializeIfNeeded = async () => {
-    if (!faceDetectionService.isReady()) {
-      setAnalysisState('initializing');
-      setProgress(20);
-      setError(null);
-      
-      try {
-        await faceDetectionService.initialize();
-        setProgress(100);
-        console.log('✅ Face detection service ready');
-        return true;
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to initialize face detection';
-        console.error('❌ Face detection initialization failed:', errorMessage);
-        setError(`Initialization failed: ${errorMessage}. Please check your internet connection and try again.`);
-        setAnalysisState('error');
-        return false;
-      }
-    }
-    return true;
+    return true; // Always ready
   };
 
   const resetAnalysis = useCallback(() => {
@@ -72,9 +54,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
       return;
     }
 
-    // Initialize face detection service if needed
-    const initialized = await initializeIfNeeded();
-    if (!initialized) return; // Initialization failed, error already set
+    // No initialization needed for simple analysis
 
     setAnalysisState('analyzing');
     setProgress(20);
@@ -87,7 +67,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
       setProgress(60);
 
       // Analyze face
-      const analysisResult = await faceDetectionService.analyzeFaceFromFile(resizedFile);
+      const analysisResult = await simpleFaceAnalysis.analyzeFaceFromFile(resizedFile);
       
       setProgress(100);
       setResult(analysisResult);
@@ -112,9 +92,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   const capturePhoto = useCallback(async () => {
     if (!webcamRef.current) return;
 
-    // Initialize face detection service if needed
-    const initialized = await initializeIfNeeded();
-    if (!initialized) return; // Initialization failed, error already set
+    // No initialization needed for simple analysis
 
     setAnalysisState('analyzing');
     setProgress(20);
@@ -141,7 +119,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         setProgress(60);
 
         try {
-          const analysisResult = await faceDetectionService.analyzeFaceFromCanvas(canvas);
+          const analysisResult = await simpleFaceAnalysis.analyzeFaceFromCanvas(canvas);
           
           setProgress(100);
           setResult(analysisResult);
@@ -177,7 +155,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
             Initializing AI Model
           </CardTitle>
           <CardDescription>
-            Loading face detection model... This may take a moment.
+            Preparing face analysis... This should only take a moment.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -352,7 +330,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
             Analyzing Your Face Shape
           </CardTitle>
           <CardDescription>
-            Our AI is processing your image and detecting facial landmarks...
+            Analyzing your face shape and generating personalized recommendations...
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -364,8 +342,8 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           </div>
           <p className="text-center text-sm text-muted-foreground mt-2">
             {progress < 40 ? 'Processing image...' : 
-             progress < 80 ? 'Detecting facial landmarks...' : 
-             'Determining face shape...'}
+             progress < 80 ? 'Analyzing facial features...' : 
+             'Generating recommendations...'}
           </p>
         </CardContent>
       </Card>
