@@ -25,17 +25,23 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   const [useCamera, setUseCamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
+  const [isClient, setIsClient] = useState(false);
 
   const desktopWebcamRef = useRef<Webcam>(null);
   const mobileWebcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const cameraContainerRef = useRef<HTMLDivElement>(null);
 
+  // Set client-side flag
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   // Auto-scroll to camera when enabled on mobile
   useEffect(() => {
-    if (useCamera && window.innerWidth < 768 && cameraContainerRef.current) {
+    if (useCamera && isClient && cameraContainerRef.current) {
       const timer = setTimeout(() => {
-        if (cameraContainerRef.current) {
+        if (cameraContainerRef.current && window.innerWidth < 768) {
           cameraContainerRef.current.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'center' 
@@ -44,7 +50,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
       }, 300); // Wait for webcam to initialize
       return () => clearTimeout(timer);
     }
-  }, [useCamera]);
+  }, [useCamera, isClient]);
 
   // Simple face analysis doesn't need initialization
   const initializeIfNeeded = async () => {
@@ -108,7 +114,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
 
   const capturePhoto = useCallback(async () => {
     // Determine which webcam to use based on screen size
-    const isDesktop = window.innerWidth >= 768; // md breakpoint
+    const isDesktop = typeof window !== 'undefined' && window.innerWidth >= 768; // md breakpoint
     const currentWebcamRef = isDesktop ? desktopWebcamRef : mobileWebcamRef;
     
     if (!currentWebcamRef.current) return;
@@ -389,18 +395,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           </Button>
           <Button
             variant={useCamera ? "default" : "outline"}
-            onClick={() => {
-              setUseCamera(true);
-              // Auto-scroll to camera on mobile after slight delay
-              setTimeout(() => {
-                if (window.innerWidth < 768 && cameraContainerRef.current) {
-                  cameraContainerRef.current.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                  });
-                }
-              }, 100);
-            }}
+            onClick={() => setUseCamera(true)}
             className="flex-1 max-w-xs"
           >
             <Camera className="h-4 w-4 mr-2" />
@@ -409,7 +404,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         </div>
 
         {/* Camera Interface */}
-        {useCamera ? (
+        {useCamera && isClient ? (
           <div ref={cameraContainerRef} className="space-y-4">
             {/* Desktop Camera */}
             <div className="hidden md:block space-y-4">
