@@ -188,14 +188,10 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
             {capturedImage && (
               <div className="space-y-2">
                 <h3 className="font-semibold">Your Photo</h3>
-                <OptimizedImage
+                <img
                   src={capturedImage} 
                   alt="Captured face for analysis"
-                  width={400}
-                  height={300}
-                  className="w-full rounded-lg shadow-md"
-                  sizes="(max-width: 768px) 100vw, 400px"
-                  quality={90}
+                  className="w-full max-w-sm mx-auto rounded-lg shadow-md"
                 />
               </div>
             )}
@@ -383,29 +379,55 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         {/* Camera Interface */}
         {useCamera ? (
           <div className="space-y-4">
-            <div className="relative w-full max-w-lg mx-auto bg-muted/50 rounded-lg overflow-hidden">
+            {/* Desktop Camera */}
+            <div className="hidden md:block relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
               <Webcam
                 ref={webcamRef}
                 audio={false}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
-                  width: { ideal: 720 },
-                  height: { ideal: 720 },
-                  facingMode: "user",
-                  aspectRatio: 1.0
+                  width: 640,
+                  height: 480,
+                  facingMode: "user"
                 }}
-                className="w-full h-auto object-cover"
-                style={{ aspectRatio: '1 / 1' }}
+                className="w-full h-full object-cover"
                 onUserMediaError={(error) => {
                   console.error('Camera access error:', error);
                   setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
                   setAnalysisState('error');
                 }}
               />
-              {/* Face guide overlay - more subtle on mobile */}
-              <div className="absolute inset-6 md:inset-8 border-2 border-white/40 rounded-full pointer-events-none">
+              <div className="absolute inset-4 border-2 border-white/50 rounded-lg pointer-events-none">
+                <div className="w-full h-full border border-dashed border-white/30 rounded-lg flex items-center justify-center">
+                  <span className="text-white/70 text-sm bg-black/20 px-2 py-1 rounded">
+                    Position your face in the frame
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Mobile Camera */}
+            <div className="md:hidden relative w-full max-w-sm mx-auto bg-muted/50 rounded-lg overflow-hidden">
+              <Webcam
+                ref={webcamRef}
+                audio={false}
+                screenshotFormat="image/jpeg"
+                videoConstraints={{
+                  width: { ideal: 640 },
+                  height: { ideal: 640 },
+                  facingMode: "user"
+                }}
+                className="w-full aspect-square object-cover"
+                onUserMediaError={(error) => {
+                  console.error('Camera access error:', error);
+                  setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
+                  setAnalysisState('error');
+                }}
+              />
+              {/* Mobile face guide overlay */}
+              <div className="absolute inset-6 border-2 border-white/40 rounded-full pointer-events-none">
                 <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-white/80 text-xs md:text-sm bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
+                  <span className="text-white/80 text-xs bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
                     Center your face
                   </span>
                 </div>
