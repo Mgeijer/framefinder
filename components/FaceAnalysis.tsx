@@ -412,28 +412,46 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         {useCamera ? (
           <div ref={cameraContainerRef} className="space-y-4">
             {/* Desktop Camera */}
-            <div className="hidden md:block relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
-              <Webcam
-                ref={desktopWebcamRef}
-                audio={false}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{
-                  width: 640,
-                  height: 480,
-                  facingMode: "user"
-                }}
-                className="w-full h-full object-cover"
-                onUserMediaError={(error) => {
-                  console.error('Camera access error:', error);
-                  setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
-                  setAnalysisState('error');
-                }}
-              />
-              <div className="absolute inset-4 border-2 border-white/50 rounded-lg pointer-events-none">
-                <div className="w-full h-full border border-dashed border-white/30 rounded-lg flex items-center justify-center">
-                  <span className="text-white/70 text-sm bg-black/20 px-2 py-1 rounded">
-                    Position your face in the frame
-                  </span>
+            <div className="hidden md:block space-y-4">
+              <div className="relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
+                <Webcam
+                  ref={desktopWebcamRef}
+                  audio={false}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={{
+                    width: 640,
+                    height: 480,
+                    facingMode: "user"
+                  }}
+                  className="w-full h-full object-cover"
+                  onUserMediaError={(error) => {
+                    console.error('Camera access error:', error);
+                    setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
+                    setAnalysisState('error');
+                  }}
+                />
+                <div className="absolute inset-4 border-2 border-white/50 rounded-lg pointer-events-none">
+                  <div className="w-full h-full border border-dashed border-white/30 rounded-lg flex items-center justify-center">
+                    <span className="text-white/70 text-sm bg-black/20 px-2 py-1 rounded">
+                      Position your face in the frame
+                    </span>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Desktop capture button */}
+              <div className="text-center space-y-3">
+                <Button 
+                  onClick={capturePhoto} 
+                  size="lg" 
+                  className="w-full max-w-xs bg-primary hover:bg-primary/90 text-white font-semibold py-3"
+                >
+                  <Camera className="h-5 w-5 mr-2" />
+                  📷 Capture & Analyze
+                </Button>
+                <div className="text-xs text-muted-foreground space-y-1">
+                  <p>💡 Hold steady and ensure good lighting</p>
+                  <p>⚠️ Camera requires HTTPS and permission access</p>
                 </div>
               </div>
             </div>
