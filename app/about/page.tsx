@@ -186,91 +186,8 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Technology Grid */}
+        {/* Our Technology */}
         <section id="our-story" className="px-4 py-16">
-          <div className="container mx-auto">
-            <div className="mx-auto max-w-2xl text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                How We Work
-              </h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                The technology and expertise behind our recommendations
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="text-4xl mb-4">🧠</div>
-                  <CardTitle className="text-xl">Advanced AI</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Our machine learning algorithms analyze multiple facial landmarks to determine face shape with reliable accuracy.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="text-4xl mb-4">👁️</div>
-                  <CardTitle className="text-xl">Computer Vision</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Cutting-edge image processing technology that works with any clear photo, providing consistent results across devices.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-              
-              <Card className="text-center">
-                <CardHeader>
-                  <div className="text-4xl mb-4">🎨</div>
-                  <CardTitle className="text-xl">Style Intelligence</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription>
-                    Expert-curated recommendations based on proven styling principles and contemporary fashion insights.
-                  </CardDescription>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* Our Values */}
-        <section className="px-4 py-16 bg-muted/30">
-          <div className="container mx-auto">
-            <div className="mx-auto max-w-2xl text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Our Values
-              </h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                The principles that guide everything we do
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {values.map((value, index) => (
-                <Card key={index} className="text-center">
-                  <CardHeader>
-                    <div className="text-4xl mb-2">{value.icon}</div>
-                    <CardTitle className="text-xl">{value.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="leading-relaxed">
-                      {value.description}
-                    </CardDescription>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
-
-
-        {/* Technology */}
-        <section className="px-4 py-16 bg-muted/30">
           <div className="container mx-auto">
             <div className="mx-auto max-w-4xl text-center">
               <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-8">
@@ -321,6 +238,37 @@ export default function AboutPage() {
           </div>
         </section>
 
+        {/* Our Values */}
+        <section className="px-4 py-16 bg-muted/30">
+          <div className="container mx-auto">
+            <div className="mx-auto max-w-2xl text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                Our Values
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                The principles that guide everything we do
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {values.map((value, index) => (
+                <Card key={index} className="text-center">
+                  <CardHeader>
+                    <div className="text-4xl mb-2">{value.icon}</div>
+                    <CardTitle className="text-xl">{value.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="leading-relaxed">
+                      {value.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </div>
+        </section>
+
+
         {/* Call to Action */}
         <section className="px-4 py-16">
           <div className="container mx-auto text-center">
@@ -341,8 +289,8 @@ export default function AboutPage() {
                 </Button>
                 
                 <Button variant="outline" size="lg" asChild>
-                  <Link href="/contact">
-                    Get in Touch
+                  <Link href="/guide">
+                    Browse Face Shapes
                   </Link>
                 </Button>
               </div>

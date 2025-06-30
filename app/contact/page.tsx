@@ -4,12 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 
 export const metadata: Metadata = {
-  title: 'Contact FrameFinder - Expert Eyewear Consultation & Support',
-  description: 'Get in touch with FrameFinder for personalized eyewear consultations, technical support, or partnership inquiries. Expert guidance for all your face shape and styling questions.',
-  keywords: 'contact FrameFinder, eyewear consultation, face shape expert, technical support, partnership inquiries, styling consultation',
+  title: 'Contact FrameFinder - Support & Feedback',
+  description: 'Get in touch with FrameFinder for technical support, feedback, or partnership inquiries. We\'re here to help with your face shape analysis experience.',
+  keywords: 'contact FrameFinder, technical support, feedback, partnership inquiries, face shape analysis help',
   openGraph: {
-    title: 'Contact FrameFinder - Expert Eyewear Consultation & Support',
-    description: 'Get in touch with FrameFinder for personalized eyewear consultations and expert guidance.',
+    title: 'Contact FrameFinder - Support & Feedback',
+    description: 'Get in touch with FrameFinder for technical support and feedback.',
     type: 'website',
     images: ['/images/og/contact.jpg'],
   },
@@ -22,19 +22,10 @@ const contactMethods = [
   {
     title: 'General Inquiries',
     icon: '💬',
-    description: 'Questions about our service, features, or general support',
+    description: 'Questions about our service, features, or general feedback',
     email: 'hello@framefinder.com',
     response: 'Within 24 hours',
     cta: 'Send Message'
-  },
-  {
-    title: 'Expert Consultation',
-    icon: '👨‍💼',
-    description: 'Personalized styling advice from our expert opticians and stylists',
-    email: 'consultation@framefinder.com',
-    response: 'Within 2 business days',
-    cta: 'Book Consultation',
-    featured: true
   },
   {
     title: 'Technical Support',
@@ -42,7 +33,8 @@ const contactMethods = [
     description: 'Help with AI analysis, photo uploads, or technical issues',
     email: 'support@framefinder.com',
     response: 'Within 12 hours',
-    cta: 'Get Help'
+    cta: 'Get Help',
+    featured: true
   },
   {
     title: 'Business Partnerships',
@@ -54,42 +46,18 @@ const contactMethods = [
   }
 ];
 
-const consultationServices = [
-  {
-    service: 'Personal Style Analysis',
-    description: 'Comprehensive face shape analysis with personalized frame recommendations',
-    duration: '30 minutes',
-    includes: ['Detailed face shape assessment', 'Color matching guidance', 'Frame style recommendations', 'Shopping guidance'],
-    ideal: 'First-time glasses wearers or major style changes'
-  },
-  {
-    service: 'Professional Wardrobe Consultation',
-    description: 'Eyewear selection for professional environments and career advancement',
-    duration: '45 minutes',
-    includes: ['Industry-specific recommendations', 'Multiple style options', 'Brand suggestions', 'Budget planning'],
-    ideal: 'Career professionals and executives'
-  },
-  {
-    service: 'Lifestyle Matching Service',
-    description: 'Frame selection based on your daily activities and lifestyle needs',
-    duration: '30 minutes',
-    includes: ['Activity-based recommendations', 'Durability considerations', 'Multi-pair strategies', 'Care instructions'],
-    ideal: 'Active individuals and families'
-  }
-];
-
 const faqHighlights = [
   {
-    question: 'How does the expert consultation work?',
-    answer: 'Our consultations are conducted via video call with certified opticians and style experts. We review your AI analysis results, discuss your preferences and lifestyle, and provide personalized recommendations.'
+    question: 'How do I get help with the face analysis?',
+    answer: 'If you\'re having trouble with photo uploads or AI analysis, our technical support team can help guide you through the process and troubleshoot any issues.'
   },
   {
-    question: 'Is there a cost for consultations?',
-    answer: 'Initial consultations are complimentary for users who have completed our AI face shape analysis. Extended styling sessions and follow-up consultations may have associated fees.'
+    question: 'Can I suggest new features or improvements?',
+    answer: 'Absolutely! We love hearing from users about how we can improve FrameFinder. Send us your feedback and feature suggestions through our general inquiries contact.'
   },
   {
-    question: 'Can you help me shop for frames online?',
-    answer: 'Absolutely! Our experts can guide you through online shopping, recommend specific retailers, and even provide virtual try-on sessions to help you make confident decisions.'
+    question: 'What if the AI analysis seems incorrect?',
+    answer: 'Our AI is continuously improving, but if you feel the results don\'t match your face shape, you can try retaking the photo with better lighting or contact support for guidance on getting better results.'
   }
 ];
 
@@ -98,7 +66,7 @@ export default function ContactPage() {
     '@context': 'https://schema.org',
     '@type': 'ContactPage',
     name: 'Contact FrameFinder',
-    description: 'Get in touch with FrameFinder for expert eyewear consultations and support',
+    description: 'Get in touch with FrameFinder for technical support and feedback',
     url: 'https://framefinder.com/contact',
     mainEntity: {
       '@type': 'Organization',
@@ -131,23 +99,23 @@ export default function ContactPage() {
           <div className="container mx-auto text-center">
             <div className="mx-auto max-w-4xl">
               <div className="mb-4 inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-primary text-primary-foreground">
-                📞 Get Expert Guidance
+                💬 Get Support
               </div>
               
               <h1 className="mb-6 text-4xl font-bold tracking-tight text-foreground sm:text-6xl lg:text-7xl">
-                Contact Our Experts
+                Contact FrameFinder
               </h1>
               
               <p className="mb-8 text-xl text-muted-foreground sm:text-2xl lg:text-xl lg:leading-8">
-                Get personalized eyewear consultations from certified opticians and style experts. 
-                Whether you need technical support or professional styling advice, we're here to help.
+                Need help with our face analysis tool or have feedback to share? 
+                Our support team is here to help you get the most out of FrameFinder.
               </p>
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button asChild size="lg">
-                  <Link href="#consultation">
-                    Book Free Consultation
-                    <span className="ml-2">👨‍💼</span>
+                  <Link href="#contact-methods">
+                    Get Support
+                    <span className="ml-2">🛠️</span>
                   </Link>
                 </Button>
                 
@@ -161,80 +129,6 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Featured Consultation CTA */}
-        <section id="consultation" className="px-4 py-16">
-          <div className="container mx-auto">
-            <div className="mx-auto max-w-4xl">
-              <Card className="border-2 border-primary/20 shadow-lg">
-                <CardHeader className="text-center pb-6">
-                  <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mb-4">
-                    <span className="text-3xl">👨‍💼</span>
-                  </div>
-                  <CardTitle className="text-3xl">Free Expert Consultation</CardTitle>
-                  <CardDescription className="text-lg">
-                    Get personalized advice from certified opticians and style experts
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4">What You Get:</h3>
-                      <ul className="space-y-3">
-                        <li className="flex items-start gap-3">
-                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                          <span className="text-sm">Detailed review of your AI analysis results</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                          <span className="text-sm">Personalized frame recommendations based on lifestyle</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                          <span className="text-sm">Color matching and material guidance</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                          <span className="text-sm">Shopping guidance and brand recommendations</span>
-                        </li>
-                        <li className="flex items-start gap-3">
-                          <span className="text-primary mt-0.5 flex-shrink-0">✓</span>
-                          <span className="text-sm">Follow-up support for final decisions</span>
-                        </li>
-                      </ul>
-                    </div>
-                    
-                    <div className="space-y-4">
-                      <div className="bg-accent/50 rounded-lg p-4">
-                        <div className="text-2xl font-bold text-primary">30 Minutes</div>
-                        <div className="text-sm text-muted-foreground">Video consultation</div>
-                      </div>
-                      <div className="bg-accent/50 rounded-lg p-4">
-                        <div className="text-2xl font-bold text-primary">100% Free</div>
-                        <div className="text-sm text-muted-foreground">No hidden costs</div>
-                      </div>
-                      <div className="bg-accent/50 rounded-lg p-4">
-                        <div className="text-2xl font-bold text-primary">Expert Led</div>
-                        <div className="text-sm text-muted-foreground">Certified professionals</div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="text-center mt-8">
-                    <Button size="lg" className="text-lg px-8 py-4">
-                      <a href="mailto:consultation@framefinder.com?subject=Free Expert Consultation Request&body=I would like to schedule a free consultation to discuss my eyewear needs. I have completed the AI face shape analysis and would like personalized recommendations.">
-                        Schedule Free Consultation
-                        <span className="ml-2">📅</span>
-                      </a>
-                    </Button>
-                    <p className="text-xs text-muted-foreground mt-2">
-                      We recommend completing your face analysis first for personalized guidance
-                    </p>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
 
         {/* Contact Methods */}
         <section id="contact-methods" className="px-4 py-16 bg-muted/30">
@@ -286,73 +180,16 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* Consultation Services */}
-        <section className="px-4 py-16">
-          <div className="container mx-auto">
-            <div className="mx-auto max-w-2xl text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Expert Consultation Services
-              </h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Professional guidance tailored to your specific needs and lifestyle
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {consultationServices.map((service, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <CardTitle className="text-xl">{service.service}</CardTitle>
-                    <CardDescription>
-                      {service.description}
-                    </CardDescription>
-                    <div className="flex items-center justify-between text-sm mt-3">
-                      <span className="bg-primary/10 text-primary px-2 py-1 rounded">
-                        {service.duration}
-                      </span>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <div>
-                        <h4 className="font-medium mb-2 text-sm">Includes:</h4>
-                        <ul className="space-y-1">
-                          {service.includes.map((item, itemIndex) => (
-                            <li key={itemIndex} className="flex items-start text-xs text-muted-foreground">
-                              <span className="text-primary mr-2 mt-0.5">•</span>
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                      
-                      <div>
-                        <h4 className="font-medium mb-1 text-sm">Ideal For:</h4>
-                        <p className="text-xs text-muted-foreground">{service.ideal}</p>
-                      </div>
-
-                      <Button className="w-full" variant="outline">
-                        <a href={`mailto:consultation@framefinder.com?subject=${service.service} Consultation Request`}>
-                          Book This Service
-                        </a>
-                      </Button>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* FAQ Highlights */}
         <section className="px-4 py-16 bg-muted/30">
           <div className="container mx-auto">
             <div className="mx-auto max-w-2xl text-center mb-12">
               <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Consultation FAQ
+                Support FAQ
               </h2>
               <p className="mt-4 text-lg text-muted-foreground">
-                Common questions about our expert consultation services
+                Common questions about getting help with FrameFinder
               </p>
             </div>
 
@@ -430,7 +267,7 @@ export default function ContactPage() {
                 Ready to Get Started?
               </h2>
               <p className="text-lg text-muted-foreground mb-8">
-                Complete your AI face shape analysis first, then book a consultation for personalized recommendations.
+                Try our AI face shape analysis to discover your perfect eyewear style. Need help? Our support team is ready to assist.
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -442,9 +279,9 @@ export default function ContactPage() {
                 </Button>
                 
                 <Button variant="outline" size="lg">
-                  <a href="mailto:consultation@framefinder.com?subject=Expert Consultation Request">
-                    Book Consultation
-                    <span className="ml-2">👨‍💼</span>
+                  <a href="mailto:support@framefinder.com?subject=FrameFinder Support Request">
+                    Get Support
+                    <span className="ml-2">🛠️</span>
                   </a>
                 </Button>
               </div>
