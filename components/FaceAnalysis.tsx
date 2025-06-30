@@ -29,6 +29,22 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   const desktopWebcamRef = useRef<Webcam>(null);
   const mobileWebcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const cameraContainerRef = useRef<HTMLDivElement>(null);
+
+  // Auto-scroll to camera when enabled on mobile
+  useEffect(() => {
+    if (useCamera && window.innerWidth < 768 && cameraContainerRef.current) {
+      const timer = setTimeout(() => {
+        if (cameraContainerRef.current) {
+          cameraContainerRef.current.scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+          });
+        }
+      }, 300); // Wait for webcam to initialize
+      return () => clearTimeout(timer);
+    }
+  }, [useCamera]);
 
   // Simple face analysis doesn't need initialization
   const initializeIfNeeded = async () => {
@@ -360,7 +376,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           Upload a photo or use your camera to discover your face shape and get personalized frame recommendations
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 md:space-y-6 pb-6">
         {/* Method Selection */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
@@ -373,7 +389,18 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           </Button>
           <Button
             variant={useCamera ? "default" : "outline"}
-            onClick={() => setUseCamera(true)}
+            onClick={() => {
+              setUseCamera(true);
+              // Auto-scroll to camera on mobile after slight delay
+              setTimeout(() => {
+                if (window.innerWidth < 768 && cameraContainerRef.current) {
+                  cameraContainerRef.current.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                  });
+                }
+              }, 100);
+            }}
             className="flex-1 max-w-xs"
           >
             <Camera className="h-4 w-4 mr-2" />
@@ -383,7 +410,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
 
         {/* Camera Interface */}
         {useCamera ? (
-          <div className="space-y-4">
+          <div ref={cameraContainerRef} className="space-y-4">
             {/* Desktop Camera */}
             <div className="hidden md:block relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
               <Webcam
@@ -411,41 +438,52 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
               </div>
             </div>
 
-            {/* Mobile Camera */}
-            <div className="md:hidden relative w-full max-w-sm mx-auto bg-muted/50 rounded-lg overflow-hidden">
-              <Webcam
-                ref={mobileWebcamRef}
-                audio={false}
-                screenshotFormat="image/jpeg"
-                videoConstraints={{
-                  width: { ideal: 640 },
-                  height: { ideal: 640 },
-                  facingMode: "user"
-                }}
-                className="w-full aspect-square object-cover"
-                onUserMediaError={(error) => {
-                  console.error('Camera access error:', error);
-                  setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
-                  setAnalysisState('error');
-                }}
-              />
-              {/* Mobile face guide overlay */}
-              <div className="absolute inset-6 border-2 border-white/40 rounded-full pointer-events-none">
-                <div className="w-full h-full flex items-center justify-center">
-                  <span className="text-white/80 text-xs bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
-                    Center your face
-                  </span>
+            {/* Mobile Camera - Optimized for full viewport */}
+            <div className="md:hidden space-y-3">
+              {/* Mobile camera with better sizing */}
+              <div className="relative w-full max-w-xs mx-auto bg-muted/50 rounded-lg overflow-hidden">
+                <Webcam
+                  ref={mobileWebcamRef}
+                  audio={false}
+                  screenshotFormat="image/jpeg"
+                  videoConstraints={{
+                    width: { ideal: 480 },
+                    height: { ideal: 480 },
+                    facingMode: "user"
+                  }}
+                  className="w-full aspect-square object-cover"
+                  onUserMediaError={(error) => {
+                    console.error('Camera access error:', error);
+                    setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
+                    setAnalysisState('error');
+                  }}
+                />
+                {/* Mobile face guide overlay - smaller for better visibility */}
+                <div className="absolute inset-4 border-2 border-white/50 rounded-full pointer-events-none">
+                  <div className="w-full h-full flex items-center justify-center">
+                    <span className="text-white/90 text-xs bg-black/40 px-2 py-1 rounded-full backdrop-blur-sm font-medium">
+                      Center your face
+                    </span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="text-center space-y-3">
-              <Button onClick={capturePhoto} size="lg" className="w-full max-w-xs">
-                <Camera className="h-5 w-5 mr-2" />
-                📷 Capture & Analyze
-              </Button>
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p>💡 Hold steady and ensure good lighting</p>
-                <p>⚠️ Camera requires HTTPS and permission access</p>
+              
+              {/* Mobile capture button - always visible */}
+              <div className="text-center">
+                <Button 
+                  onClick={capturePhoto} 
+                  size="lg" 
+                  className="w-full max-w-xs bg-primary hover:bg-primary/90 text-white font-semibold py-3"
+                >
+                  <Camera className="h-5 w-5 mr-2" />
+                  📷 Capture & Analyze
+                </Button>
+              </div>
+              
+              {/* Tips - condensed for mobile */}
+              <div className="text-center text-xs text-muted-foreground space-y-1 px-4">
+                <p>💡 Good lighting helps • Hold steady</p>
+                <p>⚠️ Requires camera permission & HTTPS</p>
               </div>
             </div>
           </div>
