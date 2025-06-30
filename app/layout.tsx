@@ -209,6 +209,7 @@ export default function RootLayout({
         <link rel="dns-prefetch" href="https://plus.unsplash.com" />
         <link rel="dns-prefetch" href="https://cdn.tailwindcss.com" />
         <link rel="dns-prefetch" href="https://cdn.jsdelivr.net" />
+        <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
         
         {/* Critical CSS preload */}
         <link rel="preload" href="/_next/static/css/app/layout.css" as="style" />
@@ -223,6 +224,15 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         />
+        
+        {/* Google AdSense */}
+        {process.env.NEXT_PUBLIC_ADSENSE_ID && (
+          <script
+            async
+            src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_ID}`}
+            crossOrigin="anonymous"
+          />
+        )}
       </head>
       <body className={cn(
         outfit.className,

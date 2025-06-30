@@ -2,9 +2,9 @@
 export const features = {
   // Advertisement configuration
   ads: {
-    enabled: false, // Set to true when we have actual ads to display
-    sidebarAd: false,
-    bottomAd: false,
+    enabled: true,
+    sidebarAd: true,
+    bottomAd: true,
   },
   
   // Analytics configuration
