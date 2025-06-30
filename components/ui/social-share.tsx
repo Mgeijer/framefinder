@@ -29,6 +29,7 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
   const [generatingImage, setGeneratingImage] = useState(false);
   const [showInstructions, setShowInstructions] = useState(false);
   const [lastGeneratedImage, setLastGeneratedImage] = useState<string | null>(null);
+  const [shareStep, setShareStep] = useState<'idle' | 'generating' | 'ready' | 'shared'>('idle');
 
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://framefinder2.vercel.app';
   const shareText = `I just discovered my face shape is ${result.faceShape.displayName}! Check out FrameFinder for AI-powered face shape analysis and personalized eyewear recommendations. ${baseUrl}`;
@@ -121,24 +122,20 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
   };
 
   const shareToInstagram = async () => {
-    // First download the mobile image for user
-    await downloadResults('mobile');
+    setShareStep('generating');
     
-    // Copy text to clipboard
-    copyToClipboard();
-    
-    // Show instructions
-    setShowInstructions(true);
-    setTimeout(() => setShowInstructions(false), 8000);
-    
-    // Open Instagram after a short delay
-    setTimeout(() => {
-      if (typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent)) {
-        window.open('instagram://', '_blank');
-      } else {
-        window.open('https://www.instagram.com/', '_blank');
-      }
-    }, 1000);
+    // Generate and show preview image
+    const shareableImage = await generateShareableImage('mobile');
+    if (shareableImage) {
+      setLastGeneratedImage(shareableImage);
+      setShareStep('ready');
+      
+      // Copy text to clipboard
+      copyToClipboard();
+      
+      // Show instructions with image preview
+      setShowInstructions(true);
+    }
   };
 
   const shareToWhatsApp = () => {
@@ -191,16 +188,90 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
-        {/* Instructions Banner */}
-        {showInstructions && (
-          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg animate-pulse">
-            <div className="flex items-start gap-3">
-              <div className="text-blue-600 text-lg">📥</div>
-              <div>
-                <p className="font-medium text-blue-900 mb-1">Image Downloaded!</p>
-                <p className="text-sm text-blue-700">
-                  Your shareable image has been downloaded. Upload it to your social media post and paste the text below for maximum impact!
-                </p>
+        {/* Share Instructions with Preview */}
+        {showInstructions && lastGeneratedImage && (
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 border border-blue-200 p-6 rounded-lg">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Preview Image */}
+              <div className="space-y-2">
+                <h4 className="font-medium text-blue-900">Your Shareable Image:</h4>
+                <img 
+                  src={lastGeneratedImage} 
+                  alt="Generated share image preview"
+                  className="w-full max-w-xs mx-auto rounded-lg shadow-md border"
+                />
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => {
+                      const link = document.createElement('a');
+                      link.download = `framefinder-${result.faceShape.id}-share.png`;
+                      link.href = lastGeneratedImage;
+                      link.click();
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <Download className="h-3 w-3 mr-1" />
+                    Save Image
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      if (typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent)) {
+                        window.open('instagram://', '_blank');
+                      } else {
+                        window.open('https://www.instagram.com/', '_blank');
+                      }
+                      setShareStep('shared');
+                    }}
+                    size="sm"
+                    className="flex-1"
+                  >
+                    <Instagram className="h-3 w-3 mr-1" />
+                    Open Instagram
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Instructions */}
+              <div className="space-y-3">
+                <h4 className="font-medium text-blue-900">How to Share:</h4>
+                <div className="space-y-2 text-sm text-blue-700">
+                  <div className="flex items-start gap-2">
+                    <span className="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">1</span>
+                    <span>Save the image to your device (button above)</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">2</span>
+                    <span>Open Instagram and create a new post</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">3</span>
+                    <span>Select the saved image from your photos</span>
+                  </div>
+                  <div className="flex items-start gap-2">
+                    <span className="bg-blue-200 text-blue-800 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mt-0.5">4</span>
+                    <span>Paste the copied text as your caption</span>
+                  </div>
+                </div>
+                <div className="bg-white/60 p-3 rounded border border-blue-200">
+                  <p className="text-xs text-blue-600 font-medium mb-1">✅ Text copied to clipboard:</p>
+                  <p className="text-xs text-blue-700 leading-relaxed">
+                    {shareText.substring(0, 100)}...
+                  </p>
+                </div>
+                <Button
+                  onClick={() => {
+                    setShowInstructions(false);
+                    setShareStep('idle');
+                    setLastGeneratedImage(null);
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                >
+                  Got it!
+                </Button>
               </div>
             </div>
           </div>
@@ -238,9 +309,19 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
             onClick={shareToInstagram}
             variant="outline"
             className="flex items-center gap-2 text-pink-600 border-pink-200 hover:bg-pink-50"
+            disabled={shareStep === 'generating' || generatingImage}
           >
-            <Instagram className="h-4 w-4" />
-            Instagram
+            {shareStep === 'generating' ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-pink-600 border-t-transparent" />
+                Creating...
+              </>
+            ) : (
+              <>
+                <Instagram className="h-4 w-4" />
+                Instagram
+              </>
+            )}
           </Button>
 
           <Button
