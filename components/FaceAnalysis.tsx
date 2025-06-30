@@ -26,7 +26,8 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
 
-  const webcamRef = useRef<Webcam>(null);
+  const desktopWebcamRef = useRef<Webcam>(null);
+  const mobileWebcamRef = useRef<Webcam>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Simple face analysis doesn't need initialization
@@ -90,7 +91,11 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
   }, [onAnalysisComplete]);
 
   const capturePhoto = useCallback(async () => {
-    if (!webcamRef.current) return;
+    // Determine which webcam to use based on screen size
+    const isDesktop = window.innerWidth >= 768; // md breakpoint
+    const currentWebcamRef = isDesktop ? desktopWebcamRef : mobileWebcamRef;
+    
+    if (!currentWebcamRef.current) return;
 
     // No initialization needed for simple analysis
 
@@ -99,7 +104,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
 
     try {
       // Capture image from webcam
-      const imageSrc = webcamRef.current.getScreenshot();
+      const imageSrc = currentWebcamRef.current.getScreenshot();
       if (!imageSrc) {
         throw new Error('Failed to capture image from camera');
       }
@@ -382,7 +387,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
             {/* Desktop Camera */}
             <div className="hidden md:block relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
               <Webcam
-                ref={webcamRef}
+                ref={desktopWebcamRef}
                 audio={false}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
@@ -409,7 +414,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
             {/* Mobile Camera */}
             <div className="md:hidden relative w-full max-w-sm mx-auto bg-muted/50 rounded-lg overflow-hidden">
               <Webcam
-                ref={webcamRef}
+                ref={mobileWebcamRef}
                 audio={false}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
