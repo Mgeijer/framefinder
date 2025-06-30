@@ -23,26 +23,20 @@ const contactMethods = [
     title: 'General Inquiries',
     icon: '💬',
     description: 'Questions about our service, features, or general feedback',
-    email: 'hello@framefinder.com',
-    response: 'Within 24 hours',
-    cta: 'Send Message'
+    email: 'Contact via GitHub Issues',
+    response: 'Best effort basis',
+    cta: 'Open Issue',
+    link: 'https://github.com/Mgeijer/framefinder/issues'
   },
   {
     title: 'Technical Support',
     icon: '🛠️',
     description: 'Help with AI analysis, photo uploads, or technical issues',
-    email: 'support@framefinder.com',
-    response: 'Within 12 hours',
-    cta: 'Get Help',
+    email: 'GitHub Issues (Bug Reports)',
+    response: 'Community support',
+    cta: 'Report Bug',
+    link: 'https://github.com/Mgeijer/framefinder/issues/new',
     featured: true
-  },
-  {
-    title: 'Business Partnerships',
-    icon: '🤝',
-    description: 'Collaboration opportunities, affiliate programs, and brand partnerships',
-    email: 'partnerships@framefinder.com',
-    response: 'Within 3 business days',
-    cta: 'Discuss Partnership'
   }
 ];
 
@@ -75,12 +69,12 @@ export default function ContactPage() {
         {
           '@type': 'ContactPoint',
           contactType: 'Customer Service',
-          email: 'hello@framefinder.com'
+          url: 'https://github.com/Mgeijer/framefinder/issues'
         },
         {
           '@type': 'ContactPoint',
           contactType: 'Technical Support',
-          email: 'support@framefinder.com'
+          url: 'https://github.com/Mgeijer/framefinder/issues/new'
         }
       ]
     }
@@ -167,8 +161,8 @@ export default function ContactPage() {
                         <span className="text-muted-foreground">Response Time:</span>
                         <span className="font-medium">{method.response}</span>
                       </div>
-                      <Button className="w-full mt-4" variant={method.featured ? 'default' : 'outline'}>
-                        <a href={`mailto:${method.email}`}>
+                      <Button className="w-full mt-4" variant={method.featured ? 'default' : 'outline'} asChild>
+                        <a href={method.link} target="_blank" rel="noopener noreferrer">
                           {method.cta}
                         </a>
                       </Button>
@@ -235,9 +229,9 @@ export default function ContactPage() {
                       <p className="text-sm text-muted-foreground mb-4">
                         Technical issues preventing AI analysis
                       </p>
-                      <Button variant="outline">
-                        <a href="mailto:support@framefinder.com?subject=URGENT: Technical Issue">
-                          Contact Support
+                      <Button variant="outline" asChild>
+                        <a href="https://github.com/Mgeijer/framefinder/issues/new" target="_blank" rel="noopener noreferrer">
+                          Report Issue
                         </a>
                       </Button>
                     </div>
@@ -278,8 +272,8 @@ export default function ContactPage() {
                   </Link>
                 </Button>
                 
-                <Button variant="outline" size="lg">
-                  <a href="mailto:support@framefinder.com?subject=FrameFinder Support Request">
+                <Button variant="outline" size="lg" asChild>
+                  <a href="https://github.com/Mgeijer/framefinder/issues" target="_blank" rel="noopener noreferrer">
                     Get Support
                     <span className="ml-2">🛠️</span>
                   </a>
