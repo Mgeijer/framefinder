@@ -181,7 +181,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-muted rounded-full h-2">
             <div 
               className="bg-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
@@ -356,7 +356,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="w-full bg-gray-200 rounded-full h-2">
+          <div className="w-full bg-muted rounded-full h-2">
             <div 
               className="bg-primary h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
@@ -405,7 +405,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         {/* Camera Interface */}
         {useCamera ? (
           <div className="space-y-4">
-            <div className="relative aspect-video max-w-md mx-auto bg-gray-100 rounded-lg overflow-hidden">
+            <div className="relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
               <Webcam
                 ref={webcamRef}
                 audio={false}
@@ -444,17 +444,17 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
           /* Upload Interface */
           <div className="space-y-4">
             <div 
-              className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
+              className="border-2 border-dashed border-border rounded-lg p-8 text-center hover:border-primary/50 transition-colors cursor-pointer"
               onClick={() => fileInputRef.current?.click()}
             >
-              <Upload className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-lg font-medium text-gray-700 mb-2">
+              <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+              <p className="text-lg font-medium text-foreground mb-2">
                 Upload your photo
               </p>
-              <p className="text-sm text-gray-500 mb-4">
+              <p className="text-sm text-muted-foreground mb-4">
                 Drag and drop or click to select a clear, front-facing photo
               </p>
-              <p className="text-xs text-gray-400">
+              <p className="text-xs text-muted-foreground">
                 Supports JPG, PNG, WebP up to 10MB
               </p>
             </div>
@@ -471,7 +471,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         {/* Tips */}
         <div className="bg-blue-50 rounded-lg p-4">
           <h3 className="font-medium text-sm mb-2">📸 Photo Tips for Best Results:</h3>
-          <ul className="text-sm text-gray-600 space-y-1">
+          <ul className="text-sm text-muted-foreground space-y-1">
             <li>• Use good lighting with your face clearly visible</li>
             <li>• Face the camera directly with a neutral expression</li>
             <li>• Remove glasses and ensure hair doesn't obscure your face</li>

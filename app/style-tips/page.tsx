@@ -163,21 +163,24 @@ const featuredArticles = [
     description: 'Discover the science behind color theory and how it applies to eyewear selection.',
     category: 'Color Theory',
     readTime: '8 min read',
-    featured: true
+    featured: true,
+    href: '/style-tips/articles/color-theory'
   },
   {
     title: 'Professional vs. Personal: Building Your Eyewear Wardrobe',
     description: 'Learn how to balance professional requirements with personal style expression.',
     category: 'Style Strategy',
     readTime: '6 min read',
-    featured: true
+    featured: true,
+    href: '/style-tips/articles/eyewear-wardrobe'
   },
   {
     title: 'Sustainable Eyewear: Eco-Friendly Materials and Brands',
     description: 'Explore environmentally conscious options in modern eyewear design.',
     category: 'Sustainability',
     readTime: '5 min read',
-    featured: false
+    featured: false,
+    href: '/style-tips/color-matching' // Link to existing color matching guide
   }
 ];
 
@@ -348,24 +351,26 @@ export default function StyleTipsPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
             {featuredArticles.filter(article => article.featured).map((article, index) => (
               <Card key={index} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <Badge>{article.category}</Badge>
-                    <span className="text-xs text-muted-foreground">{article.readTime}</span>
-                  </div>
-                  <CardTitle className="text-xl font-semibold group-hover:text-primary transition-colors">
-                    {article.title}
-                  </CardTitle>
-                  <CardDescription className="text-sm leading-relaxed">
-                    {article.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button className="w-full group-hover:bg-primary/90 transition-colors">
-                    Read Full Article
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
-                  </Button>
-                </CardContent>
+                <Link href={article.href}>
+                  <CardHeader className="pb-4">
+                    <div className="flex items-center justify-between mb-2">
+                      <Badge>{article.category}</Badge>
+                      <span className="text-xs text-muted-foreground">{article.readTime}</span>
+                    </div>
+                    <CardTitle className="text-xl font-semibold group-hover:text-primary transition-colors">
+                      {article.title}
+                    </CardTitle>
+                    <CardDescription className="text-sm leading-relaxed">
+                      {article.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Button className="w-full group-hover:bg-primary/90 transition-colors">
+                      Read Full Article
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </Button>
+                  </CardContent>
+                </Link>
               </Card>
             ))}
           </div>
@@ -418,9 +423,11 @@ export default function StyleTipsPage() {
                     )}
                   </div>
 
-                  <Button className="w-full group-hover:bg-primary/90 transition-colors" size="sm">
-                    View Full Guide
-                    <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                  <Button asChild className="w-full group-hover:bg-primary/90 transition-colors" size="sm">
+                    <Link href={`/style-tips/${category.id}`}>
+                      View Full Guide
+                      <span className="ml-2 group-hover:translate-x-1 transition-transform">→</span>
+                    </Link>
                   </Button>
                 </CardContent>
               </Card>

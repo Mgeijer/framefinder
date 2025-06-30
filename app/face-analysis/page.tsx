@@ -90,9 +90,9 @@ export default function FaceAnalysisPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="bg-white border-b">
+      <div className="bg-card border-b border-border">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
@@ -103,8 +103,8 @@ export default function FaceAnalysisPage() {
                 </Link>
               </Button>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Face Shape Analysis</h1>
-                <p className="text-sm text-gray-600">Discover your perfect eyeglass style</p>
+                <h1 className="text-2xl font-bold text-foreground">Face Shape Analysis</h1>
+                <p className="text-sm text-muted-foreground">Discover your perfect eyeglass style</p>
               </div>
             </div>
             
@@ -144,7 +144,7 @@ export default function FaceAnalysisPage() {
                 </CardHeader>
                 <CardContent className="text-sm space-y-2">
                   <p>For the most accurate results:</p>
-                  <ul className="space-y-1 text-gray-600">
+                  <ul className="space-y-1 text-muted-foreground">
                     <li>• Use good lighting</li>
                     <li>• Face the camera directly</li>
                     <li>• Remove glasses</li>
@@ -167,7 +167,7 @@ export default function FaceAnalysisPage() {
                     {analysisResult.alternativeShapes.slice(0, 3).map((alt, index) => (
                       <div key={index} className="flex justify-between items-center text-sm">
                         <span>{alt.shape.displayName}</span>
-                        <span className="text-gray-500">
+                        <span className="text-muted-foreground">
                           {Math.round(alt.confidence * 100)}%
                         </span>
                       </div>

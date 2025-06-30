@@ -4,7 +4,81 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { FaceShapeIcon } from '@/components/ui/face-shape-icon';
 import { faceShapes, getFaceShapeById } from '@/data/face-shapes';
+
+// Map frame IDs to actual image filenames
+function getFrameImagePath(frameId: string, shapeId: string): string {
+  const frameImageMap: Record<string, Record<string, string>> = {
+    oval: {
+      'rect-classic': 'square-black.jpg',
+      'round-vintage': 'round-tortoise.jpg',
+      'cat-eye-sophisticated': 'cat-eye-elegant.jpg',
+      'aviator-classic': 'aviator-gold.jpg',
+      'rimless-minimal': 'rimless-minimal.jpg',
+      'oversized-fashion': 'oversized-fashion.jpg'
+    },
+    round: {
+      'rect-angular': 'rectangular-pro.jpg',
+      'square-bold': 'square-brown.jpg',
+      'browline-classic': 'browline-classic.jpg',
+      'geometric-modern': 'geometric-designer.jpg',
+      'cat-eye-sharp': 'cat-eye-sharp.jpg',
+      'wide-bold': 'wide-bold.jpg'
+    },
+    square: {
+      'round-soft': 'round-wire.jpg',
+      'oval-gentle': 'oval-rose.jpg',
+      'aviator-classic': 'aviator-classic.jpg',
+      'cat-eye-feminine': 'cat-eye-feminine.jpg',
+      'rimless-round': 'rimless-round.jpg',
+      'soft-rect-blue': 'soft-rect-blue.jpg'
+    },
+    heart: {
+      'bottom-heavy': 'bottom-heavy.jpg',
+      'aviator-classic-heart': 'wide-bottom.jpg',
+      'cat-eye-subtle': 'cat-eye-subtle.jpg',
+      'oval-balance': 'oval-balance.jpg',
+      'rimless-delicate': 'rimless-delicate.jpg',
+      'round-balance': 'round-balance.jpg'
+    },
+    diamond: {
+      'cat-eye-diamond': 'cat-eye-dramatic.jpg',
+      'rimless-diamond': 'rimless-elegant.jpg',
+      'browline-statement': 'browline-statement.jpg',
+      'oval-flattering': 'oval-flattering.jpg',
+      'round-softening': 'round-softening.jpg',
+      'detailed-temple': 'detailed-temple.jpg'
+    },
+    triangle: {
+      'top-heavy-triangle': 'decorative-top.jpg',
+      'cat-eye-triangle': 'cat-eye-uplifting.jpg',
+      'aviator-classic': 'aviator-classic.jpg',
+      'browline-bold': 'browline-bold.jpg',
+      'round-balancing': 'round-balancing.jpg',
+      'wide-top': 'wide-top.jpg'
+    }
+  };
+
+  const shapeImages = frameImageMap[shapeId];
+  const filename = shapeImages?.[frameId];
+  
+  if (filename) {
+    return `/frames/${shapeId}/${filename}`;
+  }
+  
+  // Fallback to first available image in the shape directory
+  const fallbackImages = {
+    oval: 'aviator-gold.jpg',
+    round: 'browline-classic.jpg',
+    square: 'aviator-classic.jpg',
+    heart: 'bottom-heavy.jpg',
+    diamond: 'browline-statement.jpg',
+    triangle: 'aviator-classic.jpg'
+  };
+  
+  return `/frames/${shapeId}/${fallbackImages[shapeId as keyof typeof fallbackImages]}`;
+}
 
 type Props = {
   params: Promise<{ shape: string }>;
@@ -268,6 +342,9 @@ export default async function FaceShapeDetailPage({ params }: Props) {
 
               <div className="lg:text-center">
                 <div className="bg-card border rounded-xl p-8 shadow-sm">
+                  <div className="flex justify-center mb-6">
+                    <FaceShapeIcon shape={shape.id as any} size={120} />
+                  </div>
                   <h3 className="text-lg font-semibold mb-4">Face Shape Measurements</h3>
                   <div className="space-y-3 text-sm">
                     <div className="flex justify-between">
@@ -373,6 +450,15 @@ export default async function FaceShapeDetailPage({ params }: Props) {
                   
                   <CardContent>
                     <div className="space-y-4">
+                      {/* Frame Image */}
+                      <div className="relative h-48 bg-muted/30 rounded-lg overflow-hidden">
+                        <img 
+                          src={getFrameImagePath(frame.id, shape.id)}
+                          alt={`${frame.name} glasses frame`}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+
                       {/* Features */}
                       <div>
                         <h4 className="font-medium mb-2 text-sm text-muted-foreground">Key Features:</h4>
@@ -393,9 +479,11 @@ export default async function FaceShapeDetailPage({ params }: Props) {
                         </Badge>
                       </div>
 
-                      <Button className="w-full group-hover:bg-primary/90 transition-colors">
-                        Find Similar Styles
-                        <span className="ml-2">🔍</span>
+                      <Button asChild className="w-full group-hover:bg-primary/90 transition-colors">
+                        <Link href="/face-analysis">
+                          Find Similar Styles
+                          <span className="ml-2">🔍</span>
+                        </Link>
                       </Button>
                     </div>
                   </CardContent>

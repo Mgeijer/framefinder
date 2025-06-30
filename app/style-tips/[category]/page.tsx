@@ -225,6 +225,222 @@ const styleGuides = {
         }
       ]
     }
+  },
+  'lifestyle-matching': {
+    title: 'Lifestyle & Activity Matching',
+    description: 'Choose frames that match your daily activities and lifestyle needs.',
+    icon: '🏃‍♂️',
+    content: {
+      introduction: 'Your lifestyle should be a major factor in frame selection. Different activities, work environments, and personal habits require different considerations to ensure your eyewear enhances rather than hinders your daily life.',
+      sections: [
+        {
+          title: 'Active Lifestyle Considerations',
+          content: 'For those who lead active lives, frame selection goes beyond style to include functionality, durability, and comfort during physical activities.',
+          tips: [
+            'Choose flexible materials like TR90 that can withstand impact',
+            'Look for wraparound styles that stay secure during movement',
+            'Consider sports-specific features like rubberized nose pads',
+            'Ensure frames don\'t fog up during physical exertion',
+            'Select scratch-resistant lens coatings for durability'
+          ]
+        },
+        {
+          title: 'Professional Environment Needs',
+          content: 'Your work environment significantly influences the best frame choices for both functionality and professional appearance.',
+          tips: [
+            'Office workers benefit from blue light filtering for screen time',
+            'Healthcare professionals need easily cleanable, hygienic materials',
+            'Teachers require durable frames that handle daily wear',
+            'Outdoor workers should consider impact-resistant lenses',
+            'Creative professionals can often express more personal style'
+          ]
+        },
+        {
+          title: 'Travel and Mobility',
+          content: 'Frequent travelers and mobile professionals have unique requirements for their eyewear choices.',
+          tips: [
+            'Lightweight frames reduce fatigue during long wear',
+            'Durable cases protect frames during transport',
+            'Consider prescription sunglasses for varied lighting',
+            'Choose adjustable frames that maintain fit across climates',
+            'Pack backup frames or contacts for emergencies'
+          ]
+        },
+        {
+          title: 'Digital Life Integration',
+          content: 'Modern lifestyles often involve significant screen time, requiring specific considerations for eye health and comfort.',
+          tips: [
+            'Blue light filtering reduces digital eye strain',
+            'Anti-reflective coatings improve screen visibility',
+            'Consider computer-specific prescriptions for desk work',
+            'Adjustable frames help maintain proper viewing angles',
+            'Regular breaks remain important regardless of lens technology'
+          ]
+        }
+      ]
+    }
+  },
+  'face-features': {
+    title: 'Highlighting Best Features',
+    description: 'Learn how to use eyewear to enhance your most attractive facial features.',
+    icon: '✨',
+    content: {
+      introduction: 'Strategic frame selection can enhance your best facial features while minimizing areas you\'re less confident about. Understanding how different frame styles interact with facial features empowers you to make choices that boost your confidence.',
+      sections: [
+        {
+          title: 'Eye Enhancement Techniques',
+          content: 'Your eyes are often the focal point of your face, and the right frames can make them appear larger, brighter, and more prominent.',
+          tips: [
+            'Light-colored frames can make eyes appear larger and brighter',
+            'Cat-eye shapes naturally lift and elongate the eye area',
+            'Frames with decorative details draw attention to the eyes',
+            'Avoid frames that cast shadows across the eye area',
+            'Consider frame colors that complement your eye color'
+          ]
+        },
+        {
+          title: 'Eyebrow Considerations',
+          content: 'The relationship between your frames and eyebrows significantly impacts your overall look and facial balance.',
+          tips: [
+            'Frame tops should follow your natural eyebrow line',
+            'Browline frames can enhance naturally beautiful brows',
+            'Avoid frames that completely hide your eyebrows',
+            'Consider your eyebrow thickness when choosing frame width',
+            'Some people prefer frames that extend slightly above the brow'
+          ]
+        },
+        {
+          title: 'Nose Bridge Harmony',
+          content: 'The right bridge style can enhance nose proportions and improve overall facial harmony.',
+          tips: [
+            'Low bridges work well for flatter nose profiles',
+            'High bridges suit prominent nose bridges',
+            'Adjustable nose pads provide the best fit for most people',
+            'Bridge width should complement your nose width',
+            'Avoid bridges that create pinching or sliding'
+          ]
+        },
+        {
+          title: 'Cheekbone and Jawline Balance',
+          content: 'Frame selection can help balance prominent cheekbones or strong jawlines for overall facial harmony.',
+          tips: [
+            'Wider frames can balance narrow jawlines',
+            'Angular frames complement soft facial features',
+            'Round frames soften angular jawlines',
+            'Frame width should relate proportionally to cheekbone width',
+            'Consider how frames interact with your hairstyle'
+          ]
+        }
+      ]
+    }
+  },
+  'care-maintenance': {
+    title: 'Care & Maintenance',
+    description: 'Keep your eyewear looking great with proper care and maintenance techniques.',
+    icon: '🧽',
+    content: {
+      introduction: 'Proper care and maintenance extend the life of your eyewear while ensuring optimal vision and appearance. Developing good habits for cleaning, storage, and handling will keep your frames looking new and functioning properly for years.',
+      sections: [
+        {
+          title: 'Daily Cleaning Routine',
+          content: 'Establishing a consistent daily cleaning routine prevents buildup of oils, dust, and debris that can affect both vision and frame appearance.',
+          tips: [
+            'Use lukewarm water to rinse away loose debris before wiping',
+            'Apply eyeglass cleaner to both sides of each lens',
+            'Use only microfiber cloths to avoid scratching',
+            'Clean nose pads and temples where oils accumulate',
+            'Never use paper towels, tissues, or your shirt to clean lenses'
+          ]
+        },
+        {
+          title: 'Proper Storage Practices',
+          content: 'How you store your glasses when not wearing them significantly impacts their longevity and condition.',
+          tips: [
+            'Always use a protective case when storing glasses',
+            'Place glasses lens-side up if setting them down temporarily',
+            'Keep cases clean and free of debris that could scratch lenses',
+            'Store in moderate temperature environments',
+            'Consider multiple cases for different locations (car, office, home)'
+          ]
+        },
+        {
+          title: 'Professional Maintenance',
+          content: 'Regular professional maintenance ensures optimal fit, function, and appearance of your eyewear.',
+          tips: [
+            'Schedule professional cleanings and adjustments every 6 months',
+            'Have loose screws tightened before they fall out completely',
+            'Replace worn nose pads and temple tips as needed',
+            'Professional realignment prevents uneven wear patterns',
+            'Ask about protective coatings during routine maintenance'
+          ]
+        },
+        {
+          title: 'Extending Frame Life',
+          content: 'Simple habits and awareness can significantly extend the useful life of your eyewear investment.',
+          tips: [
+            'Remove glasses with both hands to prevent frame warping',
+            'Avoid leaving glasses in hot cars or direct sunlight',
+            'Keep backup glasses to reduce wear on your primary pair',
+            'Address minor issues promptly before they become major problems',
+            'Invest in quality cleaning supplies and protective accessories'
+          ]
+        }
+      ]
+    }
+  },
+  'multiple-pairs': {
+    title: 'Building an Eyewear Wardrobe',
+    description: 'Strategic advice for building a versatile collection of eyewear for different occasions.',
+    icon: '👓',
+    content: {
+      introduction: 'Building a strategic eyewear wardrobe is like curating any other aspect of your personal style. The right collection of frames can serve different needs, occasions, and style preferences while providing practical benefits like backup options and specialized functionality.',
+      sections: [
+        {
+          title: 'The Foundation Pair',
+          content: 'Your first and most important investment should be a versatile foundation pair that works across most situations in your life.',
+          tips: [
+            'Choose a classic shape that transcends trends',
+            'Select neutral colors that work with most outfits',
+            'Invest in high-quality materials for durability',
+            'Ensure professional appearance for work environments',
+            'Prioritize comfort for all-day wear'
+          ]
+        },
+        {
+          title: 'Adding Personality',
+          content: 'Once you have a reliable foundation, you can explore frames that express your personal style and creativity.',
+          tips: [
+            'Consider bold colors or unique patterns for weekend wear',
+            'Experiment with different shapes to discover preferences',
+            'Think about frames that complement your casual wardrobe',
+            'Try vintage or retro styles for personal expression',
+            'Choose frames that make you feel confident and unique'
+          ]
+        },
+        {
+          title: 'Specialized Functionality',
+          content: 'Different activities and environments may benefit from specialized eyewear designed for specific purposes.',
+          tips: [
+            'Computer glasses with blue light filtering for screen work',
+            'Prescription sunglasses for outdoor activities',
+            'Safety glasses for workshop or industrial environments',
+            'Sports-specific frames for athletic activities',
+            'Reading glasses for close-up work if needed'
+          ]
+        },
+        {
+          title: 'Budget and Planning',
+          content: 'Building an eyewear wardrobe requires strategic planning and budget allocation to maximize value and utility.',
+          tips: [
+            'Start with quality over quantity - one good pair beats several poor ones',
+            'Consider insurance coverage and replacement costs',
+            'Take advantage of promotions for second pairs',
+            'Plan purchases around prescription changes',
+            'Maintain all pairs properly to extend their useful life'
+          ]
+        }
+      ]
+    }
   }
 };
 

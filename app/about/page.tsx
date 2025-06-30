@@ -19,36 +19,6 @@ export const metadata: Metadata = {
   },
 };
 
-const expertiseAreas = [
-  {
-    area: 'AI & Computer Vision',
-    icon: '🧠',
-    expertise: 'Machine Learning & Facial Analysis',
-    description: 'Advanced algorithms trained on diverse datasets to provide accurate face shape classification and personalized recommendations.',
-    focus: ['Facial landmark detection', 'Pattern recognition', 'Continuous model improvement']
-  },
-  {
-    area: 'Optical Science',
-    icon: '👁️',
-    expertise: 'Frame Fitting & Visual Comfort',
-    description: 'Professional optometric principles applied to frame selection, ensuring both style and visual comfort.',
-    focus: ['Frame geometry analysis', 'Prescription compatibility', 'Comfort optimization']
-  },
-  {
-    area: 'Style Consultation',
-    icon: '🎨',
-    expertise: 'Fashion & Personal Styling',
-    description: 'Contemporary fashion insights combined with timeless style principles for personalized recommendations.',
-    focus: ['Color theory application', 'Trend analysis', 'Personal brand development']
-  },
-  {
-    area: 'Data Science',
-    icon: '📊',
-    expertise: 'Analytics & Personalization',
-    description: 'Statistical modeling and data analysis to continuously improve recommendation accuracy and user experience.',
-    focus: ['Recommendation algorithms', 'User behavior analysis', 'Performance optimization']
-  }
-];
 
 const coreValues = [
   {
@@ -106,33 +76,6 @@ const values = [
   }
 ];
 
-const milestones = [
-  {
-    year: '2020',
-    title: 'FrameFinder Founded',
-    description: 'Started as a research project to democratize professional eyewear consulting using AI technology.'
-  },
-  {
-    year: '2021',
-    title: 'AI Algorithm Launch',
-    description: 'Released our first-generation face shape analysis algorithm with 78% accuracy rate.'
-  },
-  {
-    year: '2022',
-    title: 'Style Expert Team',
-    description: 'Expanded team to include professional opticians and fashion stylists for expert recommendations.'
-  },
-  {
-    year: '2023',
-    title: 'Enhanced AI Model',
-    description: 'Launched improved AI with 85%+ accuracy and expanded to all six major face shape categories.'
-  },
-  {
-    year: '2024',
-    title: 'Global Expansion',
-    description: 'Reached 500K+ users worldwide and established partnerships with leading eyewear brands.'
-  }
-];
 
 export default function AboutPage() {
   const jsonLd = {
@@ -141,15 +84,8 @@ export default function AboutPage() {
     name: 'FrameFinder',
     description: 'AI-powered face shape analysis and eyewear recommendation platform',
     url: 'https://framefinder.com',
-    logo: 'https://framefinder.com/images/logo.png',
-    foundingDate: '2024',
     applicationCategory: 'AI Technology',
-    serviceType: 'Face Shape Analysis',
-    contactPoint: {
-      '@type': 'ContactPoint',
-      contactType: 'Customer Service',
-      email: 'hello@framefinder.com'
-    }
+    serviceType: 'Face Shape Analysis'
   };
 
   return (
@@ -250,47 +186,54 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Our Story */}
+        {/* Technology Grid */}
         <section id="our-story" className="px-4 py-16">
           <div className="container mx-auto">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-              <div>
-                <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl mb-6">
-                  Our Story
-                </h2>
-                <div className="space-y-4 text-muted-foreground leading-relaxed">
-                  <p>
-                    FrameFinder was born from a simple observation: choosing the right eyewear shouldn't 
-                    require expensive consultations or guesswork. Our founder, Dr. Sarah Chen, experienced 
-                    this frustration firsthand when struggling to find frames that truly suited her face shape.
-                  </p>
-                  <p>
-                    Combining her expertise in computer vision with insights from professional opticians 
-                    and style experts, she developed the first AI-powered face shape analysis tool that 
-                    could provide accurate, personalized recommendations instantly.
-                  </p>
-                  <p>
-                    Today, FrameFinder has helped over 500,000 people discover their perfect eyewear style, 
-                    making professional-level consulting accessible to everyone regardless of location or budget.
-                  </p>
-                </div>
-              </div>
+            <div className="mx-auto max-w-2xl text-center mb-12">
+              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
+                How We Work
+              </h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                The technology and expertise behind our recommendations
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="text-4xl mb-4">🧠</div>
+                  <CardTitle className="text-xl">Advanced AI</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Our machine learning algorithms analyze multiple facial landmarks to determine face shape with reliable accuracy.
+                  </CardDescription>
+                </CardContent>
+              </Card>
               
-              <div className="space-y-4">
-                {milestones.map((milestone, index) => (
-                  <Card key={index}>
-                    <CardHeader className="pb-3">
-                      <div className="flex items-center gap-3">
-                        <Badge variant="outline">{milestone.year}</Badge>
-                        <CardTitle className="text-lg">{milestone.title}</CardTitle>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <CardDescription>{milestone.description}</CardDescription>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="text-4xl mb-4">👁️</div>
+                  <CardTitle className="text-xl">Computer Vision</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Cutting-edge image processing technology that works with any clear photo, providing consistent results across devices.
+                  </CardDescription>
+                </CardContent>
+              </Card>
+              
+              <Card className="text-center">
+                <CardHeader>
+                  <div className="text-4xl mb-4">🎨</div>
+                  <CardTitle className="text-xl">Style Intelligence</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <CardDescription>
+                    Expert-curated recommendations based on proven styling principles and contemporary fashion insights.
+                  </CardDescription>
+                </CardContent>
+              </Card>
             </div>
           </div>
         </section>
@@ -325,51 +268,6 @@ export default function AboutPage() {
           </div>
         </section>
 
-        {/* Expertise Areas */}
-        <section className="px-4 py-16">
-          <div className="container mx-auto">
-            <div className="mx-auto max-w-2xl text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-                Our Expertise
-              </h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Multidisciplinary knowledge areas that power our recommendations
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {expertiseAreas.map((area, index) => (
-                <Card key={index}>
-                  <CardHeader>
-                    <div className="flex items-center gap-3 mb-2">
-                      <span className="text-3xl">{area.icon}</span>
-                      <CardTitle className="text-xl">{area.area}</CardTitle>
-                    </div>
-                    <CardDescription className="text-lg font-medium text-primary">
-                      {area.expertise}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-muted-foreground mb-4 leading-relaxed">
-                      {area.description}
-                    </p>
-                    <div className="space-y-1">
-                      <h4 className="font-medium text-sm">Key Focus Areas:</h4>
-                      <ul className="space-y-1">
-                        {area.focus.map((focusItem, focusIndex) => (
-                          <li key={focusIndex} className="flex items-center text-xs text-muted-foreground">
-                            <span className="text-primary mr-2">•</span>
-                            {focusItem}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Technology */}
         <section className="px-4 py-16 bg-muted/30">

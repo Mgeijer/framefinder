@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { FAQItem } from '@/components/ui/collapsible-faq'
 import { Camera, Sparkles, Users, Zap, ArrowRight, CheckCircle2 } from 'lucide-react'
 import Link from 'next/link'
 
@@ -511,89 +512,35 @@ export default function HomePage() {
 
           <div className="mx-auto max-w-4xl">
             <div className="space-y-4">
-              <Card>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-lg">How accurate is the AI face shape analysis?</h3>
-                    <span className="text-2xl">+</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground">
-                    Our AI face shape analysis uses advanced machine learning algorithms trained on diverse facial data to provide reliable face shape classification. The system analyzes key facial landmarks and proportions to determine your face shape. We recommend using the results as a professional starting point and considering your personal preferences.
-                  </p>
-                </CardContent>
-              </Card>
+              <FAQItem
+                question="How accurate is the AI face shape analysis?"
+                answer="Our AI face shape analysis uses advanced machine learning algorithms trained on diverse facial data to provide reliable face shape classification. The system analyzes key facial landmarks and proportions to determine your face shape. We recommend using the results as a professional starting point and considering your personal preferences."
+              />
 
-              <Card>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-lg">What type of photos work best for analysis?</h3>
-                    <span className="text-2xl">+</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground">
-                    For the most accurate results, use a clear, front-facing photo with good lighting where your entire face is visible. Avoid photos with shadows, tilted angles, or obstructions like hats or hair covering your face. The ideal photo shows your face straight-on, with your hair pulled back, in natural lighting.
-                  </p>
-                </CardContent>
-              </Card>
+              <FAQItem
+                question="What type of photos work best for analysis?"
+                answer="For the most accurate results, use a clear, front-facing photo with good lighting where your entire face is visible. Avoid photos with shadows, tilted angles, or obstructions like hats or hair covering your face. The ideal photo shows your face straight-on, with your hair pulled back, in natural lighting."
+              />
 
-              <Card>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-lg">Do I need expensive frames to look good?</h3>
-                    <span className="text-2xl">+</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground">
-                    Absolutely not! Great style is about choosing the right shape and fit for your face, not the price tag. A well-fitting, properly sized frame in the right shape for your face will always look better than an expensive frame that doesn't suit your features. Focus on shape, fit, and personal style rather than price.
-                  </p>
-                </CardContent>
-              </Card>
+              <FAQItem
+                question="Do I need expensive frames to look good?"
+                answer="Absolutely not! Great style is about choosing the right shape and fit for your face, not the price tag. A well-fitting, properly sized frame in the right shape for your face will always look better than an expensive frame that doesn't suit your features. Focus on shape, fit, and personal style rather than price."
+              />
 
-              <Card>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-lg">How do I choose the right frame color?</h3>
-                    <span className="text-2xl">+</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground">
-                    Frame color should complement your skin tone, hair color, and personal style. Warm skin tones (yellow/golden undertones) look great in browns, golds, and warm colors. Cool skin tones (pink/blue undertones) are enhanced by blacks, silvers, and cool colors. Neutral skin tones can wear most colors.
-                  </p>
-                </CardContent>
-              </Card>
+              <FAQItem
+                question="How do I choose the right frame color?"
+                answer="Frame color should complement your skin tone, hair color, and personal style. Warm skin tones (yellow/golden undertones) look great in browns, golds, and warm colors. Cool skin tones (pink/blue undertones) are enhanced by blacks, silvers, and cool colors. Neutral skin tones can wear most colors."
+              />
 
-              <Card>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-lg">Is my photo data secure and private?</h3>
-                    <span className="text-2xl">+</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground">
-                    Absolutely. We take privacy seriously. Photos are processed securely and are not stored permanently on our servers. The AI analysis happens in real-time, and images are automatically deleted after processing. We do not share, sell, or use your photos for any purpose other than providing your face shape analysis.
-                  </p>
-                </CardContent>
-              </Card>
+              <FAQItem
+                question="Is my photo data secure and private?"
+                answer="Absolutely. We take privacy seriously. Photos are processed securely and are not stored permanently on our servers. The AI analysis happens in real-time, and images are automatically deleted after processing. We do not share, sell, or use your photos for any purpose other than providing your face shape analysis."
+              />
 
-              <Card>
-                <CardHeader className="cursor-pointer">
-                  <div className="flex items-center justify-between">
-                    <h3 className="font-medium text-lg">Should I have different frames for work and personal use?</h3>
-                    <span className="text-2xl">+</span>
-                  </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <p className="text-muted-foreground">
-                    Many people benefit from having multiple pairs of glasses for different occasions. Consider a more conservative pair for professional settings (classic shapes, neutral colors) and a more expressive pair for personal time. This allows you to maintain appropriate professional appearance while expressing personality in casual settings.
-                  </p>
-                </CardContent>
-              </Card>
+              <FAQItem
+                question="Should I have different frames for work and personal use?"
+                answer="Many people benefit from having multiple pairs of glasses for different occasions. Consider a more conservative pair for professional settings (classic shapes, neutral colors) and a more expressive pair for personal time. This allows you to maintain appropriate professional appearance while expressing personality in casual settings."
+              />
             </div>
 
             <div className="text-center mt-12">

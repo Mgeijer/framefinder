@@ -3,7 +3,7 @@ import { Outfit } from 'next/font/google'
 import './globals.css'
 import { cn } from '@/lib/utils'
 import { PerformanceMonitor } from '@/components/performance-monitor'
-import { SafeThemeToggle } from '@/components/safe-theme-toggle'
+import { MobileHeader } from '@/components/mobile-header'
 
 const outfit = Outfit({ 
   subsets: ['latin'],
@@ -233,41 +233,7 @@ export default function RootLayout({
             <div className="hidden bg-primary text-primary-foreground p-1 text-xs text-center" style={{display: 'block'}}>
               ✅ New Styling Loaded (Build: 46ceec3) - Debug Mode
             </div>
-            <header className="sticky top-0 z-50 w-full border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60">
-            <div className="container flex h-16 items-center">
-              <div className="mr-4 flex">
-                <a className="mr-6 flex items-center space-x-2" href="/">
-                  <div className="h-6 w-6 bg-primary rounded" />
-                  <span className="font-bold text-foreground">FrameFinder</span>
-                </a>
-                <nav className="flex items-center space-x-6 text-sm font-medium">
-                  <a href="/guide" className="text-foreground/60 hover:text-foreground transition-colors">
-                    Face Shape Guide
-                  </a>
-                  <a href="/style-tips" className="text-foreground/60 hover:text-foreground transition-colors">
-                    Style Tips
-                  </a>
-                  <a href="/about" className="text-foreground/60 hover:text-foreground transition-colors">
-                    About
-                  </a>
-                </nav>
-              </div>
-              <div className="flex flex-1 items-center justify-between space-x-2 md:justify-end">
-                <div className="w-full flex-1 md:w-auto md:flex-none">
-                  {/* Search will be added here if needed */}
-                </div>
-                <nav className="flex items-center space-x-2">
-                  <SafeThemeToggle />
-                  <a 
-                    href="/face-analysis" 
-                    className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2"
-                  >
-                    Analyze My Face
-                  </a>
-                </nav>
-              </div>
-            </div>
-          </header>
+            <MobileHeader />
 
           <main className="flex-1">
             {children}

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import { FaceShapeIcon } from '@/components/ui/face-shape-icon';
 import { faceShapes } from '@/data/face-shapes';
 
 export const metadata: Metadata = {
@@ -189,6 +190,9 @@ export default function FaceShapeGuidePage() {
               <Card key={shape.id} className="group hover:shadow-lg transition-all duration-300 cursor-pointer">
                 <Link href={`/guide/${shape.id}`}>
                   <CardHeader className="pb-4">
+                    <div className="flex items-center justify-center mb-4">
+                      <FaceShapeIcon shape={shape.id as any} size={80} />
+                    </div>
                     <div className="flex items-center justify-between mb-2">
                       <CardTitle className="text-xl font-semibold group-hover:text-primary transition-colors">
                         {shape.displayName} Face
