@@ -27,6 +27,8 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
   const [generatingImage, setGeneratingImage] = useState(false);
+  const [showInstructions, setShowInstructions] = useState(false);
+  const [lastGeneratedImage, setLastGeneratedImage] = useState<string | null>(null);
 
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://framefinder2.vercel.app';
   const shareText = `I just discovered my face shape is ${result.faceShape.displayName}! Check out FrameFinder for AI-powered face shape analysis and personalized eyewear recommendations. ${baseUrl}`;
@@ -61,6 +63,7 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
         imageUrl,
         { format, includePhoto: true }
       );
+      setLastGeneratedImage(shareableImage);
       return shareableImage;
     } catch (error) {
       console.error('Failed to generate shareable image:', error);
@@ -95,10 +98,20 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
     }
   };
 
-  const shareToFacebook = () => {
-    const url = encodeURIComponent(baseUrl);
-    const text = encodeURIComponent(shareText);
-    window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+  const shareToFacebook = async () => {
+    // Download desktop image for user to upload
+    await downloadResults('desktop');
+    
+    // Show instructions
+    setShowInstructions(true);
+    setTimeout(() => setShowInstructions(false), 8000);
+    
+    // Open Facebook after delay
+    setTimeout(() => {
+      const url = encodeURIComponent(baseUrl);
+      const text = encodeURIComponent(shareText);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${text}`, '_blank');
+    }, 1000);
   };
 
   const shareToTwitter = () => {
@@ -107,16 +120,25 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
 
-  const shareToInstagram = () => {
-    // Instagram doesn't support direct sharing with text, so we copy text and open Instagram
+  const shareToInstagram = async () => {
+    // First download the mobile image for user
+    await downloadResults('mobile');
+    
+    // Copy text to clipboard
     copyToClipboard();
-    if (typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent)) {
-      // Try to open Instagram app
-      window.open('instagram://', '_blank');
-    } else {
-      // Open Instagram web
-      window.open('https://www.instagram.com/', '_blank');
-    }
+    
+    // Show instructions
+    setShowInstructions(true);
+    setTimeout(() => setShowInstructions(false), 8000);
+    
+    // Open Instagram after a short delay
+    setTimeout(() => {
+      if (typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent)) {
+        window.open('instagram://', '_blank');
+      } else {
+        window.open('https://www.instagram.com/', '_blank');
+      }
+    }, 1000);
   };
 
   const shareToWhatsApp = () => {
@@ -169,6 +191,21 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* Instructions Banner */}
+        {showInstructions && (
+          <div className="bg-blue-50 border border-blue-200 p-4 rounded-lg animate-pulse">
+            <div className="flex items-start gap-3">
+              <div className="text-blue-600 text-lg">📥</div>
+              <div>
+                <p className="font-medium text-blue-900 mb-1">Image Downloaded!</p>
+                <p className="text-sm text-blue-700">
+                  Your shareable image has been downloaded. Upload it to your social media post and paste the text below for maximum impact!
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Preview Text */}
         <div className="bg-muted/50 p-4 rounded-lg border">
           <p className="text-sm text-muted-foreground leading-relaxed">
