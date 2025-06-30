@@ -16,6 +16,7 @@ import {
   Link
 } from 'lucide-react';
 import { AnalysisResult } from '@/types';
+import { shareableImageGenerator } from '@/lib/shareableImageGenerator';
 
 interface SocialShareProps {
   result: AnalysisResult;
@@ -25,6 +26,7 @@ interface SocialShareProps {
 export default function SocialShare({ result, imageUrl }: SocialShareProps) {
   const [copied, setCopied] = useState(false);
   const [downloading, setDownloading] = useState(false);
+  const [generatingImage, setGeneratingImage] = useState(false);
 
   const baseUrl = typeof window !== 'undefined' ? window.location.origin : 'https://framefinder2.vercel.app';
   const shareText = `I just discovered my face shape is ${result.faceShape.displayName}! Check out FrameFinder for AI-powered face shape analysis and personalized eyewear recommendations. ${baseUrl}`;
@@ -49,104 +51,45 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
     }
   };
 
-  const downloadResults = async () => {
-    if (!imageUrl) return;
+  const generateShareableImage = async (format: 'desktop' | 'mobile') => {
+    if (!imageUrl) return null;
     
-    setDownloading(true);
+    setGeneratingImage(true);
     try {
-      // Create a canvas to generate a shareable image with results
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d')!;
-      canvas.width = 800;
-      canvas.height = 600;
-
-      // Background
-      ctx.fillStyle = '#ffffff';
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // Load and draw the user's image
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-      
-      await new Promise((resolve, reject) => {
-        img.onload = resolve;
-        img.onerror = reject;
-        img.src = imageUrl;
-      });
-
-      // Draw user image (left side)
-      const imgSize = 300;
-      const imgX = 50;
-      const imgY = 50;
-      ctx.drawImage(img, imgX, imgY, imgSize, imgSize);
-
-      // Add text content (right side)
-      const textX = imgX + imgSize + 50;
-      const textY = 80;
-
-      // Title
-      ctx.fillStyle = '#1f2937';
-      ctx.font = 'bold 32px Arial';
-      ctx.fillText('My Face Shape', textX, textY);
-
-      // Face shape result
-      ctx.fillStyle = '#3b82f6';
-      ctx.font = 'bold 28px Arial';
-      ctx.fillText(result.faceShape.displayName, textX, textY + 50);
-
-      // Confidence
-      ctx.fillStyle = '#6b7280';
-      ctx.font = '20px Arial';
-      ctx.fillText(`${Math.round(result.confidence * 100)}% confidence`, textX, textY + 85);
-
-      // Description
-      ctx.fillStyle = '#374151';
-      ctx.font = '16px Arial';
-      const words = result.faceShape.description.split(' ');
-      let line = '';
-      let lineY = textY + 120;
-      const maxWidth = 300;
-
-      for (let i = 0; i < words.length; i++) {
-        const testLine = line + words[i] + ' ';
-        const metrics = ctx.measureText(testLine);
-        const testWidth = metrics.width;
-        
-        if (testWidth > maxWidth && i > 0) {
-          ctx.fillText(line, textX, lineY);
-          line = words[i] + ' ';
-          lineY += 25;
-        } else {
-          line = testLine;
-        }
-      }
-      ctx.fillText(line, textX, lineY);
-
-      // Branding
-      ctx.fillStyle = '#3b82f6';
-      ctx.font = 'bold 20px Arial';
-      ctx.fillText('FrameFinder.ai', textX, canvas.height - 80);
-      
-      ctx.fillStyle = '#6b7280';
-      ctx.font = '14px Arial';
-      ctx.fillText('AI-Powered Face Shape Analysis', textX, canvas.height - 50);
-
-      // Download the image
-      canvas.toBlob((blob) => {
-        if (blob) {
-          const url = URL.createObjectURL(blob);
-          const a = document.createElement('a');
-          a.href = url;
-          a.download = `framefinder-${result.faceShape.id}-analysis.png`;
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          URL.revokeObjectURL(url);
-        }
-      }, 'image/png');
-
+      const shareableImage = await shareableImageGenerator.generateShareableImage(
+        result,
+        imageUrl,
+        { format, includePhoto: true }
+      );
+      return shareableImage;
     } catch (error) {
       console.error('Failed to generate shareable image:', error);
+      return null;
+    } finally {
+      setGeneratingImage(false);
+    }
+  };
+
+  const downloadResults = async (format: 'desktop' | 'mobile' = 'desktop') => {
+    setDownloading(true);
+    try {
+      const shareableImage = await generateShareableImage(format);
+      if (shareableImage) {
+        // Convert data URL to blob and download
+        const response = await fetch(shareableImage);
+        const blob = await response.blob();
+        
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `framefinder-${result.faceShape.id}-${format}-share.png`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }
+    } catch (error) {
+      console.error('Failed to download shareable image:', error);
     } finally {
       setDownloading(false);
     }
@@ -274,7 +217,7 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
         </div>
 
         {/* Additional Options */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <Button
             onClick={shareToEmail}
             variant="outline"
@@ -292,16 +235,35 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
             <MessageCircle className="h-4 w-4" />
             Messages
           </Button>
+        </div>
 
-          <Button
-            onClick={downloadResults}
-            variant="outline"
-            className="flex items-center gap-2"
-            disabled={downloading || !imageUrl}
-          >
-            <Download className="h-4 w-4" />
-            {downloading ? 'Creating...' : 'Download'}
-          </Button>
+        {/* Download Options */}
+        <div className="space-y-3">
+          <h4 className="font-medium text-sm text-muted-foreground">Download Shareable Images</h4>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Button
+              onClick={() => downloadResults('desktop')}
+              variant="outline"
+              className="flex items-center gap-2"
+              disabled={downloading || generatingImage || !imageUrl}
+            >
+              <Download className="h-4 w-4" />
+              {downloading ? 'Creating...' : 'Desktop Format'}
+            </Button>
+
+            <Button
+              onClick={() => downloadResults('mobile')}
+              variant="outline"
+              className="flex items-center gap-2"
+              disabled={downloading || generatingImage || !imageUrl}
+            >
+              <Download className="h-4 w-4" />
+              {downloading ? 'Creating...' : 'Mobile/Instagram'}
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            Desktop: 1200x630 (perfect for Facebook, Twitter) • Mobile: 1080x1080 (perfect for Instagram)
+          </p>
         </div>
 
         {/* Copy Link & Native Share */}
