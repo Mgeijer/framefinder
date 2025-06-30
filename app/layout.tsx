@@ -229,10 +229,6 @@ export default function RootLayout({
         "min-h-full bg-background text-foreground font-sans antialiased"
       )}>
           <div className="relative flex min-h-screen flex-col">
-            {/* Debugging indicator - will be visible when new styles load */}
-            <div className="hidden bg-primary text-primary-foreground p-1 text-xs text-center" style={{display: 'block'}}>
-              ✅ New Styling Loaded (Build: 46ceec3) - Debug Mode
-            </div>
             <MobileHeader />
 
           <main className="flex-1">
