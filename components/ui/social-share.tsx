@@ -55,15 +55,22 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
   };
 
   const generateShareableImage = async (format: 'desktop' | 'mobile') => {
-    if (!imageUrl) return null;
+    console.log('generateShareableImage called with:', { format, imageUrl: !!imageUrl }); // Debug log
+    
+    if (!imageUrl) {
+      console.error('No imageUrl provided');
+      return null;
+    }
     
     setGeneratingImage(true);
     try {
+      console.log('Calling shareableImageGenerator...');
       const shareableImage = await shareableImageGenerator.generateShareableImage(
         result,
         imageUrl,
         { format, includePhoto: true }
       );
+      console.log('Generated image result:', shareableImage ? 'Success' : 'Failed');
       setLastGeneratedImage(shareableImage);
       return shareableImage;
     } catch (error) {
@@ -122,19 +129,31 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
   };
 
   const shareToInstagram = async () => {
+    console.log('Instagram button clicked!'); // Debug log
     setShareStep('generating');
     
-    // Generate and show preview image
-    const shareableImage = await generateShareableImage('mobile');
-    if (shareableImage) {
-      setLastGeneratedImage(shareableImage);
-      setShareStep('ready');
+    try {
+      // Generate and show preview image
+      const shareableImage = await generateShareableImage('mobile');
+      console.log('Generated image:', shareableImage ? 'Success' : 'Failed'); // Debug log
       
-      // Copy text to clipboard
-      copyToClipboard();
-      
-      // Show instructions with image preview
-      setShowInstructions(true);
+      if (shareableImage) {
+        setLastGeneratedImage(shareableImage);
+        setShareStep('ready');
+        
+        // Copy text to clipboard
+        copyToClipboard();
+        
+        // Show instructions with image preview
+        setShowInstructions(true);
+        console.log('Instructions shown'); // Debug log
+      } else {
+        setShareStep('idle');
+        console.error('Failed to generate image');
+      }
+    } catch (error) {
+      console.error('Error in shareToInstagram:', error);
+      setShareStep('idle');
     }
   };
 
