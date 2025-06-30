@@ -198,7 +198,7 @@ export default function FaceAnalysisPage() {
                       {analysisResult.faceShape.celebrities.map((celebrity, index) => (
                         <span 
                           key={index}
-                          className="px-3 py-1 bg-gray-100 rounded-full text-sm"
+                          className="px-3 py-1 bg-accent rounded-full text-sm text-accent-foreground"
                         >
                           {celebrity}
                         </span>
@@ -250,7 +250,7 @@ export default function FaceAnalysisPage() {
                     </div>
                     
                     <div className="pt-4 border-t">
-                      <p className="text-sm text-gray-600 mb-3">
+                      <p className="text-sm text-muted-foreground mb-3">
                         Ready to shop? Check out these popular eyewear retailers:
                       </p>
                       <div className="flex flex-wrap gap-2">
@@ -279,7 +279,7 @@ export default function FaceAnalysisPage() {
                           EyeBuyDirect
                         </a>
                       </div>
-                      <p className="text-xs text-gray-500 mt-2">
+                      <p className="text-xs text-muted-foreground mt-2">
                         * FrameFinder may earn a commission from purchases made through these links
                       </p>
                     </div>

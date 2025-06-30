@@ -469,7 +469,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         )}
 
         {/* Tips */}
-        <div className="bg-blue-50 rounded-lg p-4">
+        <div className="bg-muted/50 rounded-lg p-4">
           <h3 className="font-medium text-sm mb-2">📸 Photo Tips for Best Results:</h3>
           <ul className="text-sm text-muted-foreground space-y-1">
             <li>• Use good lighting with your face clearly visible</li>
