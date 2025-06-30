@@ -164,11 +164,16 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
     window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
   };
 
-  const shareToLinkedIn = () => {
-    const url = encodeURIComponent(baseUrl);
-    const title = encodeURIComponent('FrameFinder - AI Face Shape Analysis');
-    const summary = encodeURIComponent(shareText);
-    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}&summary=${summary}`, '_blank');
+  const shareToInstagram = () => {
+    // Instagram doesn't support direct sharing with text, so we copy text and open Instagram
+    copyToClipboard();
+    if (typeof window !== 'undefined' && /iPhone|iPad|Android/i.test(navigator.userAgent)) {
+      // Try to open Instagram app
+      window.open('instagram://', '_blank');
+    } else {
+      // Open Instagram web
+      window.open('https://www.instagram.com/', '_blank');
+    }
   };
 
   const shareToWhatsApp = () => {
@@ -222,11 +227,11 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
       </CardHeader>
       <CardContent className="space-y-4">
         {/* Preview Text */}
-        <div className="bg-gray-50 p-4 rounded-lg border">
-          <p className="text-sm text-gray-700 leading-relaxed">
+        <div className="bg-muted/50 p-4 rounded-lg border">
+          <p className="text-sm text-muted-foreground leading-relaxed">
             {shareText}
           </p>
-          <p className="text-sm text-blue-600 mt-2">{hashtagText}</p>
+          <p className="text-sm text-primary mt-2">{hashtagText}</p>
         </div>
 
         {/* Social Media Buttons */}
@@ -250,12 +255,12 @@ export default function SocialShare({ result, imageUrl }: SocialShareProps) {
           </Button>
 
           <Button
-            onClick={shareToLinkedIn}
+            onClick={shareToInstagram}
             variant="outline"
-            className="flex items-center gap-2 text-blue-700 border-blue-200 hover:bg-blue-50"
+            className="flex items-center gap-2 text-pink-600 border-pink-200 hover:bg-pink-50"
           >
-            <Link className="h-4 w-4" />
-            LinkedIn
+            <Instagram className="h-4 w-4" />
+            Instagram
           </Button>
 
           <Button

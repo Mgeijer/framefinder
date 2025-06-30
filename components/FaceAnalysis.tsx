@@ -383,39 +383,43 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
         {/* Camera Interface */}
         {useCamera ? (
           <div className="space-y-4">
-            <div className="relative aspect-video max-w-md mx-auto bg-muted/50 rounded-lg overflow-hidden">
+            <div className="relative w-full max-w-lg mx-auto bg-muted/50 rounded-lg overflow-hidden">
               <Webcam
                 ref={webcamRef}
                 audio={false}
                 screenshotFormat="image/jpeg"
                 videoConstraints={{
-                  width: 640,
-                  height: 480,
-                  facingMode: "user"
+                  width: { ideal: 720 },
+                  height: { ideal: 720 },
+                  facingMode: "user",
+                  aspectRatio: 1.0
                 }}
-                className="w-full h-full object-cover"
+                className="w-full h-auto object-cover"
+                style={{ aspectRatio: '1 / 1' }}
                 onUserMediaError={(error) => {
                   console.error('Camera access error:', error);
                   setError('Camera access denied. Please allow camera permissions and ensure you are using HTTPS.');
                   setAnalysisState('error');
                 }}
               />
-              <div className="absolute inset-4 border-2 border-white/50 rounded-lg pointer-events-none">
-                <div className="w-full h-full border border-dashed border-white/30 rounded-lg flex items-center justify-center">
-                  <span className="text-white/70 text-sm bg-black/20 px-2 py-1 rounded">
-                    Position your face in the frame
+              {/* Face guide overlay - more subtle on mobile */}
+              <div className="absolute inset-6 md:inset-8 border-2 border-white/40 rounded-full pointer-events-none">
+                <div className="w-full h-full flex items-center justify-center">
+                  <span className="text-white/80 text-xs md:text-sm bg-black/30 px-2 py-1 rounded-full backdrop-blur-sm">
+                    Center your face
                   </span>
                 </div>
               </div>
             </div>
-            <div className="text-center">
-              <Button onClick={capturePhoto} size="lg">
-                <Camera className="h-4 w-4 mr-2" />
+            <div className="text-center space-y-3">
+              <Button onClick={capturePhoto} size="lg" className="w-full max-w-xs">
+                <Camera className="h-5 w-5 mr-2" />
                 📷 Capture & Analyze
               </Button>
-            </div>
-            <div className="text-center text-xs text-muted-foreground">
-              ⚠️ Camera requires HTTPS and permission access
+              <div className="text-xs text-muted-foreground space-y-1">
+                <p>💡 Hold steady and ensure good lighting</p>
+                <p>⚠️ Camera requires HTTPS and permission access</p>
+              </div>
             </div>
           </div>
         ) : (
@@ -440,6 +444,7 @@ export default function FaceAnalysis({ onAnalysisComplete }: FaceAnalysisProps) 
               ref={fileInputRef}
               type="file"
               accept="image/*"
+              capture="user"
               onChange={handleFileUpload}
               className="hidden"
             />
